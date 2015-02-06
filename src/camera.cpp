@@ -134,11 +134,6 @@ void Camera::orienter(int xRel, int yRel)
 
 void Camera::deplacer(int touche)
 {
-	/*// Gestion de l'orientation
-
-	if(input.mouvementSouris())
-		orienter(input.getXRel(), input.getYRel());*/
-
     // Avancée de la caméra
 
     if(touche == 'w')
