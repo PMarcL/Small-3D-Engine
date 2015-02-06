@@ -17,7 +17,8 @@ class Camera
 		//Fonctions
 		void orienter(int xRel, int yRel);
 
-		void deplacer(int touche);
+		//void deplacer(int touche);
+		void deplacer(bool avancer, bool reculer, bool gauche, bool droite);
 
 		void setPosition(ofVec3f _position);
 

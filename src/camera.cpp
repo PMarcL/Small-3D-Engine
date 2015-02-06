@@ -132,11 +132,10 @@ void Camera::orienter(int xRel, int yRel)
 	
 }
 
-void Camera::deplacer(int touche)
+void Camera::deplacer(bool avancer, bool reculer, bool gauche, bool droite)
 {
     // Avancée de la caméra
-
-    if(touche == 'w')
+    if(avancer)
     {
         m_position = m_position + m_orientation * m_vitesse;
         m_pointCible = m_position + m_orientation;
@@ -144,26 +143,21 @@ void Camera::deplacer(int touche)
 
 
     // Recul de la caméra
-
-    if(touche == 's')
+    if(reculer)
     {
         m_position = m_position - m_orientation * m_vitesse;
         m_pointCible = m_position + m_orientation;
     }
-
-
+	
     // Déplacement vers la gauche
-
-    if(touche == 'a')
+    if(gauche)
     {
         m_position = m_position + m_deplacementLateral * m_vitesse;
         m_pointCible = m_position + m_orientation;
     }
 
-
     // Déplacement vers la droite
-
-    if(touche == 'd')
+    if(droite)
     {
         m_position = m_position - m_deplacementLateral * m_vitesse;
         m_pointCible = m_position + m_orientation;

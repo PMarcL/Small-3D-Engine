@@ -36,26 +36,39 @@ void ofApp::setup(){
 	m_angle = 0.0;
 
 	m_axes = Axes(10, "Shaders/shader3D.vert", "Shaders/shader3D.frag");
+
+	m_pause = false;
+	m_Avancer = false;
+	m_Reculer = false;
+	m_Droite = false;
+	m_Gauche = false;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	//Calcul de la position relative de la souris (vélocité)
-	int posRelX = mouseX - m_centreX;
-	int posRelY = mouseY - m_centreY;
+	if(!m_pause){
+		//Maj de la position de la caméra
+		m_camera.deplacer(m_Avancer, m_Reculer, m_Gauche, m_Droite);
 
-	//Souris repositionné au centre
-	SetCursorPos(m_centreX + ofGetWindowPositionX(), m_centreY + ofGetWindowPositionY());
+		//Calcul de la position relative de la souris (vélocité)
+		int posRelX = mouseX - m_centreX;
+		int posRelY = mouseY - m_centreY;
 
-	//Mise à jour de l'orientation de la caméra
-	m_camera.orienter(posRelX, posRelY);
+		//Souris repositionné au centre
+		SetCursorPos(m_centreX + ofGetWindowPositionX(), m_centreY + ofGetWindowPositionY());
+
+		//Mise à jour de l'orientation de la caméra
+		m_camera.orienter(posRelX, posRelY);
 
 
-	//Incrémentation de l'angle
-	m_angle += 4.0;
+		//Incrémentation de l'angle
+		m_angle += 4.0;
 
-	if(m_angle >= 360.0)
-		m_angle -= 360.0;
+		if(m_angle >= 360.0)
+			m_angle -= 360.0;
+
+	}
+
 }
 
 //--------------------------------------------------------------
@@ -86,12 +99,46 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	m_camera.deplacer(key);
+	//Touches de déplacement
+	if(key == 'w' || key == 'W')
+		m_Avancer = true;
+	if(key == 's' || key == 'S')
+		m_Reculer = true;
+	if(key == 'a' || key == 'A')
+		m_Gauche = true;
+	if(key == 'd' || key == 'D')
+		m_Droite = true;
+
+	//Mode pause
+	if(key == 'p' || key == 'P'){
+		if(m_pause){
+			m_pause = false;
+			ofHideCursor();
+			SetCursorPos(m_centreX + ofGetWindowPositionX(), m_centreY + ofGetWindowPositionY());
+		}else{
+			m_pause = true;
+			ofShowCursor();
+		}
+	}
+	//Mode plein écran
+	if(key == 'f' || key == 'F'){
+		ofToggleFullscreen();
+		SetCursorPos(m_centreX + ofGetWindowPositionX(), m_centreY + ofGetWindowPositionY());		
+	}
+		
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+	//Touches de déplacement
+	if(key == 'w' || key == 'W')
+		m_Avancer = false;
+	if(key == 's' || key == 'S')
+		m_Reculer = false;
+	if(key == 'a' || key == 'A')
+		m_Gauche = false;
+	if(key == 'd' || key == 'D')
+		m_Droite = false;
 }
 
 //--------------------------------------------------------------

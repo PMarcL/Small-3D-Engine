@@ -39,4 +39,12 @@ class ofApp : public ofBaseApp{
 		float m_angle;
 
 		Axes m_axes;
+
+		bool m_pause;
+
+		//Touches
+		bool m_Avancer;
+		bool m_Reculer;
+		bool m_Gauche;
+		bool m_Droite;
 };
