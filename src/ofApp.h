@@ -5,6 +5,7 @@
 #include "camera.h"
 #include "Cube.h"
 #include "Axes.h"
+#include "MousePositionHandler.h"
 
 class ofApp : public ofBaseApp{
 
@@ -22,6 +23,8 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		~ofApp();
 
 	private:
 		Shader m_shader;
@@ -42,9 +45,8 @@ class ofApp : public ofBaseApp{
 
 		bool m_pause;
 
-		//Touches
-		bool m_Avancer;
-		bool m_Reculer;
-		bool m_Gauche;
-		bool m_Droite;
+		int dernierePositionX;
+		int dernierePositionY;
+
+		MousePositionHandler* mouseHandler;
 };

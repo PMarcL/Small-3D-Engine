@@ -12,7 +12,7 @@ void ofApp::setup(){
 	ofSetWindowShape(m_largeurFenetre, m_hauteurFenetre);
 
 	//Positionnement de la souris au centre de l'écran
-	SetCursorPos(m_largeurFenetre/2 + ofGetWindowPositionX(), m_hauteurFenetre/2 + ofGetWindowPositionY());
+	mouseHandler = new MousePositionHandler(m_largeurFenetre/2 + ofGetWindowPositionX(), m_hauteurFenetre/2 + ofGetWindowPositionY());
 	m_centreX = m_largeurFenetre/2;
 	m_centreY = m_hauteurFenetre/2;
 
@@ -22,11 +22,10 @@ void ofApp::setup(){
 	//Création de la matrice du modelview (matrice identité)
 	m_modelview.makeIdentityMatrix();
 
-	//Activation du Depth buffer
 	glEnable(GL_DEPTH_TEST);
 
 	//Création de la caméra
-	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.5, 0.5);
+	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 0.4, mouseHandler);
 
 	//Création du shader
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
@@ -38,37 +37,19 @@ void ofApp::setup(){
 	m_axes = Axes(10, "Shaders/shader3D.vert", "Shaders/shader3D.frag");
 
 	m_pause = false;
-	m_Avancer = false;
-	m_Reculer = false;
-	m_Droite = false;
-	m_Gauche = false;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 	if(!m_pause){
-		//Maj de la position de la caméra
-		m_camera.deplacer(m_Avancer, m_Reculer, m_Gauche, m_Droite);
-
-		//Calcul de la position relative de la souris (vélocité)
-		int posRelX = mouseX - m_centreX;
-		int posRelY = mouseY - m_centreY;
-
-		//Souris repositionné au centre
-		SetCursorPos(m_centreX + ofGetWindowPositionX(), m_centreY + ofGetWindowPositionY());
-
-		//Mise à jour de l'orientation de la caméra
-		m_camera.orienter(posRelX, posRelY);
-
-
+		mouseHandler->update(mouseX, mouseY);
+		m_camera.update();
 		//Incrémentation de l'angle
 		m_angle += 4.0;
 
 		if(m_angle >= 360.0)
 			m_angle -= 360.0;
-
 	}
-
 }
 
 //--------------------------------------------------------------
@@ -101,16 +82,16 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
 	//Touches de déplacement
 	if(key == 'w' || key == 'W')
-		m_Avancer = true;
-	if(key == 's' || key == 'S')
-		m_Reculer = true;
-	if(key == 'a' || key == 'A')
-		m_Gauche = true;
-	if(key == 'd' || key == 'D')
-		m_Droite = true;
+		m_camera.setMoveForward(true);
+	else if(key == 's' || key == 'S')
+		m_camera.setMoveBackward(true);
+	else if(key == 'a' || key == 'A')
+		m_camera.setMoveLeft(true);
+	else if(key == 'd' || key == 'D')
+		m_camera.setMoveRight(true);
 
 	//Mode pause
-	if(key == 'p' || key == 'P'){
+	else if(key == 'p' || key == 'P'){
 		if(m_pause){
 			m_pause = false;
 			ofHideCursor();
@@ -121,7 +102,7 @@ void ofApp::keyPressed(int key){
 		}
 	}
 	//Mode plein écran
-	if(key == 'f' || key == 'F'){
+	else if(key == 'f' || key == 'F'){
 		ofToggleFullscreen();
 		SetCursorPos(m_centreX + ofGetWindowPositionX(), m_centreY + ofGetWindowPositionY());		
 	}
@@ -132,13 +113,13 @@ void ofApp::keyPressed(int key){
 void ofApp::keyReleased(int key){
 	//Touches de déplacement
 	if(key == 'w' || key == 'W')
-		m_Avancer = false;
-	if(key == 's' || key == 'S')
-		m_Reculer = false;
-	if(key == 'a' || key == 'A')
-		m_Gauche = false;
-	if(key == 'd' || key == 'D')
-		m_Droite = false;
+		m_camera.setMoveForward(false);
+	else if(key == 's' || key == 'S')
+		m_camera.setMoveBackward(false);
+	else if(key == 'a' || key == 'A')
+		m_camera.setMoveLeft(false);
+	else if(key == 'd' || key == 'D')
+		m_camera.setMoveRight(false);
 }
 
 //--------------------------------------------------------------
@@ -179,4 +160,9 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+
+ofApp::~ofApp() {
+	delete mouseHandler;
 }

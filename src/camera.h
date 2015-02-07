@@ -2,37 +2,35 @@
 #define DEF_CAMERA
 
 #include "ofMain.h"
+#include "MousePositionHandler.h"
+
 
 class Camera
 {
     public:
-		//Constructeurs
 		Camera();
 		//Camera(ofVec3f _position, ofVec3f _pointCible, ofVec3f _axeVertical);
-		Camera(ofVec3f _position, ofVec3f _pointCible, ofVec3f _axeVertical, float _sensibilite, float _vitesse);
-		//Destructeur
-		~Camera();
+		Camera(ofVec3f _position, ofVec3f _pointCible, ofVec3f _axeVertical, float _sensibilite, float _vitesse, MousePositionHandler *mouse);
+		~Camera() {}
 
-
-		//Fonctions
-		void orienter(int xRel, int yRel);
-
-		//void deplacer(int touche);
-		void deplacer(bool avancer, bool reculer, bool gauche, bool droite);
-
+		void update();
 		void setPosition(ofVec3f _position);
-
 		void lookAt(ofMatrix4x4 &modelview);
 
-		//Getters
 		float getSensibilite() const;
 		float getVitesse() const;
 
-		//Setters
+		void setMoveForward(bool isMoving);
+		void setMoveBackward(bool isMoving);
+		void setMoveLeft(bool isMoving);
+		void setMoveRight(bool isMoving);
 		void setSensibilite(float _sensibilite);
 		void setVitesse(float _vitesse);
 
     private:
+		void orienter();
+		void deplacer();
+
 		//orientation
 		float m_phi;
 		float m_theta;
@@ -41,12 +39,18 @@ class Camera
 		//déplacement
 		ofVec3f m_axeVertical;
 		ofVec3f m_deplacementLateral;
+		bool movingForward;
+		bool movingBackward;
+		bool movingLeft;
+		bool movingRight;
 
 		ofVec3f m_position;
 		ofVec3f m_pointCible;
 
 		float m_sensibilite;
 		float m_vitesse;
+
+		MousePositionHandler* mouseHandler;
 };
 
 #endif

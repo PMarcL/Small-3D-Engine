@@ -1,57 +1,41 @@
 #include "camera.h"
 
-//Constructeur
-Camera::Camera() : m_phi(0.0), m_theta(0.0), m_orientation(), m_axeVertical(0, 0, 1), m_deplacementLateral(), m_position(), m_pointCible(), m_sensibilite(0.0), m_vitesse(0.0)
+Camera::Camera() 
+: m_phi(0.0), m_theta(0.0), m_orientation(), m_axeVertical(0, 0, 1), m_deplacementLateral(), m_position(), m_pointCible(), m_sensibilite(0.0), m_vitesse(0.0)
 {
 
 }
 
-Camera::Camera(ofVec3f _position, ofVec3f _pointCible, ofVec3f _axeVertical, float _sensibilite, float _vitesse) : m_phi(0.0), m_theta(0.0), m_orientation(), 
-                                                                                                                    m_axeVertical(_axeVertical), m_deplacementLateral(),
-                                                                                                                    m_position(_position), m_pointCible(_pointCible),
-																													m_sensibilite(_sensibilite), m_vitesse(_vitesse)
+Camera::Camera(ofVec3f _position, ofVec3f _pointCible, ofVec3f _axeVertical, float _sensibilite, float _vitesse, MousePositionHandler *mouse)
+	: m_phi(0.0), m_theta(0.0), m_orientation(), m_axeVertical(_axeVertical), m_deplacementLateral(), m_position(_position), m_pointCible(_pointCible),
+	m_sensibilite(_sensibilite), m_vitesse(_vitesse), mouseHandler(mouse)
  {
-	//Actualisation du point ciblé
-
-	// Calcul du vecteur orientation
+	 movingBackward = false;
+	 movingForward = false;
+	 movingLeft = false;
+	 movingRight = false;
 
     m_orientation = m_pointCible - m_position;
 	m_orientation.normalize();
 
-    // Si l'axe vertical est l'axe X
-
     if(m_axeVertical.x == 1.0)
     {
-        // Calcul des angles
-
         m_phi = asin(m_orientation.x);
         m_theta = acos(m_orientation.y / cos(m_phi));
 
         if(m_orientation.y < 0)
             m_theta *= -1;
     }
-
-
-    // Si c'est l'axe Y
-
     else if(m_axeVertical.y == 1.0)
     {
-        // Calcul des angles
-
         m_phi = asin(m_orientation.y);
         m_theta = acos(m_orientation.z / cos(m_phi));
 
         if(m_orientation.z < 0)
             m_theta *= -1;
     }
-
-
-    // Sinon c'est l'axe Z
-
     else
     {
-        // Calcul des angles
-
         m_phi = asin(m_orientation.x);
         m_theta = acos(m_orientation.z / cos(m_phi));
 
@@ -59,39 +43,29 @@ Camera::Camera(ofVec3f _position, ofVec3f _pointCible, ofVec3f _axeVertical, flo
             m_theta *= -1;
     }
 
-
-    // Conversion en degrés
-
     m_phi = m_phi * 180 / PI;
     m_theta = m_theta * 180 / PI;
 }
 
-//Destructeur
-Camera::~Camera()
+void Camera::update()
 {
-
+	this->deplacer();
+	this->orienter();
 }
 
-//Fonctions
-
-void Camera::lookAt(ofMatrix4x4 &modelview){
-	// Actualisation de la vue dans la matrice
-
+void Camera::lookAt(ofMatrix4x4 &modelview)
+{
 	modelview.makeLookAtViewMatrix(m_position, m_pointCible, m_axeVertical);
 }
 
-
-
-void Camera::orienter(int xRel, int yRel)
+void Camera::orienter()
 {
     // Récupération des angles
-
-    m_phi += -yRel * m_sensibilite;
-    m_theta += -xRel * m_sensibilite;
+	m_phi += -mouseHandler->getRelPosY() * m_sensibilite;
+	m_theta += -mouseHandler->getRelPosX() * m_sensibilite;
 
 
     // Limitation de l'angle phi
-
     if(m_phi > 89.0)
         m_phi = 89.0;
 
@@ -99,7 +73,6 @@ void Camera::orienter(int xRel, int yRel)
         m_phi = -89.0;
 
 	// Conversion des angles en radian
-
 	float phiRadian = m_phi * PI / 180;
 	float thetaRadian = m_theta * PI / 180;
 
@@ -132,50 +105,56 @@ void Camera::orienter(int xRel, int yRel)
 	
 }
 
-void Camera::deplacer(bool avancer, bool reculer, bool gauche, bool droite)
+void Camera::deplacer()
 {
-    // Avancée de la caméra
-    if(avancer)
+	if(movingForward)
     {
         m_position = m_position + m_orientation * m_vitesse;
         m_pointCible = m_position + m_orientation;
     }
-
-
-    // Recul de la caméra
-    if(reculer)
+	if(movingBackward)
     {
         m_position = m_position - m_orientation * m_vitesse;
         m_pointCible = m_position + m_orientation;
     }
-	
-    // Déplacement vers la gauche
-    if(gauche)
+	if(movingLeft)
     {
         m_position = m_position + m_deplacementLateral * m_vitesse;
         m_pointCible = m_position + m_orientation;
     }
-
-    // Déplacement vers la droite
-    if(droite)
+	if(movingRight)
     {
         m_position = m_position - m_deplacementLateral * m_vitesse;
         m_pointCible = m_position + m_orientation;
     }
+}
 
+void Camera::setMoveForward(bool isMoving)
+{
+	movingForward = isMoving;
+}
+
+void Camera::setMoveBackward(bool isMoving)
+{
+	movingBackward = isMoving;
+}
+
+void Camera::setMoveLeft(bool isMoving)
+{
+	movingLeft = isMoving;
+}
+
+void Camera::setMoveRight(bool isMoving)
+{
+	movingRight = isMoving;
 }
 
 void Camera::setPosition(ofVec3f _position)
 {
-    // Mise à jour de la position
     m_position = _position;
-
-    // Actualisation du point ciblé
     m_pointCible = m_position + m_orientation;
 }
 
-
-//Getters
 float Camera::getSensibilite() const
 {
     return m_vitesse;
@@ -187,12 +166,10 @@ float Camera::getVitesse() const
     return m_vitesse;
 }
 
-//Setters
 void Camera::setSensibilite(float _sensibilite)
 {
     m_sensibilite = _sensibilite;
 }
-
 
 void Camera::setVitesse(float _vitesse)
 {
