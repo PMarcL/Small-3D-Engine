@@ -64,7 +64,6 @@ void Camera::orienter()
 	m_phi += -mouseHandler->getRelPosY() * m_sensibilite;
 	m_theta += -mouseHandler->getRelPosX() * m_sensibilite;
 
-
     // Limitation de l'angle phi
     if(m_phi > 89.0)
         m_phi = 89.0;
@@ -75,8 +74,6 @@ void Camera::orienter()
 	// Conversion des angles en radian
 	float phiRadian = m_phi * PI / 180;
 	float thetaRadian = m_theta * PI / 180;
-
-
 	
 	// Calcul des coordonnées sphériques
 	if(m_axeVertical.x == 1.0)// Si l'axe vertical est l'axe X

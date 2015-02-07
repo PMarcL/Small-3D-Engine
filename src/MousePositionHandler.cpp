@@ -3,7 +3,7 @@
 MousePositionHandler::MousePositionHandler(int x, int y)
 	: currentX(x), currentY(y), lastX(x), lastY(y), relPosX(0), relPosY(0)
 {
-	this->setCursorPos(currentX, currentY);
+	this->centerCursorPosition();
 }
 
 void MousePositionHandler::update(int x, int y)
@@ -14,11 +14,8 @@ void MousePositionHandler::update(int x, int y)
 	currentY = y;
 	relPosX = currentX - lastX;
 	relPosY = currentY - lastY;
-	cout << this->mouseIsNearTheEdgeOfWindow() << endl;
 	if(this->mouseIsNearTheEdgeOfWindow())
-	{
 		this->centerCursorPosition();
-	}
 }
 
 bool MousePositionHandler::mouseIsNearTheEdgeOfWindow()
@@ -36,9 +33,9 @@ bool MousePositionHandler::mouseIsNearTheEdgeOfWindow()
 
 void MousePositionHandler::centerCursorPosition()
 {
-	setCursorPos(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
-	lastX = currentX + relPosX;
-	lastY = currentY + relPosY;
+	currentX = ofGetWindowWidth() / 2;
+	currentY = ofGetWindowHeight() / 2;
+	setCursorPos(ofGetWindowWidth()/2 + ofGetWindowPositionX(), ofGetWindowHeight()/2 + ofGetWindowPositionY());
 }
 
 void MousePositionHandler::setCursorPos(int x, int y)

@@ -9,7 +9,6 @@ class Camera
 {
     public:
 		Camera();
-		//Camera(ofVec3f _position, ofVec3f _pointCible, ofVec3f _axeVertical);
 		Camera(ofVec3f _position, ofVec3f _pointCible, ofVec3f _axeVertical, float _sensibilite, float _vitesse, MousePositionHandler *mouse);
 		~Camera() {}
 
@@ -31,12 +30,10 @@ class Camera
 		void orienter();
 		void deplacer();
 
-		//orientation
 		float m_phi;
 		float m_theta;
 		ofVec3f m_orientation;
 
-		//déplacement
 		ofVec3f m_axeVertical;
 		ofVec3f m_deplacementLateral;
 		bool movingForward;

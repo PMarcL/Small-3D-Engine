@@ -7,6 +7,8 @@
 #include "Axes.h"
 #include "MousePositionHandler.h"
 
+const static float ROTATION_SPEED = 2.0;
+
 class ofApp : public ofBaseApp{
 
 	public:
@@ -35,9 +37,6 @@ class ofApp : public ofBaseApp{
 
 		int m_largeurFenetre;
 		int m_hauteurFenetre;
-
-		int m_centreX;
-		int m_centreY;
 
 		float m_angle;
 
