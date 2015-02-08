@@ -10,11 +10,11 @@ class Axes
 {
     public:
 		Axes();
-		Axes(float taille, string const vertexShader, string const fragmentShader);
+		Axes(float taille, Shader* shader);
 		~Axes();
 		void afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview);
     private:
-		Shader m_shader;
+		Shader* m_shader;
 		float m_vertices[18];
 		float m_couleurs[18];
 };

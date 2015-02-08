@@ -1,13 +1,9 @@
 #include "Cube.h"
 
-Cube::Cube(float taille, string const vertexShader, string const fragmentShader) : m_shader(vertexShader, fragmentShader)
+Cube::Cube(float taille, Shader* shader) : m_shader(shader)
 {
-	// Chargement du shader
-	m_shader.charger();
 
-	// Division du paramètre taille
 	taille /= 2;
-
 	// Vertices temporaires
 	float verticesTmp[] = {-taille, -taille, -taille,   taille, -taille, -taille,   taille, taille, -taille,     // Face 1
 						   -taille, -taille, -taille,   -taille, taille, -taille,   taille, taille, -taille,
@@ -62,7 +58,7 @@ Cube::~Cube()
 void Cube::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview)
 {
 	// Activation du shader
-	glUseProgram(m_shader.getProgramID());
+	glUseProgram(m_shader->getProgramID());
 		
 		// Envoi des vertices
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
@@ -73,8 +69,8 @@ void Cube::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview)
 		glEnableVertexAttribArray(1);
 		
 		// Envoi des matrices
-		glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "modelview"), 1, GL_FALSE, modelview.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "modelview"), 1, GL_FALSE, modelview.getPtr());
 		
 		// Rendu
 		glDrawArrays(GL_TRIANGLES, 0, 36);

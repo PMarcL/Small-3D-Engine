@@ -4,11 +4,8 @@ Axes::Axes(){
 	//Juste pour permettre la création d'un objet Axes sans l'initialiser
 }
 
-Axes::Axes(float taille, string const vertexShader, string const fragmentShader) : m_shader(vertexShader, fragmentShader)
+Axes::Axes(float taille, Shader* shader) : m_shader(shader)
 {
-	// Chargement du shader
-	m_shader.charger();
-
 	// Vertices temporaires
 	float verticesTmp[] = {0.0, 0.0, 0.0,		//X
 							taille, 0.0, 0.0,
@@ -45,7 +42,7 @@ Axes::~Axes()
 void Axes::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview)
 {
 	//Activation du shader
-	glUseProgram(m_shader.getProgramID());
+	glUseProgram(m_shader->getProgramID());
 
 		//Axes
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
@@ -54,11 +51,9 @@ void Axes::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview)
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, m_couleurs);
 		glEnableVertexAttribArray(1);
 
-
 		// Envoi des matrices
-		glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "modelview"), 1, GL_FALSE, modelview.getPtr());
-
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "modelview"), 1, GL_FALSE, modelview.getPtr());
 
 		// Rendu
 		glDrawArrays(GL_LINES, 0, 6);

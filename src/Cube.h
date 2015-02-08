@@ -10,11 +10,11 @@
 class Cube
 {
     public:
-		Cube(float taille, string const vertexShader, string const fragmentShader);
+		Cube(float taille, Shader* shader);
 		~Cube();
 		void afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview);
     private:
-		Shader m_shader;
+		Shader* m_shader;
 		float m_vertices[108];
 		float m_couleurs[108];
 };

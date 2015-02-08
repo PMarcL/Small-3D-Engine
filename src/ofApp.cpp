@@ -15,7 +15,7 @@ void ofApp::setup(){
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_angle = 0.0;
-	m_axes = Axes(10, "Shaders/shader3D.vert", "Shaders/shader3D.frag");
+	m_axes = Axes(10, &m_shader);
 	m_pause = false;
 }
 
@@ -31,22 +31,15 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	//Placement de la caméra
 	m_camera.lookAt(m_modelview);
-
 	//Sauvegarde de la matrice modelview
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
 
-	//Afficage des axes
 	m_axes.afficher(m_projection, m_modelview);
-
-	//Déclaration d'un objet cube
-	Cube cube(2.0, "Shaders/shader3D.vert", "Shaders/shader3D.frag");
-
-	//Affichage de 4 cubes qui tournent autour de l'axe des Y
+	
+	Cube cube(2.0, &m_shader);
 	m_modelview.glRotate(m_angle, 0, 1, 0);
-
 	for(int i = 0; i < 4; i++){
 		cube.afficher(m_projection, m_modelview);
 		m_modelview.glTranslate(3, 0, 0);

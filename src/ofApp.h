@@ -31,21 +31,12 @@ class ofApp : public ofBaseApp{
 	private:
 		Shader m_shader;
 		Camera m_camera;
-
+		Axes m_axes;
 		ofMatrix4x4 m_projection;
 		ofMatrix4x4 m_modelview;
-
 		int m_largeurFenetre;
 		int m_hauteurFenetre;
-
 		float m_angle;
-
-		Axes m_axes;
-
 		bool m_pause;
-
-		int dernierePositionX;
-		int dernierePositionY;
-
 		MousePositionHandler* mouseHandler;
 };

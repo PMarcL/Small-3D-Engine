@@ -198,18 +198,18 @@ bool Shader::compilerShader(GLuint &shader, GLenum type, std::string &fichierSou
 
         // Affichage de l'erreur
         std::cout << erreur << std::endl;
-
-
-        // Libération de la mémoire et retour du booléen false
         delete[] erreur;
         glDeleteShader(shader);
-
         return false;
     }
-
-    // Sinon c'est que tout s'est bien passé
     else
         return true;
+}
+
+void Shader::useMatrices(ofMatrix4x4 projection, ofMatrix4x4 modelView)
+{
+	glUniformMatrix4fv(glGetUniformLocation(this->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
+	glUniformMatrix4fv(glGetUniformLocation(this->getProgramID(), "modelview"), 1, GL_FALSE, modelView.getPtr());
 }
 
 GLuint Shader::getProgramID() const

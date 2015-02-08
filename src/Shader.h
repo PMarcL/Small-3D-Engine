@@ -29,13 +29,11 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-
-
-// Classe Shader
+#include "ofMain.h"
 
 class Shader
 {
-    public:
+public:
 
     Shader();
     Shader(Shader const &shaderACopier);
@@ -43,14 +41,14 @@ class Shader
     ~Shader();
 
     Shader& operator=(Shader const &shaderACopier);
+	void useMatrices(ofMatrix4x4 projection, ofMatrix4x4 modelView);
 
     bool charger();
-    bool compilerShader(GLuint &shader, GLenum type, std::string &fichierSource);
     GLuint getProgramID() const;
 
 
-    private:
-
+private:
+	bool compilerShader(GLuint &shader, GLenum type, std::string &fichierSource);
     GLuint m_vertexID;
     GLuint m_fragmentID;
     GLuint m_programID;
