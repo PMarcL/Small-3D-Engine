@@ -36,8 +36,8 @@ class ofApp : public ofBaseApp{
 		Plane floor;
 		ofMatrix4x4 m_projection;
 		ofMatrix4x4 m_modelview;
-		int m_largeurFenetre;
-		int m_hauteurFenetre;
+		int m_centreXFenetre;
+		int m_centreYFenetre;
 		float m_angle;
 		bool m_pause;
 		MousePositionHandler* mouseHandler;
