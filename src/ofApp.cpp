@@ -15,8 +15,8 @@ void ofApp::setup(){
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_angle = 0.0;
-	floor = Plane(500, &m_shader);
-	floor.addTexture("Textures/grass2.jpg");
+	floor = Plane(500, &m_shader, 10, 10);
+	//floor.addTexture("Textures/grass2.jpg");
 	m_axes = Axes(10, &m_shader);
 	m_pause = false;
 

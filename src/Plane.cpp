@@ -1,23 +1,43 @@
 #include "Plane.h"
 
 
-Plane::Plane(int size, Shader* shader)
-	: shader(shader), texture(0), useTexture(false)
+Plane::Plane(int size, Shader* shader, int numColumn, int numRow)
+	: shader(shader), texture(0), nbColonnes(numColumn), nbLignes(numRow), useTexture(false)
 {
 	int halfSize = size /2;
 
-	vertices.push_back(-halfSize); vertices.push_back(0); vertices.push_back(-halfSize); // coin sup gauche
-	vertices.push_back(-halfSize); vertices.push_back(0); vertices.push_back(halfSize); // coin inf gauche
-	vertices.push_back(halfSize); vertices.push_back(0); vertices.push_back(-halfSize); // coin sup droit
-	vertices.push_back(halfSize); vertices.push_back(0); vertices.push_back(halfSize); // coin inf droit
+	int columnSize = size / nbColonnes;
+	int rowSize = size / nbLignes;
+	for(int j = 0; j < numColumn + 1; j++)
+	{
+		int z = j * columnSize;
+		z = ofMap(z, 0, size, -halfSize, halfSize);
+		for(int i = 0; i < numRow + 1; i++)
+		{
+			int x = i * rowSize;
+			x = ofMap(x, 0, size, -halfSize, halfSize);
+			vertices.push_back(x); vertices.push_back(0); vertices.push_back(z);
+		}
+	}
 
-	colors.push_back(1.0); colors.push_back(0.0); colors.push_back(0.0);
-	colors.push_back(0.0); colors.push_back(1.0); colors.push_back(0.0);
-	colors.push_back(0.0); colors.push_back(0.0); colors.push_back(1.0);
-	colors.push_back(1.0); colors.push_back(0.0); colors.push_back(1.0);
+	this->ajouterIndices();
+}
 
-	indices.push_back(0); indices.push_back(1); indices.push_back(2);
-	indices.push_back(2); indices.push_back(3); indices.push_back(1);
+void Plane::ajouterIndices()
+{
+	for(int i = 0; i < nbColonnes; i++)
+	{
+		int relIndice = i * (nbLignes + 1);
+		for(int j = 0; j < nbLignes; j++)
+		{
+			colors.push_back(1.0); colors.push_back(0.0); colors.push_back(0.0);
+			colors.push_back(0.0); colors.push_back(1.0); colors.push_back(0.0);
+			colors.push_back(0.0); colors.push_back(0.0); colors.push_back(1.0);
+			colors.push_back(1.0); colors.push_back(0.0); colors.push_back(1.0);
+			indices.push_back(j + relIndice); indices.push_back(j + relIndice + 1); indices.push_back(j + relIndice + nbLignes + 1); 
+			indices.push_back(j + relIndice + nbLignes + 1); indices.push_back(j + relIndice + 1); indices.push_back(j + relIndice + nbLignes + 2);
+		}
+	}
 }
 
 void Plane::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelView)
