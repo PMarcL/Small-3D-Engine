@@ -5,6 +5,7 @@
 #include "camera.h"
 #include "Cube.h"
 #include "Axes.h"
+#include "Plane.h"
 #include "MousePositionHandler.h"
 
 const static float ROTATION_SPEED = 2.0;
@@ -32,6 +33,7 @@ class ofApp : public ofBaseApp{
 		Shader m_shader;
 		Camera m_camera;
 		Axes m_axes;
+		Plane floor;
 		ofMatrix4x4 m_projection;
 		ofMatrix4x4 m_modelview;
 		int m_largeurFenetre;

@@ -9,14 +9,19 @@ void ofApp::setup(){
 	m_hauteurFenetre = ofGetWindowHeight();
 	glEnable(GL_DEPTH_TEST);
 	mouseHandler = new MousePositionHandler(m_largeurFenetre/2 + ofGetWindowPositionX(), m_hauteurFenetre/2 + ofGetWindowPositionY());
-	m_projection.makePerspectiveMatrix(70.0, (double)m_largeurFenetre/m_hauteurFenetre, 1.0, 100.0);
+	m_projection.makePerspectiveMatrix(70.0, (double)m_largeurFenetre/m_hauteurFenetre, 1.0, 1000.0);
 	m_modelview.makeIdentityMatrix();
-	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 0.4, mouseHandler);
+	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.0, mouseHandler);
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_angle = 0.0;
+	floor = Plane(500, &m_shader);
+	floor.addTexture("Textures/grass2.jpg");
 	m_axes = Axes(10, &m_shader);
 	m_pause = false;
+
+	mouseX = m_largeurFenetre/2;
+	mouseY = m_hauteurFenetre/2;
 }
 
 //--------------------------------------------------------------
@@ -37,7 +42,7 @@ void ofApp::draw(){
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
 
 	m_axes.afficher(m_projection, m_modelview);
-	
+	floor.afficher(m_projection, m_modelview);
 	Cube cube(2.0, &m_shader);
 	m_modelview.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){
