@@ -17,8 +17,6 @@ void ofApp::setup(){
 	m_angle = 0.0;
 	m_axes = Axes(10, &m_shader);
 	m_pause = false;
-
-	//Pour corriger notre problème d'affichage au démarrage
 	mouseX = m_centreXFenetre;
 	mouseY = m_centreYFenetre;
 }
