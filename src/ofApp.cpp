@@ -5,11 +5,11 @@ void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
 	ofHideCursor();
-	m_largeurFenetre = ofGetWindowWidth();
-	m_hauteurFenetre = ofGetWindowHeight();
+	m_centreXFenetre = ofGetWindowWidth() * 0.5;
+	m_centreYFenetre = ofGetWindowHeight() * 0.5;
 	glEnable(GL_DEPTH_TEST);
-	mouseHandler = new MousePositionHandler(m_largeurFenetre/2 + ofGetWindowPositionX(), m_hauteurFenetre/2 + ofGetWindowPositionY());
-	m_projection.makePerspectiveMatrix(70.0, (double)m_largeurFenetre/m_hauteurFenetre, 1.0, 100.0);
+	mouseHandler = new MousePositionHandler();
+	m_projection.makePerspectiveMatrix(70.0, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, 100.0);
 	m_modelview.makeIdentityMatrix();
 	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 0.4, mouseHandler);
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
@@ -17,6 +17,10 @@ void ofApp::setup(){
 	m_angle = 0.0;
 	m_axes = Axes(10, &m_shader);
 	m_pause = false;
+
+	//Pour corriger notre problème d'affichage au démarrage
+	mouseX = m_centreXFenetre;
+	mouseY = m_centreYFenetre;
 }
 
 //--------------------------------------------------------------
@@ -35,7 +39,7 @@ void ofApp::draw(){
 	m_camera.lookAt(m_modelview);
 	//Sauvegarde de la matrice modelview
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
-
+	
 	m_axes.afficher(m_projection, m_modelview);
 	
 	Cube cube(2.0, &m_shader);
@@ -56,20 +60,6 @@ void ofApp::keyPressed(int key){
 		m_camera.setMoveLeft(true);
 	else if(key == 'd' || key == 'D')
 		m_camera.setMoveRight(true);
-	else if(key == 'p' || key == 'P'){
-		if(m_pause){
-			m_pause = false;
-			ofHideCursor();
-			mouseHandler->setCursorPos(m_largeurFenetre/2 + ofGetWindowPositionX(), m_hauteurFenetre/2 + ofGetWindowPositionY());
-		}else{
-			m_pause = true;
-			ofShowCursor();
-		}
-	}
-	else if(key == 'f' || key == 'F'){
-		ofToggleFullscreen();
-		mouseHandler->setCursorPos(m_largeurFenetre/2 + ofGetWindowPositionX(), m_hauteurFenetre/2 + ofGetWindowPositionY());		
-	}
 		
 }
 
@@ -83,6 +73,20 @@ void ofApp::keyReleased(int key){
 		m_camera.setMoveLeft(false);
 	else if(key == 'd' || key == 'D')
 		m_camera.setMoveRight(false);
+	else if(key == 'p' || key == 'P'){
+		if(m_pause){
+			m_pause = false;
+			ofHideCursor();
+			mouseHandler->resetCusor();
+		}else{
+			m_pause = true;
+			ofShowCursor();
+		}
+	}
+	else if(key == 'f' || key == 'F'){
+		ofToggleFullscreen();
+		mouseHandler->resetCusor();	
+	}
 }
 
 //--------------------------------------------------------------
@@ -107,10 +111,9 @@ void ofApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-	//Note: pas encore testé
-	m_largeurFenetre = w;
-	m_hauteurFenetre = h;
-	m_projection.makePerspectiveMatrix(70.0, (double)m_largeurFenetre/m_hauteurFenetre, 1.0, 100.0);
+	m_centreXFenetre = w * 0.5;
+	m_centreYFenetre = h * 0.5;
+	m_projection.makePerspectiveMatrix(70.0, (double)w/h, 1.0, 100.0);
 }
 
 //--------------------------------------------------------------

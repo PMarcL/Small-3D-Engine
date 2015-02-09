@@ -7,14 +7,12 @@ const static int WINDOW_EDGE_CURSOR_LIMIT = 200;
 class MousePositionHandler
 {
 public:
-	MousePositionHandler(): currentX(0), currentY(0), lastX(0), lastY(0) {}
-	MousePositionHandler(int x, int y);
+	MousePositionHandler();
 	~MousePositionHandler(void) {}
 
 	void update(int x, int y);
 	void setCursorPos(int x, int y);
-	int getMouseX();
-	int getMouseY();
+	void resetCusor();
 	int getRelPosX();
 	int getRelPosY();
 
@@ -24,8 +22,6 @@ private:
 
 	int currentX;
 	int currentY;
-	int lastX;
-	int lastY;
 	int relPosX;
 	int relPosY;
 };

@@ -1,15 +1,15 @@
 #include "MousePositionHandler.h"
 
-MousePositionHandler::MousePositionHandler(int x, int y)
-	: currentX(x), currentY(y), lastX(x), lastY(y), relPosX(0), relPosY(0)
+MousePositionHandler::MousePositionHandler()
+	: relPosX(0), relPosY(0)
 {
 	this->centerCursorPosition();
 }
 
 void MousePositionHandler::update(int x, int y)
 {
-	lastX = currentX;
-	lastY = currentY;
+	int lastX = currentX;
+	int lastY = currentY;
 	currentX = x;
 	currentY = y;
 	relPosX = currentX - lastX;
@@ -33,9 +33,9 @@ bool MousePositionHandler::mouseIsNearTheEdgeOfWindow()
 
 void MousePositionHandler::centerCursorPosition()
 {
-	currentX = ofGetWindowWidth() / 2;
-	currentY = ofGetWindowHeight() / 2;
-	setCursorPos(ofGetWindowWidth()/2 + ofGetWindowPositionX(), ofGetWindowHeight()/2 + ofGetWindowPositionY());
+	currentX = ofGetWindowWidth() * 0.5;
+	currentY = ofGetWindowHeight() * 0.5;
+	setCursorPos(currentX + ofGetWindowPositionX(), currentY + ofGetWindowPositionY());
 }
 
 void MousePositionHandler::setCursorPos(int x, int y)
@@ -43,22 +43,14 @@ void MousePositionHandler::setCursorPos(int x, int y)
 	SetCursorPos(x, y);
 }
 
-int MousePositionHandler::getMouseX()
-{
-	return currentX;
+void MousePositionHandler::resetCusor(){
+	SetCursorPos(currentX + ofGetWindowPositionX(), currentY + ofGetWindowPositionY());
 }
 
-int MousePositionHandler::getMouseY()
-{
-	return currentY;
-}
-
-int MousePositionHandler::getRelPosX()
-{
+int MousePositionHandler::getRelPosX(){
 	return relPosX;
 }
 
-int MousePositionHandler::getRelPosY()
-{
+int MousePositionHandler::getRelPosY(){
 	return relPosY;
 }
