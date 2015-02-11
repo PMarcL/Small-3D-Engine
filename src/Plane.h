@@ -12,10 +12,17 @@ public:
 
 	void afficher(ofMatrix4x4 projection, ofMatrix4x4 modelView);
 	void addTexture(const string& texPath);
+	void genereHauteursAleatoire();
 
 
 private:
 	void ajouterIndices();
+	void libererRessources();
+	void chargerElementBuffer();
+	void chargerMatrices(ofMatrix4x4 projection, ofMatrix4x4 modelView, Shader* shader);
+	void chargerSommets();
+	void chargerCouleurs();
+	void chargerTexCoord();
 	
 	Shader* shader;
 	vector<GLfloat> vertices;
@@ -24,6 +31,7 @@ private:
 	vector<GLfloat> texCoords;
 	int nbColonnes;
 	int nbLignes;
+	int taille;
 	GLuint texture;
 	bool useTexture;
 };

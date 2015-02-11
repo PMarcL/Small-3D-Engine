@@ -23,6 +23,8 @@ void ofApp::setup(){
 	//Pour corriger notre problème d'affichage au démarrage
 	mouseX = m_centreXFenetre;
 	mouseY = m_centreYFenetre;
+
+	//floor.genereHauteursAleatoire();
 }
 
 //--------------------------------------------------------------
@@ -62,7 +64,6 @@ void ofApp::keyPressed(int key){
 		m_camera.setMoveLeft(true);
 	else if(key == 'd' || key == 'D')
 		m_camera.setMoveRight(true);
-		
 }
 
 //--------------------------------------------------------------
