@@ -15,8 +15,8 @@ void ofApp::setup(){
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_angle = 0.0;
-	floor = Plane(500, &m_shader, 10, 10);
-	//floor.addTexture("Textures/grass2.jpg");
+	floor = Plane(200, &m_shader, 20, 20);
+	floor.addTexture("Textures/rock.jpg");
 	m_axes = Axes(10, &m_shader);
 	m_pause = false;
 
@@ -24,7 +24,7 @@ void ofApp::setup(){
 	mouseX = m_centreXFenetre;
 	mouseY = m_centreYFenetre;
 
-	//floor.genereHauteursAleatoire();
+	floor.genereHauteursAleatoire();
 }
 
 //--------------------------------------------------------------
@@ -88,6 +88,7 @@ void ofApp::keyReleased(int key){
 	}
 	else if(key == 'f' || key == 'F'){
 		ofToggleFullscreen();
+		m_projection.makePerspectiveMatrix(70.0, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, 1000.0);
 		mouseHandler->resetCusor();	
 	}
 }

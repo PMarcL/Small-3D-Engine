@@ -128,17 +128,26 @@ void Plane::addTexture(const string& texPath)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	useTexture = true;
-	texCoords.push_back(1.0f); texCoords.push_back(1.0f);
-	texCoords.push_back(1.0f); texCoords.push_back(0.0f);
-	texCoords.push_back(0.0f); texCoords.push_back(0.0f);
-	texCoords.push_back(0.0f); texCoords.push_back(1.0f);
+	ajouterTexCoordPourChaqueSommet();
+}
+
+void Plane::ajouterTexCoordPourChaqueSommet()
+{
+	for(int i = 0; i < nbColonnes + 1; i++)
+	{
+		for(int j = 0; j < nbLignes + 1; j++)
+		{
+			texCoords.push_back(j * TEX_REPETITION_PAR_CARRE);
+			texCoords.push_back(i * TEX_REPETITION_PAR_CARRE);
+		}
+	}
 }
 
 void Plane::genereHauteursAleatoire()
 {
 	for(int i = 1; i < vertices.size(); i += 3)
 	{
-		vertices.assign(i + 1, ofRandom(30));
+		vertices[i] = ofRandom(-20.0, -15.0);
 	}
 }
 

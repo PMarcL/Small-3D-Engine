@@ -3,6 +3,8 @@
 #include "Shader.h"
 #include "ofMain.h"
 
+const static float TEX_REPETITION_PAR_CARRE = 0.2;
+
 class Plane
 {
 public:
@@ -23,6 +25,7 @@ private:
 	void chargerSommets();
 	void chargerCouleurs();
 	void chargerTexCoord();
+	void ajouterTexCoordPourChaqueSommet();
 	
 	Shader* shader;
 	vector<GLfloat> vertices;
