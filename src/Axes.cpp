@@ -1,8 +1,6 @@
 #include "Axes.h"
 
-Axes::Axes(){
-	//Juste pour permettre la création d'un objet Axes sans l'initialiser
-}
+Axes::Axes(){}
 
 Axes::Axes(float taille, Shader* shader) : m_shader(shader)
 {
