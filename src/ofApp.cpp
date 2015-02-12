@@ -46,7 +46,7 @@ void ofApp::draw(){
 	//Sauvegarde de la matrice modelview
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
 	m_axes.afficher(m_projection, m_modelview);
-	floor.afficher(m_projection, m_modelview);
+	//floor.afficher(m_projection, m_modelview);
 	roof.afficher(m_projection, m_modelview);
 	Cube cube(2.0, &m_shader);
 	m_modelview.glRotate(m_angle, 0, 1, 0);
