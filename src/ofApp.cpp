@@ -90,7 +90,6 @@ void ofApp::keyReleased(int key){
 	}
 	else if(key == 'f' || key == 'F'){
 		ofToggleFullscreen();
-		m_projection.makePerspectiveMatrix(70.0, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, 1000.0);
 		mouseHandler->resetCusor();	
 	}
 }
@@ -119,7 +118,7 @@ void ofApp::mouseReleased(int x, int y, int button){
 void ofApp::windowResized(int w, int h){
 	m_centreXFenetre = w * 0.5;
 	m_centreYFenetre = h * 0.5;
-	m_projection.makePerspectiveMatrix(70.0, (double)w/h, 1.0, 100.0);
+	m_projection.makePerspectiveMatrix(70.0, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, 1000.0);
 }
 
 //--------------------------------------------------------------

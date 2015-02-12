@@ -36,6 +36,7 @@ private:
 	int nbLignes;
 	int taille;
 	GLuint texture;
+	GLuint elemBuffer;
 	bool useTexture;
 };
 
