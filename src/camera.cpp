@@ -163,6 +163,11 @@ float Camera::getVitesse() const
     return m_vitesse;
 }
 
+ofVec3f Camera::getPosition() const
+{
+	return m_position;
+}
+
 void Camera::setSensibilite(float _sensibilite)
 {
     m_sensibilite = _sensibilite;
