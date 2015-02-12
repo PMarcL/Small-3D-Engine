@@ -98,6 +98,7 @@
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Axes.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

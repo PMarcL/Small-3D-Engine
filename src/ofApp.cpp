@@ -15,16 +15,18 @@ void ofApp::setup(){
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_angle = 0.0;
-	floor = Plane(200, &m_shader, 20, 20);
-	floor.addTexture("Textures/rock.jpg");
+
+	floor = Plane(1000, &m_shader, 20, 20);
+	floor.ajouterTexture("Textures/rock.jpg");
+	roof = Plane(1000, &m_shader, 100, 100);
+	roof.ajouterTexture("Textures/rock.jpg");
+
 	m_axes = Axes(10, &m_shader);
 	m_pause = false;
-
-	//Pour corriger notre problème d'affichage au démarrage
 	mouseX = m_centreXFenetre;
 	mouseY = m_centreYFenetre;
-
-	floor.genereHauteursAleatoire();
+	floor.genereHauteursAleatoire(-20.0, -5.0);
+	roof.genereHauteursAleatoire(100, 200);
 }
 
 //--------------------------------------------------------------
@@ -43,9 +45,9 @@ void ofApp::draw(){
 	m_camera.lookAt(m_modelview);
 	//Sauvegarde de la matrice modelview
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
-	
 	m_axes.afficher(m_projection, m_modelview);
 	floor.afficher(m_projection, m_modelview);
+	roof.afficher(m_projection, m_modelview);
 	Cube cube(2.0, &m_shader);
 	m_modelview.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){

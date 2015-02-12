@@ -115,7 +115,7 @@ void Plane::chargerTexCoord()
 	glEnableVertexAttribArray(2);
 }
 
-void Plane::addTexture(const string& texPath)
+void Plane::ajouterTexture(const string& texPath)
 {
 	ofImage image;
 	image.loadImage(texPath);
@@ -143,11 +143,11 @@ void Plane::ajouterTexCoordPourChaqueSommet()
 	}
 }
 
-void Plane::genereHauteursAleatoire()
+void Plane::genereHauteursAleatoire(float minHeight, float maxHeight)
 {
 	for(int i = 1; i < vertices.size(); i += 3)
 	{
-		vertices[i] = ofRandom(-20.0, -15.0);
+		vertices[i] = ofRandom(minHeight, maxHeight);
 	}
 }
 
