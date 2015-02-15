@@ -10,6 +10,8 @@
 
 const static float ROTATION_SPEED = 2.0;
 const static float FAR_PLANE_DISTANCE = 2000.0;
+const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
+const static float ANGLE_VISION_NORMAL = 70.0;
 
 class ofApp : public ofBaseApp{
 
@@ -45,6 +47,8 @@ class ofApp : public ofBaseApp{
 		int m_centreYFenetre;
 		float m_angle;
 		float angleChampDeVision;
+		bool cameraAvance;
+		bool vertigoEnFonction;
 		bool m_pause;
 		MousePositionHandler* mouseHandler;
 };

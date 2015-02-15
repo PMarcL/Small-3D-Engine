@@ -9,9 +9,11 @@ void ofApp::setup(){
 	m_centreYFenetre = ofGetWindowHeight() * 0.5;
 	mouseX = m_centreXFenetre;
 	mouseY = m_centreYFenetre;
-	angleChampDeVision = 70.0;
+	angleChampDeVision = ANGLE_VISION_NORMAL;
 	m_angle = 0.0;
 	m_pause = false;
+	cameraAvance = false;
+	vertigoEnFonction = false;
 	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	m_modelview.makeIdentityMatrix();
 	musiqueAmbiance.loadSound("Musique/november.mp3");
@@ -37,6 +39,10 @@ void ofApp::update(){
 		mouseHandler->update(mouseX, mouseY);
 		m_camera.update();
 		m_angle += ROTATION_SPEED;
+		if(vertigoEnFonction && cameraAvance)
+			zoomIn();
+		else if(vertigoEnFonction && angleChampDeVision > ANGLE_VISION_NORMAL)
+			zoomOut();
 	}
 }
 
@@ -59,7 +65,10 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	if(key == 'w' || key == 'W')
+	{
 		m_camera.setMoveForward(true);
+		cameraAvance = true;
+	}
 	else if(key == 's' || key == 'S')
 		m_camera.setMoveBackward(true);
 	else if(key == 'a' || key == 'A')
@@ -70,12 +79,26 @@ void ofApp::keyPressed(int key){
 		zoomIn();
 	else if(key == OF_KEY_DOWN)
 		zoomOut();
+	else if(key == 'v' || key == 'V')
+	{
+		vertigoEnFonction = !vertigoEnFonction;
+		m_camera.setVitesse(0.8);
+		if(!vertigoEnFonction)
+		{
+			angleChampDeVision = ANGLE_VISION_NORMAL;
+			m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+			m_camera.setVitesse(1.0);
+		}
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
 	if(key == 'w' || key == 'W')
+	{
 		m_camera.setMoveForward(false);
+		cameraAvance = false;
+	}
 	else if(key == 's' || key == 'S')
 		m_camera.setMoveBackward(false);
 	else if(key == 'a' || key == 'A')
@@ -143,7 +166,7 @@ void ofApp::zoomIn()
 {
 	if(angleChampDeVision < 179.0)
 	{
-		angleChampDeVision++;
+		angleChampDeVision += VERTIGO_DEGREE_PAR_FRAME;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
 }
@@ -152,7 +175,7 @@ void ofApp::zoomOut()
 {
 	if(angleChampDeVision > 1.0)
 	{
-		angleChampDeVision--;
+		angleChampDeVision -= VERTIGO_DEGREE_PAR_FRAME;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
 }
