@@ -96,6 +96,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MousePositionHandler.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\Paysage.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="src\Cube.h" />
     <ClInclude Include="src\MousePositionHandler.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\Paysage.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Skybox.h" />

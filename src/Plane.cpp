@@ -1,9 +1,9 @@
 #include "Plane.h"
 
-
-Plane::Plane(int size, Shader* shader, int numColumn, int numRow)
-	: shader(shader), texture(0), nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
+Plane::Plane(int size, int numColumn, int numRow)
+	:nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
 {
+	ratioTextureParCarre = 1.0;
 	glGenBuffers(1, &elemBuffer);
 	int halfSize = taille /2;
 
@@ -41,31 +41,20 @@ void Plane::ajouterIndices()
 	}
 }
 
-void Plane::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelView)
+void Plane::afficher()
 {
+	chargerSommets();
+	chargerCouleurs();
+	chargerElementBuffer();
 	if(useTexture)
 	{
-		glUseProgram(shader->getProgramID());
-
-		chargerSommets();
-		chargerCouleurs();
-		chargerElementBuffer();
-		chargerMatrices(projection, modelView, shader);
 		chargerTexCoord();
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform1i(glGetUniformLocation(shader->getProgramID(), "ourTexture1"), 0);
+		chargerTextures();
 		glPolygonMode(GL_FRONT, GL_FILL);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{
-		glUseProgram(shader->getProgramID());
-		chargerSommets();
-		chargerCouleurs();
-		chargerElementBuffer();
-		chargerMatrices(projection, modelView, shader);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	}
 	libererRessources();
@@ -76,19 +65,13 @@ void Plane::libererRessources()
 	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
-	glUseProgram(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Plane::chargerElementBuffer()
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elemBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(), GL_STATIC_DRAW);
-}
-
-void Plane::chargerMatrices(ofMatrix4x4 projection, ofMatrix4x4 modelView, Shader* sh)
-{
-	glUniformMatrix4fv(glGetUniformLocation(sh->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-	glUniformMatrix4fv(glGetUniformLocation(sh->getProgramID(), "modelview"), 1, GL_FALSE, modelView.getPtr());
 }
 
 void Plane::chargerSommets()
@@ -109,21 +92,30 @@ void Plane::chargerTexCoord()
 	glEnableVertexAttribArray(2);
 }
 
+void Plane::chargerTextures()
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	
+}
+
 void Plane::ajouterTexture(const string& texPath)
 {
 	ofImage image;
 	image.loadImage(texPath);
-	image.draw(0.0, 0.0);
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	
+	textures.push_back(GLuint());
+	glGenTextures(1, &textures[textures.size() - 1]);
+	glBindTexture(GL_TEXTURE_2D, textures[textures.size() - 1]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.getPixels());
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	image.clear();
-	useTexture = true;
-	shader = new Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
-	shader->charger();
+}
+
+void Plane::utiliserTextures(bool utiliser)
+{
+	useTexture = utiliser;
 	ajouterTexCoordPourChaqueSommet();
 }
 
@@ -133,8 +125,8 @@ void Plane::ajouterTexCoordPourChaqueSommet()
 	{
 		for(int j = 0; j < nbLignes + 1; j++)
 		{
-			texCoords.push_back(j * TEX_REPETITION_PAR_CARRE);
-			texCoords.push_back(i * TEX_REPETITION_PAR_CARRE);
+			texCoords.push_back(j * ratioTextureParCarre);
+			texCoords.push_back(i * ratioTextureParCarre);
 		}
 	}
 }
@@ -145,6 +137,33 @@ void Plane::genereHauteursAleatoire(float minHeight, float maxHeight)
 	{
 		vertices[i] = ofRandom(minHeight, maxHeight);
 	}
+}
+
+void Plane::generePenteProgressive(float minHeight, float maxHeight)
+{
+	float x = 0;
+	for(int i = 1; i < vertices.size(); i += 3)
+	{
+		vertices[i] = ofRandom(minHeight, maxHeight) * x;
+		minHeight++;
+		maxHeight++;
+		x++;
+	}
+}
+
+void Plane::reinitialiseHauteur()
+{
+	for(int i = 1; i < vertices.size(); i += 3)
+	{
+		vertices[i] = 0;
+	}
+}
+
+void Plane::setRatioTextureParCarre(float ratio)
+{
+	ratioTextureParCarre = ratio;
+	texCoords.clear();
+	ajouterTexCoordPourChaqueSommet();
 }
 
 Plane::~Plane(void)
