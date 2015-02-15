@@ -66,6 +66,10 @@ void ofApp::keyPressed(int key){
 		m_camera.setMoveLeft(true);
 	else if(key == 'd' || key == 'D')
 		m_camera.setMoveRight(true);
+	else if(key == OF_KEY_UP)
+		zoomIn();
+	else if(key == OF_KEY_DOWN)
+		zoomOut();
 }
 
 //--------------------------------------------------------------
@@ -135,6 +139,23 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
+void ofApp::zoomIn()
+{
+	if(angleChampDeVision < 179.0)
+	{
+		angleChampDeVision++;
+		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+	}
+}
+
+void ofApp::zoomOut()
+{
+	if(angleChampDeVision > 1.0)
+	{
+		angleChampDeVision--;
+		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+	}
+}
 
 ofApp::~ofApp() {
 	delete mouseHandler;

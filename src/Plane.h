@@ -15,6 +15,8 @@ public:
 	void afficher();
 	void ajouterTexture(const string& texPath);
 	void genereHauteursAleatoire(float minHeight, float maxHeight);
+	void generePenteProgressive(float minHeight, float maxHeight);
+	void reinitialiseHauteur();
 	void setRatioTextureParCarre(float ratio);
 	void utiliserTextures(bool utiliser);
 

@@ -19,7 +19,9 @@ private:
 	Shader shaderUneTexture;
 	Shader shaderPassThru;
 	Shader shaderOscillation;
+
 	Plane surfaceCentrale;
 	Plane ocean;
+	Plane montagne;
 };
 

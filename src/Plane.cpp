@@ -139,6 +139,26 @@ void Plane::genereHauteursAleatoire(float minHeight, float maxHeight)
 	}
 }
 
+void Plane::generePenteProgressive(float minHeight, float maxHeight)
+{
+	float x = 0;
+	for(int i = 1; i < vertices.size(); i += 3)
+	{
+		vertices[i] = ofRandom(minHeight, maxHeight) * x;
+		minHeight++;
+		maxHeight++;
+		x++;
+	}
+}
+
+void Plane::reinitialiseHauteur()
+{
+	for(int i = 1; i < vertices.size(); i += 3)
+	{
+		vertices[i] = 0;
+	}
+}
+
 void Plane::setRatioTextureParCarre(float ratio)
 {
 	ratioTextureParCarre = ratio;
