@@ -27,26 +27,8 @@ void ofApp::setup(){
 	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.0, mouseHandler);
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
-	floor = Plane(1000, &m_shader, 20, 20);
-	roof = Plane(1000, &m_shader, 100, 100);
 	m_axes = Axes(30, &m_shader);
-	wave = new Shader("Shaders/waveShader.vert", "Shaders/waveShader.frag");
-	wave->charger();
-	ocean = Plane(1000, wave, 100, 100);
-	ocean.ajouterTexture("Textures/water1.jpg");
-	ocean.ajouterTexture("Textures/water2.jpg");
-	ocean.utiliserTextures(true);
-	ocean.setShader(wave);
-	ocean.setRatioTextureParCarre(0.2);
 	
-	floor.ajouterTexture("Textures/rock.jpg");
-	floor.genereHauteursAleatoire(-20.0, -5.0);
-	floor.utiliserTextures(true);
-	floor.setShader(new Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag"));
-	roof.ajouterTexture("Textures/rock.jpg");
-	roof.genereHauteursAleatoire(100, 200);
-	roof.utiliserTextures(true);
-	roof.setShader(new Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag"));
 }
 
 //--------------------------------------------------------------
@@ -65,12 +47,8 @@ void ofApp::draw(){
 	//Sauvegarde de la matrice modelview
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
 	m_axes.afficher(m_projection, m_modelview);
-	floor.afficher(m_projection, m_modelview);
-	roof.afficher(m_projection, m_modelview);
-	m_modelview.glTranslate(1000, -10, 0);
-	ocean.afficher(m_projection, m_modelview);
+	paysage.afficher(m_projection, m_modelview);
 	Cube cube(2.0, &m_shader);
-	m_modelview = sauvegardeModelview;
 	m_modelview.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){
 		cube.afficher(m_projection, m_modelview);

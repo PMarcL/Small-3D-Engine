@@ -5,10 +5,8 @@
 #include "camera.h"
 #include "Cube.h"
 #include "Axes.h"
-#include "Plane.h"
 #include "MousePositionHandler.h"
-#include "Skybox.h"
-#include "ofxQtVideoSaver.h"
+#include "Paysage.h"
 
 const static float ROTATION_SPEED = 2.0;
 const static float FAR_PLANE_DISTANCE = 2000.0;
@@ -36,18 +34,15 @@ class ofApp : public ofBaseApp{
 		Shader m_shader;
 		Camera m_camera;
 		Axes m_axes;
-		Plane floor;
-		Plane roof;
 		ofMatrix4x4 m_projection;
 		ofMatrix4x4 m_modelview;
 		ofSoundPlayer musiqueAmbiance;
 		ofSoundPlayer sfxAmbiance;
+		Paysage paysage;
 		int m_centreXFenetre;
 		int m_centreYFenetre;
 		float m_angle;
 		float angleChampDeVision;
 		bool m_pause;
-		Shader* wave;
-		Plane ocean;
 		MousePositionHandler* mouseHandler;
 };
