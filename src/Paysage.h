@@ -15,6 +15,7 @@ public:
 
 private:
 
+	ofVec3f lumiereAmbiante;
 	Shader shaderUneTexture;
 	Shader shaderPassThru;
 	Shader shaderOscillation;

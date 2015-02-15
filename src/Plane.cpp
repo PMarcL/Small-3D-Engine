@@ -1,7 +1,7 @@
 #include "Plane.h"
 
-Plane::Plane(int size, Shader* shader, int numColumn, int numRow)
-	: shader(shader), nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
+Plane::Plane(int size, int numColumn, int numRow)
+	:nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
 {
 	ratioTextureParCarre = 1.0;
 	glGenBuffers(1, &elemBuffer);
@@ -41,22 +41,15 @@ void Plane::ajouterIndices()
 	}
 }
 
-void Plane::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelView)
+void Plane::afficher()
 {
-	glUseProgram(shader->getProgramID());
-
 	chargerSommets();
 	chargerCouleurs();
 	chargerElementBuffer();
-	chargerMatrices(projection, modelView, shader);
-	
 	if(useTexture)
 	{
 		chargerTexCoord();
 		chargerTextures();
-		ofVec3f ambientColor(0.0,0.0,0.3);
-		glUniform3fv(glGetUniformLocation(shader->getProgramID(), "ambientColor"), 1, ambientColor.getPtr());
-		glUniform1f(glGetUniformLocation(shader->getProgramID(), "time"), ofGetElapsedTimef());
 		glPolygonMode(GL_FRONT, GL_FILL);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	}
@@ -73,19 +66,12 @@ void Plane::libererRessources()
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glUseProgram(0);
 }
 
 void Plane::chargerElementBuffer()
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elemBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(), GL_STATIC_DRAW);
-}
-
-void Plane::chargerMatrices(ofMatrix4x4 projection, ofMatrix4x4 modelView, Shader* sh)
-{
-	glUniformMatrix4fv(glGetUniformLocation(sh->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-	glUniformMatrix4fv(glGetUniformLocation(sh->getProgramID(), "modelview"), 1, GL_FALSE, modelView.getPtr());
 }
 
 void Plane::chargerSommets()
@@ -108,20 +94,9 @@ void Plane::chargerTexCoord()
 
 void Plane::chargerTextures()
 {
-	if(textures.size() >= 1)
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textures[0]);
-		string uniformName = "Texture1";
-		glUniform1i(glGetUniformLocation(shader->getProgramID(), uniformName.c_str()), 0);
-	}
-	if(textures.size() >= 2)
-	{
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, textures[1]);
-		string uniformName = "Texture2";
-		glUniform1i(glGetUniformLocation(shader->getProgramID(), uniformName.c_str()), 0);
-	}
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	
 }
 
 void Plane::ajouterTexture(const string& texPath)
@@ -142,12 +117,6 @@ void Plane::utiliserTextures(bool utiliser)
 {
 	useTexture = utiliser;
 	ajouterTexCoordPourChaqueSommet();
-}
-
-void Plane::setShader(Shader* nouveauShader)
-{
-	shader = nouveauShader;
-	shader->charger();
 }
 
 void Plane::ajouterTexCoordPourChaqueSommet()
