@@ -73,10 +73,12 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelView)
 	ocean.afficher();
 	pushMatrix2 = modelView;
 	modelView.glTranslate(0.0, 0.0, -1000.0);
+	modelView.glRotate(90.0, 0.0, 1.0, 0.0);
 	glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "modelview"), 1, GL_FALSE, modelView.getPtr());
 	ocean.afficher();
 	modelView = pushMatrix2;
 	modelView.glTranslate(0.0, 0.0, 1000.0);
+	modelView.glRotate(90.0, 0.0, 1.0, 0.0);
 	glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "modelview"), 1, GL_FALSE, modelView.getPtr());
 	ocean.afficher();
 
