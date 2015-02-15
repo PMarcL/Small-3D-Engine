@@ -1,9 +1,9 @@
 #include "Plane.h"
 
-
 Plane::Plane(int size, Shader* shader, int numColumn, int numRow)
-	: shader(shader), texture(0), nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
+	: shader(shader), nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
 {
+	ratioTextureParCarre = 1.0;
 	glGenBuffers(1, &elemBuffer);
 	int halfSize = taille /2;
 
@@ -43,29 +43,25 @@ void Plane::ajouterIndices()
 
 void Plane::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelView)
 {
+	glUseProgram(shader->getProgramID());
+
+	chargerSommets();
+	chargerCouleurs();
+	chargerElementBuffer();
+	chargerMatrices(projection, modelView, shader);
+	
 	if(useTexture)
 	{
-		glUseProgram(shader->getProgramID());
-
-		chargerSommets();
-		chargerCouleurs();
-		chargerElementBuffer();
-		chargerMatrices(projection, modelView, shader);
 		chargerTexCoord();
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform1i(glGetUniformLocation(shader->getProgramID(), "ourTexture1"), 0);
+		chargerTextures();
+		ofVec3f ambientColor(0.0,0.0,0.3);
+		glUniform3fv(glGetUniformLocation(shader->getProgramID(), "ambientColor"), 1, ambientColor.getPtr());
+		glUniform1f(glGetUniformLocation(shader->getProgramID(), "time"), ofGetElapsedTimef());
 		glPolygonMode(GL_FRONT, GL_FILL);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{
-		glUseProgram(shader->getProgramID());
-		chargerSommets();
-		chargerCouleurs();
-		chargerElementBuffer();
-		chargerMatrices(projection, modelView, shader);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	}
 	libererRessources();
@@ -76,6 +72,7 @@ void Plane::libererRessources()
 	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
 }
 
@@ -109,22 +106,48 @@ void Plane::chargerTexCoord()
 	glEnableVertexAttribArray(2);
 }
 
+void Plane::chargerTextures()
+{
+	if(textures.size() >= 1)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, textures[0]);
+		string uniformName = "Texture1";
+		glUniform1i(glGetUniformLocation(shader->getProgramID(), uniformName.c_str()), 0);
+	}
+	if(textures.size() >= 2)
+	{
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, textures[1]);
+		string uniformName = "Texture2";
+		glUniform1i(glGetUniformLocation(shader->getProgramID(), uniformName.c_str()), 0);
+	}
+}
+
 void Plane::ajouterTexture(const string& texPath)
 {
 	ofImage image;
 	image.loadImage(texPath);
-	image.draw(0.0, 0.0);
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	
+	textures.push_back(GLuint());
+	glGenTextures(1, &textures[textures.size() - 1]);
+	glBindTexture(GL_TEXTURE_2D, textures[textures.size() - 1]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.getPixels());
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	image.clear();
-	useTexture = true;
-	shader = new Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
-	shader->charger();
+}
+
+void Plane::utiliserTextures(bool utiliser)
+{
+	useTexture = utiliser;
 	ajouterTexCoordPourChaqueSommet();
+}
+
+void Plane::setShader(Shader* nouveauShader)
+{
+	shader = nouveauShader;
+	shader->charger();
 }
 
 void Plane::ajouterTexCoordPourChaqueSommet()
@@ -133,8 +156,8 @@ void Plane::ajouterTexCoordPourChaqueSommet()
 	{
 		for(int j = 0; j < nbLignes + 1; j++)
 		{
-			texCoords.push_back(j * TEX_REPETITION_PAR_CARRE);
-			texCoords.push_back(i * TEX_REPETITION_PAR_CARRE);
+			texCoords.push_back(j * ratioTextureParCarre);
+			texCoords.push_back(i * ratioTextureParCarre);
 		}
 	}
 }
@@ -145,6 +168,13 @@ void Plane::genereHauteursAleatoire(float minHeight, float maxHeight)
 	{
 		vertices[i] = ofRandom(minHeight, maxHeight);
 	}
+}
+
+void Plane::setRatioTextureParCarre(float ratio)
+{
+	ratioTextureParCarre = ratio;
+	texCoords.clear();
+	ajouterTexCoordPourChaqueSommet();
 }
 
 Plane::~Plane(void)

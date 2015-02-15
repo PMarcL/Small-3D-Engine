@@ -10,6 +10,7 @@
 class Cube
 {
     public:
+		Cube(){}
 		Cube(float taille, Shader* shader);
 		~Cube();
 		void afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview);

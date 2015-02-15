@@ -7,26 +7,46 @@ void ofApp::setup(){
 	ofHideCursor();
 	m_centreXFenetre = ofGetWindowWidth() * 0.5;
 	m_centreYFenetre = ofGetWindowHeight() * 0.5;
-	glEnable(GL_DEPTH_TEST);
-	mouseHandler = new MousePositionHandler();
-	m_projection.makePerspectiveMatrix(70.0, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, 1000.0);
+	mouseX = m_centreXFenetre;
+	mouseY = m_centreYFenetre;
+	angleChampDeVision = 70.0;
+	m_angle = 0.0;
+	m_pause = false;
+	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	m_modelview.makeIdentityMatrix();
+	musiqueAmbiance.loadSound("Musique/november.mp3");
+	musiqueAmbiance.setLoop(true);
+	musiqueAmbiance.play();
+	sfxAmbiance.loadSound("SFX/wind.wav");
+	sfxAmbiance.setLoop(true);
+	sfxAmbiance.setVolume(0.5);
+	sfxAmbiance.play();
+	glEnable(GL_DEPTH_TEST);
+
+	mouseHandler = new MousePositionHandler();
 	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.0, mouseHandler);
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
-	m_angle = 0.0;
-
 	floor = Plane(1000, &m_shader, 20, 20);
-	floor.ajouterTexture("Textures/rock.jpg");
 	roof = Plane(1000, &m_shader, 100, 100);
-	roof.ajouterTexture("Textures/rock.jpg");
-
-	m_axes = Axes(10, &m_shader);
-	m_pause = false;
-	mouseX = m_centreXFenetre;
-	mouseY = m_centreYFenetre;
+	m_axes = Axes(30, &m_shader);
+	wave = new Shader("Shaders/waveShader.vert", "Shaders/waveShader.frag");
+	wave->charger();
+	ocean = Plane(1000, wave, 100, 100);
+	ocean.ajouterTexture("Textures/water1.jpg");
+	ocean.ajouterTexture("Textures/water2.jpg");
+	ocean.utiliserTextures(true);
+	ocean.setShader(wave);
+	ocean.setRatioTextureParCarre(0.2);
+	
+	floor.ajouterTexture("Textures/rock.jpg");
 	floor.genereHauteursAleatoire(-20.0, -5.0);
+	floor.utiliserTextures(true);
+	floor.setShader(new Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag"));
+	roof.ajouterTexture("Textures/rock.jpg");
 	roof.genereHauteursAleatoire(100, 200);
+	roof.utiliserTextures(true);
+	roof.setShader(new Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag"));
 }
 
 //--------------------------------------------------------------
@@ -41,14 +61,16 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//Placement de la caméra
 	m_camera.lookAt(m_modelview);
 	//Sauvegarde de la matrice modelview
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
 	m_axes.afficher(m_projection, m_modelview);
-	//floor.afficher(m_projection, m_modelview);
+	floor.afficher(m_projection, m_modelview);
 	roof.afficher(m_projection, m_modelview);
+	m_modelview.glTranslate(1000, -10, 0);
+	ocean.afficher(m_projection, m_modelview);
 	Cube cube(2.0, &m_shader);
+	m_modelview = sauvegardeModelview;
 	m_modelview.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){
 		cube.afficher(m_projection, m_modelview);
@@ -83,9 +105,13 @@ void ofApp::keyReleased(int key){
 			m_pause = false;
 			ofHideCursor();
 			mouseHandler->resetCusor();
+			musiqueAmbiance.setPaused(!(musiqueAmbiance.getIsPlaying()));
+			sfxAmbiance.setPaused(!(sfxAmbiance.getIsPlaying()));
 		}else{
 			m_pause = true;
 			ofShowCursor();
+			musiqueAmbiance.setPaused(musiqueAmbiance.getIsPlaying());
+			sfxAmbiance.setPaused(sfxAmbiance.getIsPlaying());
 		}
 	}
 	else if(key == 'f' || key == 'F'){
@@ -118,7 +144,7 @@ void ofApp::mouseReleased(int x, int y, int button){
 void ofApp::windowResized(int w, int h){
 	m_centreXFenetre = w * 0.5;
 	m_centreYFenetre = h * 0.5;
-	m_projection.makePerspectiveMatrix(70.0, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, 1000.0);
+	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 }
 
 //--------------------------------------------------------------
