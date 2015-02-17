@@ -16,13 +16,7 @@ void ofApp::setup(){
 	vertigoEnFonction = false;
 	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	m_modelview.makeIdentityMatrix();
-	musiqueAmbiance.loadSound("Musique/november.mp3");
-	musiqueAmbiance.setLoop(true);
-	musiqueAmbiance.play();
-	sfxAmbiance.loadSound("SFX/wind.wav");
-	sfxAmbiance.setLoop(true);
-	sfxAmbiance.setVolume(0.5);
-	sfxAmbiance.play();
+	son.jouerMusiqueEtAmbiance();
 	glEnable(GL_DEPTH_TEST);
 
 	mouseHandler = new MousePositionHandler();
@@ -30,6 +24,7 @@ void ofApp::setup(){
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_axes = Axes(30, &m_shader);
+	perso = ModeleOBJ("Models/dude.obj");
 	
 }
 
@@ -50,11 +45,15 @@ void ofApp::update(){
 void ofApp::draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_camera.lookAt(m_modelview);
-	//Sauvegarde de la matrice modelview
+	//	pushMatrix
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
 	m_axes.afficher(m_projection, m_modelview);
 	paysage.afficher(m_projection, m_modelview);
+	m_modelview.glTranslate(50, 0, 0);
+	m_modelview.glScale(10,10,10);
+	perso.afficher(m_projection, m_modelview, m_camera.getPosition());
 	Cube cube(2.0, &m_shader);
+	m_modelview = sauvegardeModelview;
 	m_modelview.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){
 		cube.afficher(m_projection, m_modelview);
@@ -110,13 +109,11 @@ void ofApp::keyReleased(int key){
 			m_pause = false;
 			ofHideCursor();
 			mouseHandler->resetCusor();
-			musiqueAmbiance.setPaused(!(musiqueAmbiance.getIsPlaying()));
-			sfxAmbiance.setPaused(!(sfxAmbiance.getIsPlaying()));
+			son.desactionnerPauseMusiqueEtAmbiance();
 		}else{
 			m_pause = true;
 			ofShowCursor();
-			musiqueAmbiance.setPaused(musiqueAmbiance.getIsPlaying());
-			sfxAmbiance.setPaused(sfxAmbiance.getIsPlaying());
+			son.actionnerPauseMusiqueEtAmbiance();
 		}
 	}
 	else if(key == 'f' || key == 'F'){

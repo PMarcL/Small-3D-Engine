@@ -7,9 +7,11 @@
 #include "Axes.h"
 #include "MousePositionHandler.h"
 #include "Paysage.h"
+#include "MusiqueSFX.h"
+#include "modeleOBJ.h"
 
 const static float ROTATION_SPEED = 2.0;
-const static float FAR_PLANE_DISTANCE = 2000.0;
+const static float FAR_PLANE_DISTANCE = 3000.0;
 const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
 
@@ -40,9 +42,9 @@ class ofApp : public ofBaseApp{
 		Axes m_axes;
 		ofMatrix4x4 m_projection;
 		ofMatrix4x4 m_modelview;
-		ofSoundPlayer musiqueAmbiance;
-		ofSoundPlayer sfxAmbiance;
+		MusiqueSFX son;
 		Paysage paysage;
+		ModeleOBJ perso;
 		int m_centreXFenetre;
 		int m_centreYFenetre;
 		float m_angle;

@@ -92,9 +92,11 @@
   <ItemGroup>
     <ClCompile Include="src\Axes.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\modeleOBJ.cpp" />
     <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MousePositionHandler.cpp" />
+    <ClCompile Include="src\MusiqueSFX.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\Paysage.cpp" />
     <ClCompile Include="src\Plane.cpp" />
@@ -104,8 +106,10 @@
   <ItemGroup>
     <ClInclude Include="src\Axes.h" />
     <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\modeleOBJ.h" />
     <ClInclude Include="src\Cube.h" />
     <ClInclude Include="src\MousePositionHandler.h" />
+    <ClInclude Include="src\MusiqueSFX.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Paysage.h" />
     <ClInclude Include="src\Plane.h" />
