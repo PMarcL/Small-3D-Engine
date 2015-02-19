@@ -9,6 +9,7 @@
 #include "Paysage.h"
 #include "MusiqueSFX.h"
 #include "modeleOBJ.h"
+#include "CubeMap.h"
 
 const static float ROTATION_SPEED = 2.0;
 const static float FAR_PLANE_DISTANCE = 3000.0;
@@ -38,6 +39,8 @@ class ofApp : public ofBaseApp{
 
 	private:
 		Shader m_shader;
+		Shader m_shaderTex;
+
 		Camera m_camera;
 		Axes m_axes;
 		ofMatrix4x4 m_projection;
@@ -45,6 +48,9 @@ class ofApp : public ofBaseApp{
 		MusiqueSFX son;
 		Paysage paysage;
 		ModeleOBJ perso;
+		CubeMap m_cubeMap;
+		Cube m_cube;
+
 		int m_centreXFenetre;
 		int m_centreYFenetre;
 		float m_angle;
@@ -52,5 +58,6 @@ class ofApp : public ofBaseApp{
 		bool cameraAvance;
 		bool vertigoEnFonction;
 		bool m_pause;
-		MousePositionHandler* mouseHandler;
+
+		MousePositionHandler* mouseHandler;			
 };

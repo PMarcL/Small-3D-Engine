@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClCompile Include="src\Axes.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\CubeMap.cpp" />
     <ClCompile Include="src\modeleOBJ.cpp" />
     <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -102,10 +103,12 @@
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Axes.h" />
     <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\CubeMap.h" />
     <ClInclude Include="src\modeleOBJ.h" />
     <ClInclude Include="src\Cube.h" />
     <ClInclude Include="src\MousePositionHandler.h" />
@@ -115,6 +118,7 @@
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Skybox.h" />
+    <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

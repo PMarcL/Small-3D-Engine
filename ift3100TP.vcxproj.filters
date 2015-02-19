@@ -35,6 +35,12 @@
     <ClCompile Include="src\modeleOBJ.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\CubeMap.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -71,6 +77,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\modeleOBJ.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CubeMap.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
