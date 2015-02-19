@@ -1,0 +1,56 @@
+#pragma once
+
+#include "ofMain.h"
+#include "Shader.h"
+#include "camera.h"
+#include "Cube.h"
+#include "Axes.h"
+#include "MousePositionHandler.h"
+#include "Paysage.h"
+#include "MusiqueSFX.h"
+#include "modeleOBJ.h"
+
+const static float ROTATION_SPEED = 2.0;
+const static float FAR_PLANE_DISTANCE = 3000.0;
+const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
+const static float ANGLE_VISION_NORMAL = 70.0;
+
+class ofApp : public ofBaseApp{
+
+	public:
+		void setup();
+		void update();
+		void draw();
+
+		void keyPressed(int key);
+		void keyReleased(int key);
+		void mouseMoved(int x, int y );
+		void mouseDragged(int x, int y, int button);
+		void mousePressed(int x, int y, int button);
+		void mouseReleased(int x, int y, int button);
+		void windowResized(int w, int h);
+		void dragEvent(ofDragInfo dragInfo);
+		void gotMessage(ofMessage msg);
+		void zoomIn();
+		void zoomOut();
+
+		~ofApp();
+
+	private:
+		Shader m_shader;
+		Camera m_camera;
+		Axes m_axes;
+		ofMatrix4x4 m_projection;
+		ofMatrix4x4 m_modelview;
+		MusiqueSFX son;
+		Paysage paysage;
+		ModeleOBJ perso;
+		int m_centreXFenetre;
+		int m_centreYFenetre;
+		float m_angle;
+		float angleChampDeVision;
+		bool cameraAvance;
+		bool vertigoEnFonction;
+		bool m_pause;
+		MousePositionHandler* mouseHandler;
+};
