@@ -11,6 +11,7 @@ ModeleOBJ::ModeleOBJ(void)
 
 ModeleOBJ::~ModeleOBJ(void)
 {
+
 }
 
 ModeleOBJ::ModeleOBJ(const string& cheminOBJ)
@@ -30,6 +31,7 @@ ModeleOBJ::ModeleOBJ(const string& cheminOBJ)
 void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelView, const ofVec3f& lightPos)
 {
 	glUseProgram(shader->getProgramID());
+
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "modelview"), 1, GL_FALSE, modelView.getPtr());
 	glUniform3f(glGetUniformLocation(shader->getProgramID(), "lightPos"), lightPos.x, lightPos.y, lightPos.z);

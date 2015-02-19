@@ -10,8 +10,6 @@ out vec3 Normal;
 uniform mat4 projection;
 uniform mat4 modelview;
 
-
-
 void main()
 {
     gl_Position = projection * modelview * vec4(position, 1.0);

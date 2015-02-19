@@ -25,7 +25,18 @@ void ofApp::setup(){
 	m_shader.charger();
 	m_axes = Axes(30, &m_shader);
 	perso = ModeleOBJ("Models/dude.obj");
+	m_cube = Cube(2.0, &m_shader);
+
+	m_shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
+	m_shaderTex.charger();
 	
+	m_cubeMap = CubeMap(10, &m_shaderTex, 
+		"Textures/ciel/XN.jpg",
+		"Textures/ciel/XP.jpg",
+		"Textures/ciel/YN.jpg",
+		"Textures/ciel/YP.jpg",
+		"Textures/ciel/ZN.jpg",
+		"Textures/ciel/ZN.jpg");
 }
 
 //--------------------------------------------------------------
@@ -47,11 +58,14 @@ void ofApp::draw(){
 	m_camera.lookAt(m_modelview);
 	//	pushMatrix
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
+	m_modelview.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
+	m_cubeMap.afficher(m_projection, m_modelview);
+	m_modelview = sauvegardeModelview;
 	m_axes.afficher(m_projection, m_modelview);
 	paysage.afficher(m_projection, m_modelview);
 	m_modelview.glTranslate(50, 0, 0);
 	m_modelview.glScale(10,10,10);
-	perso.afficher(m_projection, m_modelview, m_camera.getPosition());
+	perso.afficher(m_projection, m_modelview, DIRECTION_LUMIERE);
 	Cube cube(2.0, &m_shader);
 	m_modelview = sauvegardeModelview;
 	m_modelview.glRotate(m_angle, 0, 1, 0);
