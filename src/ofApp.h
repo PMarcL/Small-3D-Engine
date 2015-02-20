@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGui.h"
 #include "Shader.h"
 #include "camera.h"
 #include "Cube.h"
@@ -47,4 +48,9 @@ class ofApp : public ofBaseApp{
 		float angleChampDeVision;
 		bool m_pause;
 		MousePositionHandler* mouseHandler;
+		
+		ofxPanel gui;
+		ofParameterGroup parameters;
+		ofParameter<bool> rotationEnabled;
+		ofTrueTypeFont font;
 };

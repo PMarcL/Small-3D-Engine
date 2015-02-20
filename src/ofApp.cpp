@@ -29,6 +29,13 @@ void ofApp::setup(){
 	m_shader.charger();
 	m_axes = Axes(30, &m_shader);
 	
+	parameters.setName("settings");
+	parameters.add(rotationEnabled.set("rotation", true));
+	parameters.add(rotationEnabled.set("rotation", true));
+	gui.setup(parameters);
+
+	font.loadFont(OF_TTF_SANS,9,true,true);
+	ofEnableAlphaBlending(); //nécessaire pour le rendu de texte
 }
 
 //--------------------------------------------------------------
@@ -43,17 +50,20 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	m_camera.lookAt(m_modelview);
 	//Sauvegarde de la matrice modelview
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
 	m_axes.afficher(m_projection, m_modelview);
 	paysage.afficher(m_projection, m_modelview);
 	Cube cube(2.0, &m_shader);
+	gui.draw();
 	m_modelview.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){
 		cube.afficher(m_projection, m_modelview);
 		m_modelview.glTranslate(3, 0, 0);
 	}
+	
 }
 
 //--------------------------------------------------------------
