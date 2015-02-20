@@ -10,6 +10,8 @@
 #include "MusiqueSFX.h"
 #include "modeleOBJ.h"
 #include "CubeMap.h"
+#include "Tetraedre.h"
+#include "Octaedre.h"
 
 const static float ROTATION_SPEED = 2.0;
 const static float FAR_PLANE_DISTANCE = 3000.0;
@@ -50,6 +52,8 @@ class ofApp : public ofBaseApp{
 		ModeleOBJ perso;
 		CubeMap m_cubeMap;
 		Cube m_cube;
+		Tetraedre m_tretraedre;
+		Octaedre m_octaedre;
 
 		int m_centreXFenetre;
 		int m_centreYFenetre;
