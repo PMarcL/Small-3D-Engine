@@ -9,18 +9,14 @@ void ofApp::setup(){
 	m_centreYFenetre = ofGetWindowHeight() * 0.5;
 	mouseX = m_centreXFenetre;
 	mouseY = m_centreYFenetre;
-	angleChampDeVision = 70.0;
+	angleChampDeVision = ANGLE_VISION_NORMAL;
 	m_angle = 0.0;
 	m_pause = false;
+	cameraAvance = false;
+	vertigoEnFonction = false;
 	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	m_modelview.makeIdentityMatrix();
-	musiqueAmbiance.loadSound("Musique/november.mp3");
-	musiqueAmbiance.setLoop(true);
-	musiqueAmbiance.play();
-	sfxAmbiance.loadSound("SFX/wind.wav");
-	sfxAmbiance.setLoop(true);
-	sfxAmbiance.setVolume(0.5);
-	sfxAmbiance.play();
+	son.jouerMusiqueEtAmbiance();
 	glEnable(GL_DEPTH_TEST);
 
 	mouseHandler = new MousePositionHandler();
@@ -28,7 +24,13 @@ void ofApp::setup(){
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_axes = Axes(30, &m_shader);
+	perso = ModeleOBJ("Models/dude.obj");
+	m_cube = Cube(2.0, &m_shader);
+
+	m_shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
+	m_shaderTex.charger();
 	
+
 	parameters.setName("settings");
 	parameters.add(rotationEnabled.set("rotation", true));
 	parameters.add(rotationEnabled.set("rotation", true));
@@ -36,6 +38,14 @@ void ofApp::setup(){
 
 	font.loadFont(OF_TTF_SANS,9,true,true);
 	ofEnableAlphaBlending(); //nécessaire pour le rendu de texte
+	m_cubeMap = CubeMap(10, &m_shaderTex, 
+		"Textures/ciel/XN.jpg",
+		"Textures/ciel/XP.jpg",
+		"Textures/ciel/YN.jpg",
+		"Textures/ciel/YP.jpg",
+		"Textures/ciel/ZN.jpg",
+		"Textures/ciel/ZN.jpg");
+
 }
 
 //--------------------------------------------------------------
@@ -44,6 +54,10 @@ void ofApp::update(){
 		mouseHandler->update(mouseX, mouseY);
 		m_camera.update();
 		m_angle += ROTATION_SPEED;
+		if(vertigoEnFonction && cameraAvance)
+			zoomIn();
+		else if(vertigoEnFonction && angleChampDeVision > ANGLE_VISION_NORMAL)
+			zoomOut();
 	}
 }
 
@@ -52,12 +66,22 @@ void ofApp::draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	m_camera.lookAt(m_modelview);
-	//Sauvegarde de la matrice modelview
+	//	pushMatrix
 	ofMatrix4x4 sauvegardeModelview = m_modelview;
+	m_modelview.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
+	m_cubeMap.afficher(m_projection, m_modelview);
+	m_modelview = sauvegardeModelview;
 	m_axes.afficher(m_projection, m_modelview);
 	paysage.afficher(m_projection, m_modelview);
+	m_modelview.glTranslate(50, 0, 0);
+	m_modelview.glScale(10,10,10);
+	perso.afficher(m_projection, m_modelview, DIRECTION_LUMIERE);
 	Cube cube(2.0, &m_shader);
+<<<<<<< HEAD
 	gui.draw();
+=======
+	m_modelview = sauvegardeModelview;
+>>>>>>> origin/master
 	m_modelview.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){
 		cube.afficher(m_projection, m_modelview);
@@ -69,7 +93,10 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	if(key == 'w' || key == 'W')
+	{
 		m_camera.setMoveForward(true);
+		cameraAvance = true;
+	}
 	else if(key == 's' || key == 'S')
 		m_camera.setMoveBackward(true);
 	else if(key == 'a' || key == 'A')
@@ -80,12 +107,33 @@ void ofApp::keyPressed(int key){
 		zoomIn();
 	else if(key == OF_KEY_DOWN)
 		zoomOut();
+	else if(key == 'v' || key == 'V')
+	{
+		vertigoEnFonction = !vertigoEnFonction;
+		m_camera.setVitesse(0.8);
+		if(!vertigoEnFonction)
+		{
+			angleChampDeVision = ANGLE_VISION_NORMAL;
+			m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+			m_camera.setVitesse(1.0);
+		}
+	}
+	else if(key == 'i' || key == 'I')
+	{
+		ofImage screen;
+		screen.grabScreen(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+		screen.saveImage("screenShot.png");
+
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
 	if(key == 'w' || key == 'W')
+	{
 		m_camera.setMoveForward(false);
+		cameraAvance = false;
+	}
 	else if(key == 's' || key == 'S')
 		m_camera.setMoveBackward(false);
 	else if(key == 'a' || key == 'A')
@@ -97,13 +145,11 @@ void ofApp::keyReleased(int key){
 			m_pause = false;
 			ofHideCursor();
 			mouseHandler->resetCusor();
-			musiqueAmbiance.setPaused(!(musiqueAmbiance.getIsPlaying()));
-			sfxAmbiance.setPaused(!(sfxAmbiance.getIsPlaying()));
+			son.desactionnerPauseMusiqueEtAmbiance();
 		}else{
 			m_pause = true;
 			ofShowCursor();
-			musiqueAmbiance.setPaused(musiqueAmbiance.getIsPlaying());
-			sfxAmbiance.setPaused(sfxAmbiance.getIsPlaying());
+			son.actionnerPauseMusiqueEtAmbiance();
 		}
 	}
 	else if(key == 'f' || key == 'F'){
@@ -153,7 +199,7 @@ void ofApp::zoomIn()
 {
 	if(angleChampDeVision < 179.0)
 	{
-		angleChampDeVision++;
+		angleChampDeVision += VERTIGO_DEGREE_PAR_FRAME;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
 }
@@ -162,7 +208,7 @@ void ofApp::zoomOut()
 {
 	if(angleChampDeVision > 1.0)
 	{
-		angleChampDeVision--;
+		angleChampDeVision -= VERTIGO_DEGREE_PAR_FRAME;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
 }

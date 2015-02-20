@@ -8,9 +8,15 @@
 #include "Axes.h"
 #include "MousePositionHandler.h"
 #include "Paysage.h"
+#include "MusiqueSFX.h"
+#include "modeleOBJ.h"
+#include "CubeMap.h"
 
 const static float ROTATION_SPEED = 2.0;
-const static float FAR_PLANE_DISTANCE = 2000.0;
+const static float FAR_PLANE_DISTANCE = 3000.0;
+const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
+const static float ANGLE_VISION_NORMAL = 70.0;
+const static ofVec3f DIRECTION_LUMIERE = ofVec3f(500, 500, 300);
 
 class ofApp : public ofBaseApp{
 
@@ -35,17 +41,23 @@ class ofApp : public ofBaseApp{
 
 	private:
 		Shader m_shader;
+		Shader m_shaderTex;
 		Camera m_camera;
 		Axes m_axes;
 		ofMatrix4x4 m_projection;
 		ofMatrix4x4 m_modelview;
-		ofSoundPlayer musiqueAmbiance;
-		ofSoundPlayer sfxAmbiance;
+		MusiqueSFX son;
 		Paysage paysage;
+		ModeleOBJ perso;
+		CubeMap m_cubeMap;
+		Cube m_cube;
+
 		int m_centreXFenetre;
 		int m_centreYFenetre;
 		float m_angle;
 		float angleChampDeVision;
+		bool cameraAvance;
+		bool vertigoEnFonction;
 		bool m_pause;
 		MousePositionHandler* mouseHandler;
 		
