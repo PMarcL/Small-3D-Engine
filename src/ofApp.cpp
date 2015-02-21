@@ -55,26 +55,31 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	m_camera.lookAt(view);
-	//	pushMatrix
-	ofMatrix4x4 pushModel = model;
-	model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
-	m_cubeMap.afficher(m_projection, model, view);
-	model = pushModel;
+	
+	pushMatrix();
+		model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
+		m_cubeMap.afficher(m_projection, model, view);
+	popMatrix();
+	
 	m_axes.afficher(m_projection, model, view);
 	paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE);
-	model.glTranslate(50, 0, 0);
-	model.glScale(10,10,10);
-	perso.afficher(m_projection, model, view, DIRECTION_LUMIERE);
-	Cube cube(2.0, &m_shader);
-	model = pushModel;
-	model.glRotate(m_angle, 0, 1, 0);
-	for(int i = 0; i < 4; i++){
-		cube.afficher(m_projection, model, view);
-		model.glTranslate(3, 0, 0);
-	}
-	// popMatrix
-	model = pushModel;
+	
+	pushMatrix();
+		model.glTranslate(50, 0, 0);
+		model.glScale(10,10,10);
+		perso.afficher(m_projection, model, view, DIRECTION_LUMIERE);
+	popMatrix();
+	
+	pushMatrix();
+		Cube cube(2.0, &m_shader);
+		model.glRotate(m_angle, 0, 1, 0);
+		for(int i = 0; i < 4; i++){
+			cube.afficher(m_projection, model, view);
+			model.glTranslate(3, 0, 0);
+		}
+	popMatrix();
 }
 
 //--------------------------------------------------------------
@@ -198,6 +203,17 @@ void ofApp::zoomOut()
 		angleChampDeVision -= VERTIGO_DEGREE_PAR_FRAME;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
+}
+
+void ofApp::pushMatrix()
+{
+	matrices.push(model);
+}
+
+void ofApp::popMatrix()
+{
+	model = matrices.top();
+	matrices.pop();
 }
 
 ofApp::~ofApp() {

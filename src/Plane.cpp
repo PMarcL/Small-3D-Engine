@@ -20,13 +20,13 @@ void Plane::ajouterSommets()
 
 	for(int j = 0; j < nbColonnes + 1; j++)
 	{
-		int z = j * columnSize;
-		z = ofMap(z, 0, taille, -halfSize, halfSize);
+		int x = j * columnSize;
+		x = ofMap(x, 0, taille, -halfSize, halfSize);
 		for(int i = 0; i < nbLignes + 1; i++)
 		{
-			int x = i * rowSize;
-			x = ofMap(x, 0, taille, -halfSize, halfSize);
-			vertices.push_back(ofVec3f(z, 0, x));
+			int z = i * rowSize;
+			z = ofMap(z, 0, taille, -halfSize, halfSize);
+			vertices.push_back(ofVec3f(x, 0, z));
 		}
 	}
 }

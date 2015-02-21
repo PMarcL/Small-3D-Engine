@@ -10,6 +10,7 @@
 #include "MusiqueSFX.h"
 #include "modeleOBJ.h"
 #include "CubeMap.h"
+#include <stack>
 
 const static float ROTATION_SPEED = 2.0;
 const static float FAR_PLANE_DISTANCE = 3000.0;
@@ -39,6 +40,10 @@ class ofApp : public ofBaseApp{
 		~ofApp();
 
 	private:
+		void pushMatrix();
+		void popMatrix();
+
+		stack<ofMatrix4x4> matrices;
 		Shader m_shader;
 		Shader m_shaderTex;
 		Camera m_camera;
