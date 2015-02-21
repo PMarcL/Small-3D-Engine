@@ -15,7 +15,7 @@ void ofApp::setup(){
 	cameraAvance = false;
 	vertigoEnFonction = false;
 	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
-	m_modelview.makeIdentityMatrix();
+	model.makeIdentityMatrix();
 	son.jouerMusiqueEtAmbiance();
 	glEnable(GL_DEPTH_TEST);
 
@@ -30,7 +30,7 @@ void ofApp::setup(){
 	m_shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
 	m_shaderTex.charger();
 	
-	m_cubeMap = CubeMap(10, &m_shaderTex, 
+	m_cubeMap = CubeMap(100, &m_shaderTex, 
 		"Textures/ciel/XN.jpg",
 		"Textures/ciel/XP.jpg",
 		"Textures/ciel/YN.jpg",
@@ -55,24 +55,26 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	m_camera.lookAt(m_modelview);
+	m_camera.lookAt(view);
 	//	pushMatrix
-	ofMatrix4x4 sauvegardeModelview = m_modelview;
-	m_modelview.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
-	m_cubeMap.afficher(m_projection, m_modelview);
-	m_modelview = sauvegardeModelview;
-	m_axes.afficher(m_projection, m_modelview);
-	paysage.afficher(m_projection, m_modelview);
-	m_modelview.glTranslate(50, 0, 0);
-	m_modelview.glScale(10,10,10);
-	perso.afficher(m_projection, m_modelview, DIRECTION_LUMIERE);
+	ofMatrix4x4 pushModel = model;
+	model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
+	m_cubeMap.afficher(m_projection, model, view);
+	model = pushModel;
+	m_axes.afficher(m_projection, model, view);
+	paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE);
+	model.glTranslate(50, 0, 0);
+	model.glScale(10,10,10);
+	perso.afficher(m_projection, model, view, DIRECTION_LUMIERE);
 	Cube cube(2.0, &m_shader);
-	m_modelview = sauvegardeModelview;
-	m_modelview.glRotate(m_angle, 0, 1, 0);
+	model = pushModel;
+	model.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){
-		cube.afficher(m_projection, m_modelview);
-		m_modelview.glTranslate(3, 0, 0);
+		cube.afficher(m_projection, model, view);
+		model.glTranslate(3, 0, 0);
 	}
+	// popMatrix
+	model = pushModel;
 }
 
 //--------------------------------------------------------------
@@ -182,7 +184,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::zoomIn()
 {
-	if(angleChampDeVision < 179.0)
+	if(angleChampDeVision < 170.0)
 	{
 		angleChampDeVision += VERTIGO_DEGREE_PAR_FRAME;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);

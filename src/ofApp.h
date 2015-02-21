@@ -44,7 +44,8 @@ class ofApp : public ofBaseApp{
 		Camera m_camera;
 		Axes m_axes;
 		ofMatrix4x4 m_projection;
-		ofMatrix4x4 m_modelview;
+		ofMatrix4x4 model;
+		ofMatrix4x4 view;
 		MusiqueSFX son;
 		Paysage paysage;
 		ModeleOBJ perso;

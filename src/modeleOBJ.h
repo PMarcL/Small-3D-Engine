@@ -11,7 +11,7 @@ public:
 	ModeleOBJ(const string& cheminOBJ);
 	~ModeleOBJ(void);
 
-	void afficher(ofMatrix4x4 projection, ofMatrix4x4 modelView,const ofVec3f& lightPos);
+	void afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view, const ofVec3f& lightPos);
 
 private:
 	
