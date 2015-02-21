@@ -42,7 +42,7 @@ Tetraedre::~Tetraedre()
 
 }
 
-void Tetraedre::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview)
+void Tetraedre::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &model, ofMatrix4x4 &view)
 {
 	// Activation du shader
 	glUseProgram(m_shader->getProgramID());
@@ -57,7 +57,8 @@ void Tetraedre::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview)
 		
 		// Envoi des matrices
 		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "modelview"), 1, GL_FALSE, modelview.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
 		
 		// Rendu
 		glDrawArrays(GL_TRIANGLES, 0, 12);

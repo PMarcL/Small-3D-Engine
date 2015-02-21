@@ -25,7 +25,7 @@ Mesh::Mesh(const vector<GLfloat>& positions, const vector<GLfloat>& couleurs,
 		utiliserIndices = true;
 	}
 
-	//genererBuffer();
+	genererBuffer();
 }
 
 Mesh::Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors,
@@ -37,6 +37,28 @@ Mesh::Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors,
 
 	if(colors.size() > 0)
 		ajouterCouleurs(colors);
+	if(normals.size() > 0)
+		ajouterNormals(normals);
+	if(indices.size() > 0)
+	{
+		ajouterIndices(indices);
+		utiliserIndices = true;
+	}
+
+	genererBuffer();
+}
+
+Mesh::Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors, const vector<GLfloat>& texCoords,
+		   const vector<ofVec3f>& normals, const vector<GLuint>& indices, int nbSommets)
+{
+	utiliserIndices = false;
+	ajouterVertices(nbSommets);
+	ajouterPositions(positions);
+
+	if(colors.size() > 0)
+		ajouterCouleurs(colors);
+	if(texCoords.size() > 0) 
+		ajouterTexCoords(texCoords);
 	if(normals.size() > 0)
 		ajouterNormals(normals);
 	if(indices.size() > 0)

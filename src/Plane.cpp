@@ -4,24 +4,31 @@ Plane::Plane(int size, int numColumn, int numRow)
 	:nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
 {
 	ratioTextureParCarre = 1.0;
-	glGenBuffers(1, &elemBuffer);
-	int halfSize = taille /2;
+	this->ajouterSommets();
+	this->ajouterIndices();
+	this->ajouterCouleurs();
+	this->ajouterTexCoordPourChaqueSommet();
+	this->calculerNormals();
+	this->initialiserMesh();
+}
 
+void Plane::ajouterSommets()
+{
+	int halfSize = taille / 2;
 	int columnSize = taille / nbColonnes;
 	int rowSize = taille / nbLignes;
+
 	for(int j = 0; j < nbColonnes + 1; j++)
 	{
-		int z = j * columnSize;
-		z = ofMap(z, 0, taille, -halfSize, halfSize);
+		int x = j * columnSize;
+		x = ofMap(x, 0, taille, -halfSize, halfSize);
 		for(int i = 0; i < nbLignes + 1; i++)
 		{
-			int x = i * rowSize;
-			x = ofMap(x, 0, taille, -halfSize, halfSize);
-			vertices.push_back(x); vertices.push_back(0); vertices.push_back(z);
+			int z = i * rowSize;
+			z = ofMap(z, 0, taille, -halfSize, halfSize);
+			vertices.push_back(ofVec3f(x, 0, z));
 		}
 	}
-
-	this->ajouterIndices();
 }
 
 void Plane::ajouterIndices()
@@ -31,65 +38,51 @@ void Plane::ajouterIndices()
 		int relIndice = i * (nbLignes + 1);
 		for(int j = 0; j < nbLignes; j++)
 		{
-			colors.push_back(1.0); colors.push_back(0.0); colors.push_back(0.0);
-			colors.push_back(0.0); colors.push_back(1.0); colors.push_back(0.0);
-			colors.push_back(0.0); colors.push_back(0.0); colors.push_back(1.0);
-			colors.push_back(1.0); colors.push_back(0.0); colors.push_back(1.0);
 			indices.push_back(j + relIndice); indices.push_back(j + relIndice + 1); indices.push_back(j + relIndice + nbLignes + 1); 
 			indices.push_back(j + relIndice + nbLignes + 1); indices.push_back(j + relIndice + 1); indices.push_back(j + relIndice + nbLignes + 2);
 		}
 	}
 }
 
+void Plane::ajouterCouleurs()
+{
+	for(int i = 0; i < nbColonnes; i++)
+	{
+		for(int j = 0; j < nbLignes; j++)
+		{
+			colors.push_back(ofVec3f(1.0, 0.0, 0.0));
+			colors.push_back(ofVec3f(0.0, 1.0, 0.0));
+			colors.push_back(ofVec3f(0.0, 0.0, 1.0));
+			colors.push_back(ofVec3f(1.0, 0.0, 1.0));
+		}
+	}
+}
+
+void Plane::calculerNormals()
+{
+	normals.resize(vertices.size());
+	for (int i = 0; i < indices.size(); i+=3)
+	{
+		GLuint ia = indices[i];
+		GLuint ib = indices[i+1];
+		GLuint ic = indices[i+2];
+		ofVec3f normal = ofVec3f(vertices[ib]) - ofVec3f(vertices[ia]);
+		normal.cross(ofVec3f(vertices[ic]) - ofVec3f(vertices[ia]));
+		normal.normalize();
+		normals[ia] = normals[ib] = normals[ic] = normal;
+	}
+}
+
+void Plane::initialiserMesh()
+{
+	mesh = Mesh(vertices, colors, texCoords, normals, indices, (nbColonnes + 1) * (nbLignes + 1));
+}
+
 void Plane::afficher()
 {
-	chargerSommets();
-	chargerCouleurs();
-	chargerElementBuffer();
 	if(useTexture)
-	{
-		chargerTexCoord();
 		chargerTextures();
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	}
-	else
-	{
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	}
-	libererRessources();
-}
-
-void Plane::libererRessources()
-{
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void Plane::chargerElementBuffer()
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elemBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(), GL_STATIC_DRAW);
-}
-
-void Plane::chargerSommets()
-{
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices.data());
-	glEnableVertexAttribArray(0);
-}
-
-void Plane::chargerCouleurs()
-{
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, colors.data());
-	glEnableVertexAttribArray(1);
-}
-
-void Plane::chargerTexCoord()
-{
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, texCoords.data());
-	glEnableVertexAttribArray(2);
+	mesh.dessiner();
 }
 
 void Plane::chargerTextures()
@@ -116,7 +109,6 @@ void Plane::ajouterTexture(const string& texPath)
 void Plane::utiliserTextures(bool utiliser)
 {
 	useTexture = utiliser;
-	ajouterTexCoordPourChaqueSommet();
 }
 
 void Plane::ajouterTexCoordPourChaqueSommet()
@@ -133,30 +125,36 @@ void Plane::ajouterTexCoordPourChaqueSommet()
 
 void Plane::genereHauteursAleatoire(float minHeight, float maxHeight)
 {
-	for(int i = 1; i < vertices.size(); i += 3)
+	for(int i = 1; i < vertices.size(); i++)
 	{
-		vertices[i] = ofRandom(minHeight, maxHeight);
+		vertices[i].y = ofRandom(minHeight, maxHeight);
 	}
+
+	this->initialiserMesh();
 }
 
 void Plane::generePenteProgressive(float minHeight, float maxHeight)
 {
 	float x = 0;
-	for(int i = 1; i < vertices.size(); i += 3)
+	for(int i = 1; i < vertices.size(); i++)
 	{
-		vertices[i] = ofRandom(minHeight, maxHeight) * x;
+		vertices[i].y = ofRandom(minHeight, maxHeight) * x;
 		minHeight++;
 		maxHeight++;
 		x++;
 	}
+
+	this->initialiserMesh();
 }
 
 void Plane::reinitialiseHauteur()
 {
-	for(int i = 1; i < vertices.size(); i += 3)
+	for(int i = 1; i < vertices.size(); i++)
 	{
-		vertices[i] = 0;
+		vertices[i].y = 0;
 	}
+
+	this->initialiserMesh();
 }
 
 void Plane::setRatioTextureParCarre(float ratio)
@@ -164,6 +162,7 @@ void Plane::setRatioTextureParCarre(float ratio)
 	ratioTextureParCarre = ratio;
 	texCoords.clear();
 	ajouterTexCoordPourChaqueSommet();
+	this->initialiserMesh();
 }
 
 Plane::~Plane(void)

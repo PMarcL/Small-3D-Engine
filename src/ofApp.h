@@ -10,6 +10,7 @@
 #include "MusiqueSFX.h"
 #include "modeleOBJ.h"
 #include "CubeMap.h"
+#include <stack>
 #include "Tetraedre.h"
 #include "Octaedre.h"
 
@@ -41,12 +42,17 @@ class ofApp : public ofBaseApp{
 		~ofApp();
 
 	private:
+		void pushMatrix();
+		void popMatrix();
+
+		stack<ofMatrix4x4> matrices;
 		Shader m_shader;
 		Shader m_shaderTex;
 		Camera m_camera;
 		Axes m_axes;
 		ofMatrix4x4 m_projection;
-		ofMatrix4x4 m_modelview;
+		ofMatrix4x4 model;
+		ofMatrix4x4 view;
 		MusiqueSFX son;
 		Paysage paysage;
 		ModeleOBJ perso;

@@ -12,7 +12,7 @@ class Octaedre
 		Octaedre(){}
 		Octaedre(float taille, Shader* shader);
 		~Octaedre();
-		void afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview);
+		void afficher(ofMatrix4x4 &projection, ofMatrix4x4 &model, ofMatrix4x4 &view);
     private:
 		Shader* m_shader;
 		float m_vertices[72];

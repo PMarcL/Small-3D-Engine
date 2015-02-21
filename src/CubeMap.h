@@ -13,7 +13,7 @@ class CubeMap
 		CubeMap(){};
 		CubeMap(float taille, Shader* shader, string texXN, string texXP, string texYN, string texYP, string texZN, string texZP);
 		~CubeMap();
-		void afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview);
+		void afficher(ofMatrix4x4 &projection, ofMatrix4x4 &model, ofMatrix4x4 &view);
 		CubeMap& operator=(CubeMap const &cubeMapeACopier);
 
 		//Propriétés
