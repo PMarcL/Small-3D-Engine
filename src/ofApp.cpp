@@ -20,12 +20,14 @@ void ofApp::setup(){
 	glEnable(GL_DEPTH_TEST);
 
 	mouseHandler = new MousePositionHandler();
-	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.0, mouseHandler);
+	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 0.50, mouseHandler);
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_axes = Axes(30, &m_shader);
 	perso = ModeleOBJ("Models/dude.obj");
 	m_cube = Cube(2.0, &m_shader);
+	m_tretraedre = Tetraedre(8.0, &m_shader);
+	m_octaedre = Octaedre(2.0, &m_shader);
 
 	m_shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
 	m_shaderTex.charger();
@@ -62,9 +64,26 @@ void ofApp::draw(){
 		model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
 		m_cubeMap.afficher(m_projection, model, view);
 	popMatrix();
+
+	pushMatrix();
+		model.glTranslate(30.0f, 0.0f, 100.0f);
+		m_tretraedre.afficher(m_projection, model, view);
 	
-	m_axes.afficher(m_projection, model, view);
-	paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE);
+
+		for(float i = 0; i < 360; i+= 30){
+			pushMatrix();
+				model.glRotate(i + m_angle, 0.0f, 1.0f, 0.0f);
+				model.glTranslate(30.0f, 0.0f, 0.0f);
+				m_octaedre.afficher(m_projection, model, view);
+			popMatrix();
+		}
+		m_octaedre.afficher(m_projection, model, view);
+	popMatrix();
+
+	pushMatrix();
+		m_axes.afficher(m_projection, model, view);
+		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE);
+	popMatrix();
 	
 	pushMatrix();
 		model.glTranslate(50, 0, 0);
