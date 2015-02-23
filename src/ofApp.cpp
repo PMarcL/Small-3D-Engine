@@ -10,6 +10,7 @@ void ofApp::setup(){
 	mouseX = m_centreXFenetre;
 	mouseY = m_centreYFenetre;
 	angleChampDeVision = ANGLE_VISION_NORMAL;
+	nbCaptureEcran = 0;
 	m_angle = 0.0;
 	m_pause = false;
 	cameraAvance = false;
@@ -20,7 +21,7 @@ void ofApp::setup(){
 	glEnable(GL_DEPTH_TEST);
 
 	mouseHandler = new MousePositionHandler();
-	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 0.50, mouseHandler);
+	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_axes = Axes(30, &m_shader);
@@ -131,10 +132,11 @@ void ofApp::keyPressed(int key){
 	}
 	else if(key == 'i' || key == 'I')
 	{
-		ofImage screen;
-		screen.grabScreen(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-		screen.saveImage("screenShot.png");
-
+		ofImage fenetre;
+		fenetre.grabScreen(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+		string nb = to_string(nbCaptureEcran);
+		fenetre.saveImage("Captures/capture" + nb +".png");
+		nbCaptureEcran++;
 	}
 }
 

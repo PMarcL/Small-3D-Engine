@@ -48,7 +48,7 @@ void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 
 	glUseProgram(0);
 }
 
-bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& outVertices, vector<GLuint>& elements, std::vector<ofVec3f>& outNormals)
+bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<GLuint>& indices, std::vector<ofVec3f>& normales)
 {
 	vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 
@@ -62,35 +62,35 @@ bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& outVertices, vector
 	string ligne; 
 	while(getline(fichier, ligne))
 	{
-		string header = ligne.substr(0,2);
-		if(header == "v ")
+		string enTete = ligne.substr(0,2);
+		if(enTete == "v ")
 		{
 			istringstream s(ligne.substr(2));
 			ofVec3f vertex;
 			s >> vertex.x;
 			s >> vertex.y;
 			s >> vertex.z;
-			outVertices.push_back(vertex);
+			sommets.push_back(vertex);
 		}
-		else if(header == "f ")
+		else if(enTete == "f ")
 		{
 			istringstream s(ligne.substr(2));
 			GLushort a, b, c;
 			s >> a; s >> b, s >> c;
 			a--; b--; c--;
-			elements.push_back(a); elements.push_back(b); elements.push_back(c);
+			indices.push_back(a); indices.push_back(b); indices.push_back(c);
 		}
 		else if(ligne[0] == '#') { /* ignoré cette ligne */ }
 		else { /* ignoré cette ligne */ }
 	}
-	outNormals.resize(outVertices.size(), ofVec3f(0.0, 0.0, 0.0));
-	for (int i = 0; i < elements.size(); i+=3) {
-		GLuint ia = elements[i];
-		GLuint ib = elements[i+1];
-		GLuint ic = elements[i+2];
-		ofVec3f normal = ofVec3f(outVertices[ib]) - ofVec3f(outVertices[ia]);
-		normal.cross(ofVec3f(outVertices[ic]) - ofVec3f(outVertices[ia]));
+	normales.resize(sommets.size(), ofVec3f(0.0, 0.0, 0.0));
+	for (int i = 0; i < indices.size(); i+=3) {
+		GLuint ia = indices[i];
+		GLuint ib = indices[i+1];
+		GLuint ic = indices[i+2];
+		ofVec3f normal = ofVec3f(sommets[ib]) - ofVec3f(sommets[ia]);
+		normal.cross(ofVec3f(sommets[ic]) - ofVec3f(sommets[ia]));
 		normal.normalize();
-		outNormals[ia] = outNormals[ib] = outNormals[ic] = normal;
+		normales[ia] = normales[ib] = normales[ic] = normal;
   }
 }
