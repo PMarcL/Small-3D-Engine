@@ -15,7 +15,8 @@
 #include "Tetraedre.h"
 #include "Octaedre.h"
 
-const static float ROTATION_SPEED = 2.0;
+const static float DEFAULT_ROTATION_SPEED = 2.0;
+const static float DEFAULT_CAMERA_SPEED = 1.0;
 const static float FAR_PLANE_DISTANCE = 3000.0;
 const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
@@ -68,12 +69,21 @@ class ofApp : public ofBaseApp{
 		float m_angle;
 		float angleChampDeVision;
 		bool cameraAvance;
-		bool vertigoEnFonction;
-		bool m_pause;
 		MousePositionHandler* mouseHandler;
 		
+		void pauseToggled(bool & paused);
+		void vertigoToggled(bool & enabled);
+		void speedChanged(float & speed);
+
+		bool showMenu;
+		ofxFloatSlider cameraSpeed;
+		ofxFloatSlider rotationSpeed;
+		ofxToggle rotationActivated;
+		ofxToggle vertigoEnFonction;
+		ofxToggle paused;
+		ofxLabel guiMessage;
+		ofxLabel fps;
+		ofxLabel usageMessage;
+
 		ofxPanel gui;
-		ofParameterGroup parameters;
-		ofParameter<bool> rotationEnabled;
-		ofTrueTypeFont font;
 };
