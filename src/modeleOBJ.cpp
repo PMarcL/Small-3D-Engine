@@ -32,16 +32,17 @@ ModeleOBJ::ModeleOBJ(const string& cheminOBJ)
 	normals.clear();
 }
 
-void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view, const ofVec3f& lightPos)
+void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
+						 const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere)
 {
 	glUseProgram(shader->getProgramID());
 
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
-	glUniform3f(glGetUniformLocation(shader->getProgramID(), "lightPos"), lightPos.x, lightPos.y, lightPos.z);
-	glUniform3f(glGetUniformLocation(shader->getProgramID(), "lightColor"), 0.8, 0.8, 1);
-	glUniform3f(glGetUniformLocation(shader->getProgramID(), "objectColor"), 1, 0.1, 0.31);
+	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "lightPos"), 1, directionLumiere.getPtr());
+	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "lightColor"), 1, couleurLumiere.getPtr());
+	glUniform3f(glGetUniformLocation(shader->getProgramID(), "objectColor"), 0.0, 0.5, 0.1);
 
 	mesh.dessiner();
 

@@ -1,15 +1,31 @@
 #version 430 core
 
-in vec3 color;
+in vec3 Color;
 in vec2 TexCoord;
+in vec3 Normal;
+in vec3 FragPos;
 
-out vec4 outColor;
 uniform sampler2D Texture1;
 uniform vec3 lumiereAmbiante;
+uniform vec3 positionLumiere;
+uniform vec3 couleurLumiere;
+
+out vec4 color;
 
 void main()
 {
-  vec4 oceanColor = vec4(0.0, 0.1, 0.4, 0.5);
-  vec4 oceanWithTex = mix(texture(Texture1, TexCoord), oceanColor, 0.6);
-  outColor = mix(oceanWithTex, vec4(lumiereAmbiante, 0.5), 0.2);
+		// Lumière ambiante
+    float ambientStrength = 0.2f;
+    vec3 ambient = ambientStrength * lumiereAmbiante;
+
+		// Lumière diffuse
+    vec3 norm = normalize(Normal);
+    vec3 directionLumiere = normalize(positionLumiere - FragPos);
+    float diff = max(dot(norm, directionLumiere), 0.0);
+    vec3 diffuse = diff * couleurLumiere;
+
+	 	vec4 couleurObjet = texture(Texture1, TexCoord);
+
+    vec3 result = (ambient + diffuse) * couleurObjet.xyz;
+    color = vec4(result, 0.5f);
 }

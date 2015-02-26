@@ -3,11 +3,6 @@
 
 Paysage::Paysage()
 {
-	lumiereAmbiante = ofVec3f(0.0, 0.0, 0.3);
-
-	shaderPassThru = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
-	shaderPassThru.charger();
-	
 	shaderOscillation =  Shader("Shaders/waveShader.vert", "Shaders/waveShader.frag");
 	shaderOscillation.charger();
 
@@ -28,18 +23,29 @@ Paysage::Paysage()
 	montagne.generePenteProgressive(0.0, 5.0);
 	montagne.ajouterTexture("Textures/rock.jpg");
 	montagne.utiliserTextures(true);
+
+	arbre = ModeleOBJ("Models/tree.obj");
+	generationPositionArbres();
 }
 
+void Paysage::generationPositionArbres()
+{
+	for(int i = 0; i < NB_ARBRES; i++)
+	{
+		positionsArbres.push_back(ofVec3f(ofRandom(-500.0, 500.0), -10.0, ofRandom(-1500.0, 1500.0)));
+	}
+}
 
-void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 view,  const ofVec3f& lightPos)
+void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 view, 
+					   const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere)
 {
 	this->model = modelIn;
 	// Affichage de la surface de base
 	pushMatrix();
 		glUseProgram(shaderUneTexture.getProgramID());
-		glUniform3fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "lumiereAmbiante"), 1, lumiereAmbiante.getPtr());
-		glUniform3fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "positionLumiere"), 1, lightPos.getPtr());
-		glUniform3f(glGetUniformLocation(shaderUneTexture.getProgramID(), "couleurLumiere"), 1.0, 1.0, 1.0);
+		glUniform3fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "lumiereAmbiante"), 1, LUMIERE_AMBIANTE.getPtr());
+		glUniform3fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "positionLumiere"), 1, directionLumiere.getPtr());
+		glUniform3fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "couleurLumiere"), 1, couleurLumiere.getPtr());
 		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
 		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
 		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
@@ -77,9 +83,9 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	pushMatrix();
 		model.glTranslate(980.0, -40.0, 0.0);
 		glUseProgram(shaderOscillation.getProgramID());
-		glUniform3fv(glGetUniformLocation(shaderOscillation.getProgramID(), "lumiereAmbiante"), 1, lumiereAmbiante.getPtr());
-		glUniform3fv(glGetUniformLocation(shaderOscillation.getProgramID(), "positionLumiere"), 1, lightPos.getPtr());
-		glUniform3f(glGetUniformLocation(shaderOscillation.getProgramID(), "couleurLumiere"), 1.0, 1.0, 1.0);
+		glUniform3fv(glGetUniformLocation(shaderOscillation.getProgramID(), "lumiereAmbiante"), 1, LUMIERE_AMBIANTE.getPtr());
+		glUniform3fv(glGetUniformLocation(shaderOscillation.getProgramID(), "positionLumiere"), 1, directionLumiere.getPtr());
+		glUniform3fv(glGetUniformLocation(shaderOscillation.getProgramID(), "couleurLumiere"), 1, couleurLumiere.getPtr());
 		glUniform1f(glGetUniformLocation(shaderOscillation.getProgramID(), "time"), ofGetElapsedTimef());
 		glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
 		glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
@@ -101,6 +107,15 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 		popMatrix();
 
 	popMatrix();
+
+	for(int i = 0; i < NB_ARBRES; i++)
+	{
+		pushMatrix();
+			model.glTranslate(positionsArbres[i]);
+			model.glScale(50, 50, 50);
+			arbre.afficher(projection, model, view, directionLumiere, couleurLumiere);
+		popMatrix();
+	}
 
 	glUseProgram(0);
 }
