@@ -54,7 +54,7 @@ void ofApp::setup(){
 		"Textures/ciel/YN.jpg",
 		"Textures/ciel/YP.jpg",
 		"Textures/ciel/ZN.jpg",
-		"Textures/ciel/ZN.jpg");
+		"Textures/ciel/ZP.jpg");
 }
 
 //--------------------------------------------------------------
