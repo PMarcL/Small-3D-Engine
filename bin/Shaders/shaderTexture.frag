@@ -10,5 +10,5 @@ uniform vec3 lumiereAmbiante;
 
 void main()
 {
-	color = mix(texture(Texture1, TexCoord), vec4(lumiereAmbiante, 1.0), 0.2);
+    color = mix(texture(Texture1, TexCoord), vec4(lumiereAmbiante, 1.0), 0.2);
 }

@@ -3,8 +3,11 @@
 #include "ofMain.h"
 #include "Plane.h"
 #include "Shader.h"
+#include "modeleOBJ.h"
 #include <stack>
 
+const static int NB_ARBRES = 30;
+const static ofVec3f LUMIERE_AMBIANTE = ofVec3f(0.0, 0.0, 0.8);
 
 class Paysage
 {
@@ -12,9 +15,11 @@ public:
 	Paysage(void);
 	~Paysage(void) {}
 
-	void afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view, const ofVec3f& lightPos);
+	void afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
+		const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere);
 
 private:
+	void generationPositionArbres();
 	void pushMatrix();
 	void popMatrix();
 
@@ -27,5 +32,7 @@ private:
 	Plane surfaceCentrale;
 	Plane ocean;
 	Plane montagne;
+	ModeleOBJ arbre;
+	vector<ofVec3f> positionsArbres;
 };
 

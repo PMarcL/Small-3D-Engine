@@ -14,17 +14,17 @@ out vec4 color;
 
 void main()
 {
-	// Ambient
+		// Lumière ambiante
     float ambientStrength = 0.2f;
     vec3 ambient = ambientStrength * lumiereAmbiante;
 
-    // Diffuse
+		// Lumière diffuse
     vec3 norm = normalize(Normal);
     vec3 directionLumiere = normalize(positionLumiere - FragPos);
     float diff = max(dot(norm, directionLumiere), 0.0);
     vec3 diffuse = diff * couleurLumiere;
 
-	 vec4 couleurObjet = texture(Texture1, TexCoord);
+	 	vec4 couleurObjet = texture(Texture1, TexCoord);
 
     vec3 result = (ambient + diffuse) * couleurObjet.xyz;
     color = vec4(result, 0.5f);

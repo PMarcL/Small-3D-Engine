@@ -83,13 +83,13 @@ void ofApp::draw(){
 
 	pushMatrix();
 		m_axes.afficher(m_projection, model, view);
-		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE);
+		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE);
 	popMatrix();
 	
 	pushMatrix();
 		model.glTranslate(50, 0, 0);
 		model.glScale(10,10,10);
-		perso.afficher(m_projection, model, view, DIRECTION_LUMIERE);
+		perso.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE);
 	popMatrix();
 	
 	pushMatrix();

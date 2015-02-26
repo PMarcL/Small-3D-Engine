@@ -19,6 +19,7 @@ const static float FAR_PLANE_DISTANCE = 3000.0;
 const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
 const static ofVec3f DIRECTION_LUMIERE = ofVec3f(500, 1500, 300);
+const static ofVec3f COUL_LUMIERE = ofVec3f(1.0, 1.0, 1.0);
 
 class ofApp : public ofBaseApp{
 
