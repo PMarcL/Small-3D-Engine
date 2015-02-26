@@ -38,6 +38,8 @@ public:
 		const vector<GLuint>& indices, int nbSommets);
 	Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors,
 		const vector<ofVec3f>& normals, const vector<GLuint>& indices, int nbSommets);
+	Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors, const vector<GLfloat>& texCoords,
+		const vector<ofVec3f>& normals, const vector<GLuint>& indices, int nbSommets);
 	~Mesh(void) {}
 	
 	void utilisationDesIndices(bool utiliser);

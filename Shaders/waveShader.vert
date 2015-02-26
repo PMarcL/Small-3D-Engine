@@ -1,24 +1,29 @@
 #version 430 core
 
-in vec3 in_Vertex;
-in vec3 in_Color;
-in vec2 texCoord;
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 color;
+layout (location = 2) in vec2 texCoord;
+layout (location = 3) in vec3 normal;
 
 uniform mat4 projection;
-uniform mat4 modelview;
+uniform mat4 model;
+uniform mat4 view;
 uniform float time;
 
-out vec3 color;
+out vec3 Color;
 out vec2 TexCoord;
+out vec3 Normal;
+out vec3 FragPos;
 
 void main()
 {
-	float deplacementY = sin(time + (in_Vertex.x / 100.0) + (in_Vertex.z / 100.0)) * 15;
-	vec4 position = projection * modelview * vec4(in_Vertex, 1.0);
-	position.y += deplacementY;
-	gl_Position = position;
+	float deplacementY = sin(time + (position.x / 100.0) + (position.z / 100.0)) * 15;
+	vec4 Position = projection * view * model* vec4(position, 1.0);
+	Position.y += deplacementY;
+	gl_Position = Position;
 
-	color = in_Color;
+	Color = color;
 	TexCoord = texCoord;
-
+	Normal = normal;
+	FragPos = vec3(model * vec4(position, 1.0));
 }

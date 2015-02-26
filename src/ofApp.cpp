@@ -10,27 +10,29 @@ void ofApp::setup(){
 	mouseX = m_centreXFenetre;
 	mouseY = m_centreYFenetre;
 	angleChampDeVision = ANGLE_VISION_NORMAL;
+	nbCaptureEcran = 0;
 	m_angle = 0.0;
 	m_pause = false;
 	cameraAvance = false;
 	vertigoEnFonction = false;
 	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
-	m_modelview.makeIdentityMatrix();
+	model.makeIdentityMatrix();
 	son.jouerMusiqueEtAmbiance();
 	glEnable(GL_DEPTH_TEST);
 
 	mouseHandler = new MousePositionHandler();
-	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.0, mouseHandler);
+	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_axes = Axes(30, &m_shader);
 	perso = ModeleOBJ("Models/dude.obj");
 	m_cube = Cube(2.0, &m_shader);
+	m_tretraedre = Tetraedre(8.0, &m_shader);
+	m_octaedre = Octaedre(2.0, &m_shader);
 
 	m_shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
 	m_shaderTex.charger();
 	
-
 	parameters.setName("settings");
 	parameters.add(rotationEnabled.set("rotation", true));
 	parameters.add(rotationEnabled.set("rotation", true));
@@ -38,7 +40,7 @@ void ofApp::setup(){
 
 	font.loadFont(OF_TTF_SANS,9,true,true);
 	ofEnableAlphaBlending(); //nécessaire pour le rendu de texte
-	m_cubeMap = CubeMap(10, &m_shaderTex, 
+	m_cubeMap = CubeMap(100, &m_shaderTex, 
 		"Textures/ciel/XN.jpg",
 		"Textures/ciel/XP.jpg",
 		"Textures/ciel/YN.jpg",
@@ -77,17 +79,56 @@ void ofApp::draw(){
 	m_modelview.glScale(10,10,10);
 	perso.afficher(m_projection, m_modelview, DIRECTION_LUMIERE);
 	Cube cube(2.0, &m_shader);
-<<<<<<< HEAD
+
 	gui.draw();
-=======
 	m_modelview = sauvegardeModelview;
->>>>>>> origin/master
 	m_modelview.glRotate(m_angle, 0, 1, 0);
 	for(int i = 0; i < 4; i++){
 		cube.afficher(m_projection, m_modelview);
 		m_modelview.glTranslate(3, 0, 0);
 	}
+
+	m_camera.lookAt(view);
 	
+	pushMatrix();
+		model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
+		m_cubeMap.afficher(m_projection, model, view);
+	popMatrix();
+
+	pushMatrix();
+		model.glTranslate(30.0f, 0.0f, 100.0f);
+		m_tretraedre.afficher(m_projection, model, view);
+	
+
+		for(float i = 0; i < 360; i+= 30){
+			pushMatrix();
+				model.glRotate(i + m_angle, 0.0f, 1.0f, 0.0f);
+				model.glTranslate(30.0f, 0.0f, 0.0f);
+				m_octaedre.afficher(m_projection, model, view);
+			popMatrix();
+		}
+		m_octaedre.afficher(m_projection, model, view);
+	popMatrix();
+
+	pushMatrix();
+		m_axes.afficher(m_projection, model, view);
+		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE);
+	popMatrix();
+	
+	pushMatrix();
+		model.glTranslate(50, 0, 0);
+		model.glScale(10,10,10);
+		perso.afficher(m_projection, model, view, DIRECTION_LUMIERE);
+	popMatrix();
+	
+	pushMatrix();
+		Cube cube(2.0, &m_shader);
+		model.glRotate(m_angle, 0, 1, 0);
+		for(int i = 0; i < 4; i++){
+			cube.afficher(m_projection, model, view);
+			model.glTranslate(3, 0, 0);
+		}
+	popMatrix();
 }
 
 //--------------------------------------------------------------
@@ -120,10 +161,11 @@ void ofApp::keyPressed(int key){
 	}
 	else if(key == 'i' || key == 'I')
 	{
-		ofImage screen;
-		screen.grabScreen(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-		screen.saveImage("screenShot.png");
-
+		ofImage fenetre;
+		fenetre.grabScreen(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+		string nb = to_string(nbCaptureEcran);
+		fenetre.saveImage("Captures/capture" + nb +".png");
+		nbCaptureEcran++;
 	}
 }
 
@@ -197,7 +239,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::zoomIn()
 {
-	if(angleChampDeVision < 179.0)
+	if(angleChampDeVision < 170.0)
 	{
 		angleChampDeVision += VERTIGO_DEGREE_PAR_FRAME;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
@@ -211,6 +253,17 @@ void ofApp::zoomOut()
 		angleChampDeVision -= VERTIGO_DEGREE_PAR_FRAME;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
+}
+
+void ofApp::pushMatrix()
+{
+	matrices.push(model);
+}
+
+void ofApp::popMatrix()
+{
+	model = matrices.top();
+	matrices.pop();
 }
 
 ofApp::~ofApp() {

@@ -25,7 +25,6 @@
     <ClCompile Include="src\Plane.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Skybox.cpp" />
     <ClCompile Include="src\Paysage.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -36,12 +35,18 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Mesh.cpp">
-		<Filter>src</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\CubeMap.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tetraedre.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Octaedre.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,7 +77,6 @@
     <ClInclude Include="src\Plane.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Skybox.h" />
     <ClInclude Include="src\Paysage.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -83,12 +87,18 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Mesh.h">
-		<Filter>src</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\CubeMap.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Texture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tetraedre.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Octaedre.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

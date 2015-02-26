@@ -99,11 +99,12 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MousePositionHandler.cpp" />
     <ClCompile Include="src\MusiqueSFX.cpp" />
+    <ClCompile Include="src\Octaedre.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\Paysage.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\Skybox.cpp" />
+    <ClCompile Include="src\Tetraedre.cpp" />
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,11 +116,12 @@
     <ClInclude Include="src\Cube.h" />
     <ClInclude Include="src\MousePositionHandler.h" />
     <ClInclude Include="src\MusiqueSFX.h" />
+    <ClInclude Include="src\Octaedre.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Paysage.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\Skybox.h" />
+    <ClInclude Include="src\Tetraedre.h" />
     <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <ItemGroup>

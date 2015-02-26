@@ -72,7 +72,7 @@ CubeMap::~CubeMap()
 
 }
 
-void CubeMap::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview)
+void CubeMap::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &model, ofMatrix4x4 &view)
 {
 	glDisable(GL_LIGHTING);
 
@@ -91,7 +91,8 @@ void CubeMap::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &modelview)
 		
 		// Envoi des matrices
 		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "modelview"), 1, GL_FALSE, modelview.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
 		
 		for(int i = 0; i < 6; i++){
 			glBindTexture(GL_TEXTURE_2D, tex[i].getID());
