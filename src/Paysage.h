@@ -16,7 +16,7 @@ public:
 	~Paysage(void) {}
 
 	void afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
-		const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere);
+		const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere, const float& intensiteLumiere);
 
 private:
 	void generationPositionArbres();

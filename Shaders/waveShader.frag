@@ -9,14 +9,14 @@ uniform sampler2D Texture1;
 uniform vec3 lumiereAmbiante;
 uniform vec3 positionLumiere;
 uniform vec3 couleurLumiere;
+uniform float intensiteLumiere;
 
 out vec4 color;
 
 void main()
 {
 		// Lumière ambiante
-    float ambientStrength = 0.2f;
-    vec3 ambient = ambientStrength * lumiereAmbiante;
+    vec3 ambient = intensiteLumiere * lumiereAmbiante;
 
 		// Lumière diffuse
     vec3 norm = normalize(Normal);

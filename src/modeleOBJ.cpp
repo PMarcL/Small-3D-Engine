@@ -33,10 +33,12 @@ ModeleOBJ::ModeleOBJ(const string& cheminOBJ)
 }
 
 void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
-						 const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere)
+						 const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere, const float& intensiteLumiere)
 {
 	glUseProgram(shader->getProgramID());
 
+	glUniform1f(glGetUniformLocation(shader->getProgramID(), "intensiteLumiere"), intensiteLumiere);
+	glUniform3f(glGetUniformLocation(shader->getProgramID(), "lumiereAmbiante"), 0.0, 0.0, 0.8);
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());

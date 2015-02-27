@@ -15,6 +15,9 @@ void ofApp::setup(){
 	angleChampDeVision = ANGLE_VISION_NORMAL;
 	nbCaptureEcran = 0;
 	m_angle = 0.0;
+	intensiteLumiere = QUANTITE_LUMIERE_DEFAUT;
+	showMenu = true;
+	paused = false;
 	
 	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
@@ -35,17 +38,19 @@ void ofApp::setup(){
 	
 	paused.addListener(this, &ofApp::pauseToggled);
 	vertigoEnFonction.addListener(this, &ofApp::vertigoToggled);
-	cameraSpeed.addListener(this, &ofApp::speedChanged);
+	vitesseCamera.addListener(this, &ofApp::speedChanged);
+	quantiteIntensiteLumiere.addListener(this, &ofApp::intensiteLumiereChangee);
 	
-	gui.setup("Parameters");
-	gui.add(guiMessage.setup("", "To access the menu \nwith the mouse, \nYou must \ntype the 'p' key", 200, 120));
+	gui.setup("Parametres");
+	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
 	gui.add(paused.setup("p - Pause", false));
-	gui.add(rotationActivated.setup("r - Cube Rotation", true));
-	gui.add(vertigoEnFonction.setup("v - Vertigo Effect", false));
-	gui.add(cameraSpeed.setup("camera speed", DEFAULT_CAMERA_SPEED, 0.5, 3));
-	gui.add(rotationSpeed.setup("rotation speed", DEFAULT_ROTATION_SPEED, 0.5, 5));
+	gui.add(rotationActive.setup("r - Rotation primitives", true));
+	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
+	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 3));
+	gui.add(vitesseRotation.setup("vitesse de rotation", VITESSE_ROTATION_DEFAUT, 0.5, 5));
+	gui.add(quantiteIntensiteLumiere.setup("lumiere ambiante", intensiteLumiere, 0.0, 1.0));
 	gui.add(fps.setup("fps", ""));
-	gui.add(usageMessage.setup("Other Keys", "\nw - move forward\ns - move backward\na - move left\nd - move right\ni take screenshot\nf - toggle fullscreen\nm - toggle menu", 200, 220));
+	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger a gauche\nd - bouger a droite\ni capture d'ecran\nf - mode plein ecran\nm - afficher menu", 200, 220));
 
 	m_cubeMap = CubeMap(100, &m_shaderTex, 
 		"Textures/ciel/XN.jpg",
@@ -61,8 +66,8 @@ void ofApp::update(){
 	if(!paused){
 		mouseHandler->update(mouseX, mouseY);
 		m_camera.update();
-		if (rotationActivated) {
-			m_angle += rotationSpeed;
+		if (rotationActive) {
+			m_angle += vitesseRotation;
 		}
 		
 		if(vertigoEnFonction && m_camera.isMovingForward())
@@ -102,13 +107,13 @@ void ofApp::draw(){
 
 	pushMatrix();
 		m_axes.afficher(m_projection, model, view);
-		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE);
+		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE, intensiteLumiere);
 	popMatrix();
 
 	pushMatrix();
 		model.glTranslate(50, 0, 0);
 		model.glScale(10,10,10);
-		perso.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE);
+		perso.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE, intensiteLumiere);
 	popMatrix();
 
 	pushMatrix();
@@ -142,9 +147,7 @@ void ofApp::keyPressed(int key){
 	else if(key == OF_KEY_DOWN)
 		zoomOut();
 	else if(key == 'v' || key == 'V')
-	{
 		vertigoEnFonction = !vertigoEnFonction;
-	}
 	else if(key == 'i' || key == 'I')
 	{
 		ofImage fenetre;
@@ -153,9 +156,8 @@ void ofApp::keyPressed(int key){
 		fenetre.saveImage("Captures/capture" + nb +".png");
 		nbCaptureEcran++;
 	}
-	else if (key == 'm' || 'M'){
+	else if (key == 'm' || key == 'M')
 		showMenu = !showMenu;
-	}
 }
 
 //--------------------------------------------------------------
@@ -170,6 +172,8 @@ void ofApp::keyReleased(int key){
 		m_camera.setMoveRight(false);
 	else if(key == 'p' || key == 'P'){
 		paused = !paused;
+	} else if(key == 'r' || key == 'r'){
+		rotationActive = !rotationActive;
 	}
 	else if(key == 'f' || key == 'F'){
 		ofToggleFullscreen();
@@ -228,17 +232,22 @@ void ofApp::pauseToggled(bool &paused) {
 
 void ofApp::vertigoToggled(bool &enabled) {
 	if (enabled){
-		cameraSpeed = 0.8;
+		vitesseCamera = 0.8;
 	}
 	else{
 		angleChampDeVision = ANGLE_VISION_NORMAL;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth() / ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
-		cameraSpeed = 1;
+		vitesseCamera = 1;
 	}
 }
 
 void ofApp::speedChanged(float &speed) {
 	m_camera.setVitesse(speed);
+}
+
+void ofApp::intensiteLumiereChangee(float & intensite)
+{
+	intensiteLumiere = intensite;
 }
 
 void ofApp::zoomIn()
