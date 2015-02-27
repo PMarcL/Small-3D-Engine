@@ -178,6 +178,8 @@ void ofApp::keyReleased(int key){
 		m_camera.setMoveRight(false);
 	else if(key == 'p' || key == 'P'){
 		paused = !paused;
+	} else if(key == 'r' || key == 'r'){
+		rotationActive = !rotationActive;
 	}
 	else if(key == 'f' || key == 'F'){
 		ofToggleFullscreen();
