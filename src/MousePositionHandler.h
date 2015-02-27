@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-const static int WINDOW_EDGE_CURSOR_LIMIT = 200;
+const static int WINDOW_EDGE_CURSOR_LIMIT = 300;
 
 class MousePositionHandler
 {

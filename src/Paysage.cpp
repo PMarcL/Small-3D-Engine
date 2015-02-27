@@ -107,7 +107,7 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 		popMatrix();
 
 	popMatrix();
-
+	
 	for(int i = 0; i < NB_ARBRES; i++)
 	{
 		pushMatrix();

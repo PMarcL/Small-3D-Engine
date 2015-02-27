@@ -82,44 +82,43 @@ void ofApp::draw(){
 	m_camera.lookAt(view);
 
 	pushMatrix();
-	model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
-	m_cubeMap.afficher(m_projection, model, view);
+		model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
+		m_cubeMap.afficher(m_projection, model, view);
 	popMatrix();
-
 	
 	pushMatrix();
-	model.glTranslate(30.0f, 0.0f, 100.0f);
-	m_tretraedre.afficher(m_projection, model, view);
+		model.glTranslate(30.0f, 0.0f, 100.0f);
+		m_tretraedre.afficher(m_projection, model, view);
 
 
-	for (float i = 0; i < 360; i += 30){
-		pushMatrix();
-		model.glRotate(i + m_angle, 0.0f, 1.0f, 0.0f);
-		model.glTranslate(30.0f, 0.0f, 0.0f);
+		for (float i = 0; i < 360; i += 30){
+			pushMatrix();
+				model.glRotate(i + m_angle, 0.0f, 1.0f, 0.0f);
+				model.glTranslate(30.0f, 0.0f, 0.0f);
+				m_octaedre.afficher(m_projection, model, view);
+			popMatrix();
+		}
 		m_octaedre.afficher(m_projection, model, view);
-		popMatrix();
-	}
-	m_octaedre.afficher(m_projection, model, view);
 	popMatrix();
 
 	pushMatrix();
-	m_axes.afficher(m_projection, model, view);
-	paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE);
+		m_axes.afficher(m_projection, model, view);
+		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE);
 	popMatrix();
 
 	pushMatrix();
-	model.glTranslate(50, 0, 0);
-	model.glScale(10,10,10);
-	perso.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE);
+		model.glTranslate(50, 0, 0);
+		model.glScale(10,10,10);
+		perso.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE);
 	popMatrix();
 
 	pushMatrix();
-	Cube cube(2.0, &m_shader);
-	model.glRotate(m_angle, 0, 1, 0);
-	for (int i = 0; i < 4; i++){
-		cube.afficher(m_projection, model, view);
-		model.glTranslate(3, 0, 0);
-	}
+		Cube cube(2.0, &m_shader);
+		model.glRotate(m_angle, 0, 1, 0);
+		for (int i = 0; i < 4; i++){
+			cube.afficher(m_projection, model, view);
+			model.glTranslate(3, 0, 0);
+		}
 	popMatrix();
 	
 	glDisable(GL_LIGHTING);
