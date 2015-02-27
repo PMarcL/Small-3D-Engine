@@ -38,15 +38,15 @@ void ofApp::setup(){
 	vertigoEnFonction.addListener(this, &ofApp::vertigoToggled);
 	vitesseCamera.addListener(this, &ofApp::speedChanged);
 	
-	gui.setup("Parameters");
-	gui.add(guiMessage.setup("", "To access the menu \nwith the mouse, \nYou must \ntype the 'p' key", 200, 120));
+	gui.setup("Paramètres");
+	gui.add(guiMessage.setup("", "Pour accéder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
 	gui.add(paused.setup("p - Pause", false));
-	gui.add(rotationActive.setup("r - Cube Rotation", true));
-	gui.add(vertigoEnFonction.setup("v - Vertigo Effect", false));
-	gui.add(vitesseCamera.setup("camera speed", VITESSE_CAMERA_DEFAUT, 0.5, 3));
-	gui.add(vitesseRotation.setup("rotation speed", VITESSE_ROTATION_DEFAUT, 0.5, 5));
+	gui.add(rotationActive.setup("r - Rotation des primitives", true));
+	gui.add(vertigoEnFonction.setup("v - Effet Vertigo", false));
+	gui.add(vitesseCamera.setup("vitesse de déplacement", VITESSE_CAMERA_DEFAUT, 0.5, 3));
+	gui.add(vitesseRotation.setup("vitesse de rotation", VITESSE_ROTATION_DEFAUT, 0.5, 5));
 	gui.add(fps.setup("fps", ""));
-	gui.add(usageMessage.setup("Other Keys", "\nw - move forward\ns - move backward\na - move left\nd - move right\ni take screenshot\nf - toggle fullscreen\nm - toggle menu", 200, 220));
+	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger à gauche\nd - bouger à droite\ni capture d'écran\nf - mode plein écran\nm - afficher menu", 200, 220));
 
 	m_cubeMap = CubeMap(100, &m_shaderTex, 
 		"Textures/ciel/XN.jpg",
