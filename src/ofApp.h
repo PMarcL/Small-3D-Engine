@@ -69,6 +69,7 @@ class ofApp : public ofBaseApp{
 		int nbCaptureEcran;
 		float m_angle;
 		float angleChampDeVision;
+		float intensiteLumiere;
 		MousePositionHandler* mouseHandler;
 		
 		void pauseToggled(bool & paused);
@@ -78,6 +79,7 @@ class ofApp : public ofBaseApp{
 		bool showMenu;
 		ofxFloatSlider cameraSpeed;
 		ofxFloatSlider rotationSpeed;
+		ofxFloatSlider quantiteIntensiteLumiere;
 		ofxToggle rotationActivated;
 		ofxToggle vertigoEnFonction;
 		ofxToggle paused;

@@ -153,7 +153,7 @@ void ofApp::keyPressed(int key){
 		fenetre.saveImage("Captures/capture" + nb +".png");
 		nbCaptureEcran++;
 	}
-	else if (key == 'm'){
+	else if (key == 'm' || 'M'){
 		showMenu = !showMenu;
 	}
 }
