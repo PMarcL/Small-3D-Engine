@@ -41,7 +41,7 @@ void ofApp::setup(){
 	gui.setup("Parametres");
 	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
 	gui.add(paused.setup("p - Pause", false));
-	gui.add(rotationActive.setup("r - Rotation des cubes", true));
+	gui.add(rotationActive.setup("r - Rotation primitives", true));
 	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 3));
 	gui.add(vitesseRotation.setup("vitesse de rotation", VITESSE_ROTATION_DEFAUT, 0.5, 5));
