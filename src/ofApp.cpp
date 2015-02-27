@@ -15,7 +15,6 @@ void ofApp::setup(){
 	angleChampDeVision = ANGLE_VISION_NORMAL;
 	nbCaptureEcran = 0;
 	m_angle = 0.0;
-	cameraAvance = false;
 	
 	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
@@ -54,7 +53,7 @@ void ofApp::setup(){
 		"Textures/ciel/YN.jpg",
 		"Textures/ciel/YP.jpg",
 		"Textures/ciel/ZN.jpg",
-		"Textures/ciel/ZN.jpg");
+		"Textures/ciel/ZP.jpg");
 }
 
 //--------------------------------------------------------------
@@ -66,7 +65,7 @@ void ofApp::update(){
 			m_angle += rotationSpeed;
 		}
 		
-		if(vertigoEnFonction && cameraAvance)
+		if(vertigoEnFonction && m_camera.isMovingForward())
 			zoomIn();
 		else if(vertigoEnFonction && angleChampDeVision > ANGLE_VISION_NORMAL)
 			zoomOut();
@@ -131,10 +130,7 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	if(key == 'w' || key == 'W')
-	{
 		m_camera.setMoveForward(true);
-		cameraAvance = true;
-	}
 	else if(key == 's' || key == 'S')
 		m_camera.setMoveBackward(true);
 	else if(key == 'a' || key == 'A')
@@ -165,10 +161,7 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
 	if(key == 'w' || key == 'W')
-	{
 		m_camera.setMoveForward(false);
-		cameraAvance = false;
-	}
 	else if(key == 's' || key == 'S')
 		m_camera.setMoveBackward(false);
 	else if(key == 'a' || key == 'A')

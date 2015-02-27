@@ -96,9 +96,6 @@ void CubeMap::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &model, ofMatrix4x4 
 		
 		for(int i = 0; i < 6; i++){
 			glBindTexture(GL_TEXTURE_2D, tex[i].getID());
-			//glBindTexture(GL_TEXTURE_2D, textu.getID());
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glDrawArrays(GL_TRIANGLES, i * 6, 6);
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}

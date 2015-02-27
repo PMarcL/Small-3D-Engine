@@ -177,3 +177,23 @@ void Camera::setVitesse(float _vitesse)
 {
     m_vitesse = _vitesse;
 }
+
+bool Camera::isMovingForward() const
+{
+	return movingForward;
+}
+
+bool Camera::isMovingBackward() const
+{
+	return movingBackward;
+}
+
+bool Camera::isMovingRight() const
+{
+	return movingRight;
+}
+
+bool Camera::isMovingLeft() const
+{
+	return movingLeft;
+}

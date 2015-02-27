@@ -69,7 +69,6 @@ class ofApp : public ofBaseApp{
 		int nbCaptureEcran;
 		float m_angle;
 		float angleChampDeVision;
-		bool cameraAvance;
 		MousePositionHandler* mouseHandler;
 		
 		void pauseToggled(bool & paused);
