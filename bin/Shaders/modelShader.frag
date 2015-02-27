@@ -7,13 +7,14 @@ out vec4 out_Color;
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
+uniform vec3 lumiereAmbiante;
 uniform vec3 objectColor;
+uniform float intensiteLumiere;
 
 void main()
 {
 		// Lumière ambiante
-    float ambientStrength = 0.1f;
-    vec3 ambient = ambientStrength * lightColor;
+    vec3 ambient = intensiteLumiere * lumiereAmbiante;
 
 		// Lumière diffuse
     vec3 norm = normalize(Normal);
