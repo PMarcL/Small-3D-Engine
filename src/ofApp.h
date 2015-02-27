@@ -15,8 +15,8 @@
 #include "Tetraedre.h"
 #include "Octaedre.h"
 
-const static float DEFAULT_ROTATION_SPEED = 2.0;
-const static float DEFAULT_CAMERA_SPEED = 1.0;
+const static float VITESSE_ROTATION_DEFAUT = 2.0;
+const static float VITESSE_CAMERA_DEFAUT = 1.0;
 const static float FAR_PLANE_DISTANCE = 3000.0;
 const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
@@ -77,9 +77,9 @@ class ofApp : public ofBaseApp{
 		void speedChanged(float & speed);
 
 		bool showMenu;
-		ofxFloatSlider cameraSpeed;
-		ofxFloatSlider rotationSpeed;
-		ofxToggle rotationActivated;
+		ofxFloatSlider vitesseCamera;
+		ofxFloatSlider vitesseRotation;
+		ofxToggle rotationActive;
 		ofxToggle vertigoEnFonction;
 		ofxToggle paused;
 		ofxLabel guiMessage;

@@ -36,15 +36,15 @@ void ofApp::setup(){
 	
 	paused.addListener(this, &ofApp::pauseToggled);
 	vertigoEnFonction.addListener(this, &ofApp::vertigoToggled);
-	cameraSpeed.addListener(this, &ofApp::speedChanged);
+	vitesseCamera.addListener(this, &ofApp::speedChanged);
 	
 	gui.setup("Parameters");
 	gui.add(guiMessage.setup("", "To access the menu \nwith the mouse, \nYou must \ntype the 'p' key", 200, 120));
 	gui.add(paused.setup("p - Pause", false));
-	gui.add(rotationActivated.setup("r - Cube Rotation", true));
+	gui.add(rotationActive.setup("r - Cube Rotation", true));
 	gui.add(vertigoEnFonction.setup("v - Vertigo Effect", false));
-	gui.add(cameraSpeed.setup("camera speed", DEFAULT_CAMERA_SPEED, 0.5, 3));
-	gui.add(rotationSpeed.setup("rotation speed", DEFAULT_ROTATION_SPEED, 0.5, 5));
+	gui.add(vitesseCamera.setup("camera speed", VITESSE_CAMERA_DEFAUT, 0.5, 3));
+	gui.add(vitesseRotation.setup("rotation speed", VITESSE_ROTATION_DEFAUT, 0.5, 5));
 	gui.add(fps.setup("fps", ""));
 	gui.add(usageMessage.setup("Other Keys", "\nw - move forward\ns - move backward\na - move left\nd - move right\ni take screenshot\nf - toggle fullscreen\nm - toggle menu", 200, 220));
 
@@ -62,8 +62,8 @@ void ofApp::update(){
 	if(!paused){
 		mouseHandler->update(mouseX, mouseY);
 		m_camera.update();
-		if (rotationActivated) {
-			m_angle += rotationSpeed;
+		if (rotationActive) {
+			m_angle += vitesseRotation;
 		}
 		
 		if(vertigoEnFonction && cameraAvance)
@@ -236,12 +236,12 @@ void ofApp::pauseToggled(bool &paused) {
 
 void ofApp::vertigoToggled(bool &enabled) {
 	if (enabled){
-		cameraSpeed = 0.8;
+		vitesseCamera = 0.8;
 	}
 	else{
 		angleChampDeVision = ANGLE_VISION_NORMAL;
 		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth() / ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
-		cameraSpeed = 1;
+		vitesseCamera = 1;
 	}
 }
 
