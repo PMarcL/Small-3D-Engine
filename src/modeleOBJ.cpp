@@ -28,17 +28,12 @@ ModeleOBJ::ModeleOBJ(const string& cheminOBJ)
 }
 
 void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
-						 const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere, const float& intensiteLumiere)
+						 const Lumiere& lumiere)
 {
 	glUseProgram(shader->getProgramID());
 
-	glUniform1f(glGetUniformLocation(shader->getProgramID(), "intensiteLumiere"), intensiteLumiere);
-	glUniform3f(glGetUniformLocation(shader->getProgramID(), "lumiereAmbiante"), 0.0, 0.0, 0.8);
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
-	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "positionLumiere"), 1, directionLumiere.getPtr());
-	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "couleurLumiere"), 1, couleurLumiere.getPtr());
+	chargerValeursIlluminationUniforms(lumiere);
+	chargerMatricesMVPUniforms(projection, model, view);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
@@ -49,6 +44,20 @@ void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 
 	glUseProgram(0);
 }
 
+void ModeleOBJ::chargerValeursIlluminationUniforms(const Lumiere& lumiere)
+{
+	glUniform1f(glGetUniformLocation(shader->getProgramID(), "intensiteLumiere"), lumiere.getIntensiteLumiereAmbiante());
+	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "lumiereAmbiante"), 1, lumiere.getCouleurAmbiante().getPtr());
+	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "positionLumiere"), 1, lumiere.getPosition().getPtr());
+	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "couleurLumiere"), 1, lumiere.getCouleurDirectionnelle().getPtr());
+}
+
+void ModeleOBJ::chargerMatricesMVPUniforms(const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)
+{
+	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
+	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
+}
 
 bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<ofVec2f>& texCoord, std::vector<ofVec3f>& normales)
 {

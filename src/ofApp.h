@@ -14,16 +14,13 @@
 #include <stack>
 #include "Tetraedre.h"
 #include "Octaedre.h"
-#include "Courbe.h"
+#include "Lumiere.h"
 
 const static float VITESSE_ROTATION_DEFAUT = 2.0;
 const static float VITESSE_CAMERA_DEFAUT = 3.0;
-const static float QUANTITE_LUMIERE_DEFAUT = 0.2;
 const static float FAR_PLANE_DISTANCE = 3000.0;
 const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
-const static ofVec3f DIRECTION_LUMIERE = ofVec3f(1500, 2500, 500);
-const static ofVec3f COUL_LUMIERE = ofVec3f(1.0, 1.0, 1.0);
 
 class ofApp : public ofBaseApp{
 
@@ -70,13 +67,13 @@ class ofApp : public ofBaseApp{
 		Cube m_cube;
 		Tetraedre m_tretraedre;
 		Octaedre m_octaedre;
+		Lumiere lumiere;
 
 		int m_centreXFenetre;
 		int m_centreYFenetre;
 		int nbCaptureEcran;
 		float m_angle;
 		float angleChampDeVision;
-		float intensiteLumiere;
 		MousePositionHandler* mouseHandler;
 
 		bool showMenu;
@@ -89,6 +86,5 @@ class ofApp : public ofBaseApp{
 		ofxLabel guiMessage;
 		ofxLabel fps;
 		ofxLabel usageMessage;
-
 		ofxPanel gui;
 };

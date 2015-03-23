@@ -62,19 +62,14 @@ bool Paysage::positionEstEnConflit(int espacement, ofVec3f position)
 }
 
 void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 view, 
-					   const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere, const float& intensiteLumiere)
+					   const Lumiere& lumiere)
 {
 	this->model = modelIn;
 	// Affichage de la surface de base
 	pushMatrix();
 		glUseProgram(shaderUneTexture.getProgramID());
-		glUniform1f(glGetUniformLocation(shaderUneTexture.getProgramID(), "intensiteLumiere"), intensiteLumiere);
-		glUniform3fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "lumiereAmbiante"), 1, LUMIERE_AMBIANTE.getPtr());
-		glUniform3fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "positionLumiere"), 1, directionLumiere.getPtr());
-		glUniform3fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "couleurLumiere"), 1, couleurLumiere.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+		chargerValeursIlluminationUniforms(shaderUneTexture.getProgramID(), lumiere);
+		chargerMatricesMVPUniforms(shaderUneTexture.getProgramID(), projection, modelIn, view);
 		surfaceCentrale.afficher();
 		model.glTranslate(0.0, 0.0, 1000.0);
 		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
@@ -107,16 +102,11 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	
 	// Affichage de l'océan
 	pushMatrix();
-		model.glTranslate(980.0, -40.0, 0.0);
 		glUseProgram(shaderOscillation.getProgramID());
-		glUniform1f(glGetUniformLocation(shaderOscillation.getProgramID(), "intensiteLumiere"), intensiteLumiere);
-		glUniform3fv(glGetUniformLocation(shaderOscillation.getProgramID(), "lumiereAmbiante"), 1, LUMIERE_AMBIANTE.getPtr());
-		glUniform3fv(glGetUniformLocation(shaderOscillation.getProgramID(), "positionLumiere"), 1, directionLumiere.getPtr());
-		glUniform3fv(glGetUniformLocation(shaderOscillation.getProgramID(), "couleurLumiere"), 1, couleurLumiere.getPtr());
+		model.glTranslate(980.0, -40.0, 0.0);
+		chargerValeursIlluminationUniforms(shaderOscillation.getProgramID(), lumiere);
+		chargerMatricesMVPUniforms(shaderOscillation.getProgramID(), projection, model, view);
 		glUniform1f(glGetUniformLocation(shaderOscillation.getProgramID(), "time"), ofGetElapsedTimef());
-		glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
 		ocean.afficher();
 	
 		pushMatrix();
@@ -142,11 +132,26 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 			glBindTexture(GL_TEXTURE_2D, texTree.getID());
 			model.glTranslate(positionsArbres[i]);
 			model.glScale(50, 50, 50);
-			arbre.afficher(projection, model, view, directionLumiere, couleurLumiere, intensiteLumiere);		
+			arbre.afficher(projection, model, view, lumiere);		
 		popMatrix();
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
+}
+
+void Paysage::chargerValeursIlluminationUniforms(GLuint id, const Lumiere& lumiere)
+{
+	glUniform1f(glGetUniformLocation(id, "intensiteLumiere"), lumiere.getIntensiteLumiereAmbiante());
+	glUniform3fv(glGetUniformLocation(id, "lumiereAmbiante"), 1, lumiere.getCouleurAmbiante().getPtr());
+	glUniform3fv(glGetUniformLocation(id, "positionLumiere"), 1, lumiere.getPosition().getPtr());
+	glUniform3fv(glGetUniformLocation(id, "couleurLumiere"), 1, lumiere.getCouleurDirectionnelle().getPtr());
+}
+
+void Paysage::chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)
+{
+	glUniformMatrix4fv(glGetUniformLocation(id, "projection"), 1, GL_FALSE, projection.getPtr());
+	glUniformMatrix4fv(glGetUniformLocation(id, "view"), 1, GL_FALSE, view.getPtr());
+	glUniformMatrix4fv(glGetUniformLocation(id, "model"), 1, GL_FALSE, model.getPtr());
 }
 
 void Paysage::pushMatrix()

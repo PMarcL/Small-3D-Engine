@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "Shader.h"
 #include "Mesh.h"
-#include "Texture.h"
+#include "Lumiere.h"
 
 class ModeleOBJ
 {
@@ -13,10 +13,12 @@ public:
 	~ModeleOBJ(void);
 
 	void afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
-		const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere, const float& intensiteLumiere);
+		const Lumiere& lumiere);
 
 private:
-	
+	void chargerValeursIlluminationUniforms(const Lumiere& lumiere);
+	void chargerMatricesMVPUniforms(const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view);
+
 	Shader* shader;
 	Mesh mesh;
 };

@@ -101,6 +101,7 @@
     <ClCompile Include="src\Axes.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\Courbe.cpp" />
+    <ClCompile Include="src\Lumiere.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\CubeMap.cpp" />
     <ClCompile Include="src\modeleOBJ.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="src\Axes.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\Courbe.h" />
+    <ClInclude Include="src\Lumiere.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\CubeMap.h" />
     <ClInclude Include="src\modeleOBJ.h" />

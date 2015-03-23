@@ -79,6 +79,9 @@
     <ClCompile Include="src\Courbe.cpp">
       <Filter>src\Utilitaires</Filter>
     </ClCompile>
+    <ClCompile Include="src\Lumiere.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -177,6 +180,9 @@
       <Filter>src\Affichables</Filter>
     </ClInclude>
     <ClInclude Include="src\Courbe.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lumiere.h">
       <Filter>src\Utilitaires</Filter>
     </ClInclude>
   </ItemGroup>

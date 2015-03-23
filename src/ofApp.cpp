@@ -14,7 +14,6 @@ void ofApp::setup(){
 	angleChampDeVision = ANGLE_VISION_NORMAL;
 	nbCaptureEcran = 0;
 	m_angle = 0.0;
-	intensiteLumiere = QUANTITE_LUMIERE_DEFAUT;
 	showMenu = true;
 	paused = false;
 	
@@ -88,7 +87,7 @@ void ofApp::draw(){
 
 	pushMatrix();
 		m_axes.afficher(m_projection, model, view);
-		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE, intensiteLumiere);
+		paysage.afficher(m_projection, model, view, lumiere);
 	popMatrix();
 
 	pushMatrix();
@@ -206,7 +205,7 @@ void ofApp::configurerUI() {
 	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
 	gui.add(vitesseRotation.setup("vitesse de rotation", VITESSE_ROTATION_DEFAUT, 0.5, 5));
-	gui.add(quantiteIntensiteLumiere.setup("lumiere ambiante", intensiteLumiere, 0.0, 1.0));
+	gui.add(quantiteIntensiteLumiere.setup("lumiere ambiante", lumiere.getIntensiteLumiereAmbiante(), 0.0, 1.0));
 	gui.add(fps.setup("fps", ""));
 	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger a gauche\nd - bouger a droite\ni capture d'ecran\nf - mode plein ecran\nm - afficher menu", 200, 220));
 }
@@ -240,7 +239,7 @@ void ofApp::speedChanged(float &speed) {
 
 void ofApp::intensiteLumiereChangee(float & intensite)
 {
-	intensiteLumiere = intensite;
+	lumiere.setIntensiteLumiereAmbiante(intensite);
 }
 
 void ofApp::zoomIn()

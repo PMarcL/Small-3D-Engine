@@ -4,6 +4,7 @@
 #include "Plane.h"
 #include "Shader.h"
 #include "modeleOBJ.h"
+#include "Lumiere.h"
 #include <stack>
 
 const static int NB_ARBRES = 40;
@@ -16,12 +17,14 @@ public:
 	~Paysage(void) {}
 
 	void afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
-		const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere, const float& intensiteLumiere);
+		const Lumiere& lumiere);
 
 private:
 	void generationPositionsArbres();
 	ofVec3f genererPositionAvecEspacement(int espacement);
 	bool positionEstEnConflit(int espacement, ofVec3f position);
+	void chargerValeursIlluminationUniforms(GLuint id, const Lumiere& lumiere);
+	void chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view);
 	void pushMatrix();
 	void popMatrix();
 

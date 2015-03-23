@@ -1,9 +1,11 @@
 #version 430 core
 
-in vec3 Color;
-in vec2 TexCoord;
-in vec3 Normal;
-in vec3 FragPos;
+out vec4 color;
+
+in vec3 fragColor;
+in vec2 fragTexCoord;
+in vec3 fragNormal;
+in vec3 fragPos;
 
 uniform sampler2D Texture1;
 uniform vec3 lumiereAmbiante;
@@ -11,21 +13,19 @@ uniform vec3 positionLumiere;
 uniform vec3 couleurLumiere;
 uniform float intensiteLumiere;
 
-out vec4 color;
-
 void main()
 {
-		// Lumière ambiante
+	// Lumière ambiante
     vec3 ambient = intensiteLumiere * lumiereAmbiante;
 
-		// Lumière diffuse
-    vec3 norm = normalize(Normal);
-    vec3 directionLumiere = normalize(positionLumiere - FragPos);
-    float diff = max(dot(norm, directionLumiere), 0.0);
+    // Lumière diffuse
+    vec3 normal = normalize(fragNormal);
+    vec3 directionLumiere = normalize(positionLumiere - fragPos);
+    float diff = max(dot(normal, directionLumiere), 0.0);
     vec3 diffuse = diff * couleurLumiere;
 
-	 	vec4 couleurObjet = texture(Texture1, TexCoord);
-
+	// combinaison de la couleur de l'objet et de son illumination
+	vec4 couleurObjet = texture(Texture1, fragTexCoord);
     vec3 result = (ambient + diffuse) * couleurObjet.xyz;
     color = vec4(result, 0.5f);
 }
