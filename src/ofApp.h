@@ -14,14 +14,15 @@
 #include <stack>
 #include "Tetraedre.h"
 #include "Octaedre.h"
+#include "Courbe.h"
 
 const static float VITESSE_ROTATION_DEFAUT = 2.0;
-const static float VITESSE_CAMERA_DEFAUT = 1.0;
+const static float VITESSE_CAMERA_DEFAUT = 3.0;
 const static float QUANTITE_LUMIERE_DEFAUT = 0.2;
 const static float FAR_PLANE_DISTANCE = 3000.0;
 const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
-const static ofVec3f DIRECTION_LUMIERE = ofVec3f(500, 1500, 300);
+const static ofVec3f DIRECTION_LUMIERE = ofVec3f(1500, 2500, 500);
 const static ofVec3f COUL_LUMIERE = ofVec3f(1.0, 1.0, 1.0);
 
 class ofApp : public ofBaseApp{
@@ -40,14 +41,20 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		void zoomIn();
-		void zoomOut();
+		
 
 		~ofApp();
 
 	private:
+		void configurerUI();
+		void zoomIn();
+		void zoomOut();
 		void pushMatrix();
 		void popMatrix();
+		void pauseToggled(bool & paused);
+		void vertigoToggled(bool & enabled);
+		void speedChanged(float & speed);
+		void intensiteLumiereChangee(float& intensite);
 
 		stack<ofMatrix4x4> matrices;
 		Shader m_shader;
@@ -59,7 +66,6 @@ class ofApp : public ofBaseApp{
 		ofMatrix4x4 view;
 		MusiqueSFX son;
 		Paysage paysage;
-		ModeleOBJ perso;
 		CubeMap m_cubeMap;
 		Cube m_cube;
 		Tetraedre m_tretraedre;
@@ -72,11 +78,6 @@ class ofApp : public ofBaseApp{
 		float angleChampDeVision;
 		float intensiteLumiere;
 		MousePositionHandler* mouseHandler;
-		
-		void pauseToggled(bool & paused);
-		void vertigoToggled(bool & enabled);
-		void speedChanged(float & speed);
-		void intensiteLumiereChangee(float& intensite);
 
 		bool showMenu;
 		ofxFloatSlider quantiteIntensiteLumiere;

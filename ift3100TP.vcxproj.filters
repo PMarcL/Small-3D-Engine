@@ -73,6 +73,12 @@
     <ClCompile Include="src\Paysage.cpp">
       <Filter>src\Affichables</Filter>
     </ClCompile>
+    <ClCompile Include="src\SurfaceCoons.cpp">
+      <Filter>src\Affichables</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Courbe.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -166,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="src\Paysage.h">
       <Filter>src\Affichables</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SurfaceCoons.h">
+      <Filter>src\Affichables</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Courbe.h">
+      <Filter>src\Utilitaires</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

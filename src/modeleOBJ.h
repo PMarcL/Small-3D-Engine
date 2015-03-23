@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "Texture.h"
 
 class ModeleOBJ
 {
@@ -16,12 +17,7 @@ public:
 
 private:
 	
-	GLuint elementBuffer;
 	Shader* shader;
-	vector<ofVec3f> vertices;
-	vector<GLuint> elements;
-	vector<ofVec3f> normals;
-	vector<ofVec3f> colors;
 	Mesh mesh;
 };
 

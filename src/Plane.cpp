@@ -88,22 +88,16 @@ void Plane::afficher()
 void Plane::chargerTextures()
 {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	
+	glBindTexture(GL_TEXTURE_2D, texture.getID());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 void Plane::ajouterTexture(const string& texPath)
 {
-	ofImage image;
-	image.loadImage(texPath);
-	
-	textures.push_back(GLuint());
-	glGenTextures(1, &textures[textures.size() - 1]);
-	glBindTexture(GL_TEXTURE_2D, textures[textures.size() - 1]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.getPixels());
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	image.clear();
+	texture.setFichierImage(texPath);
+	texture.charger();
 }
 
 void Plane::utiliserTextures(bool utiliser)

@@ -15,7 +15,7 @@ uniform float intensiteLumiere;
 
 void main()
 {
-		// Lumière ambiante
+	// Lumière ambiante
     vec3 ambient = intensiteLumiere * lumiereAmbiante;
 
     // Lumière diffuse
@@ -24,7 +24,7 @@ void main()
     float diff = max(dot(norm, directionLumiere), 0.0);
     vec3 diffuse = diff * couleurLumiere;
 
-		vec4 couleurObjet = texture(Texture1, TexCoord);
+	vec4 couleurObjet = texture(Texture1, TexCoord);
 
     vec3 result = (ambient + diffuse) * couleurObjet.xyz;
     color = vec4(result, 1.0f);

@@ -116,6 +116,7 @@ CubeMap& CubeMap::operator=(CubeMap const &cubeMapACopier)
 {
 	for(int i = 0; i < 6; i++){
 		tex[i] = cubeMapACopier.tex[i];
+		tex[i].charger();
 	}
 
 	for(int i = 0; i < 6; i++){

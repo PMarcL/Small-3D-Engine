@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "ofMain.h"
 #include "Mesh.h"
+#include "Texture.h"
 
 const static float TEX_REPETITION_PAR_CARRE = 1;
 
@@ -37,7 +38,7 @@ private:
 	vector<GLuint> indices;
 	vector<GLfloat> texCoords;
 	vector<ofVec3f> normals;
-	vector<GLuint> textures;
+	Texture texture;
 	int nbColonnes;
 	int nbLignes;
 	int taille;

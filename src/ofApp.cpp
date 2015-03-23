@@ -4,7 +4,6 @@
 void ofApp::setup(){
 	
 	ofBackground(0);
-	
 	ofSetFrameRate(60);
 	ofHideCursor();
 	
@@ -28,29 +27,13 @@ void ofApp::setup(){
 	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	m_shader.charger();
 	m_axes = Axes(30, &m_shader);
-	perso = ModeleOBJ("Models/dude.obj");
 	m_cube = Cube(2.0, &m_shader);
 	m_tretraedre = Tetraedre(8.0, &m_shader);
 	m_octaedre = Octaedre(2.0, &m_shader);
 
 	m_shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
 	m_shaderTex.charger();
-	
-	paused.addListener(this, &ofApp::pauseToggled);
-	vertigoEnFonction.addListener(this, &ofApp::vertigoToggled);
-	vitesseCamera.addListener(this, &ofApp::speedChanged);
-	quantiteIntensiteLumiere.addListener(this, &ofApp::intensiteLumiereChangee);
-	
-	gui.setup("Parametres");
-	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
-	gui.add(paused.setup("p - Pause", false));
-	gui.add(rotationActive.setup("r - Rotation primitives", true));
-	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
-	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 3));
-	gui.add(vitesseRotation.setup("vitesse de rotation", VITESSE_ROTATION_DEFAUT, 0.5, 5));
-	gui.add(quantiteIntensiteLumiere.setup("lumiere ambiante", intensiteLumiere, 0.0, 1.0));
-	gui.add(fps.setup("fps", ""));
-	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger a gauche\nd - bouger a droite\ni capture d'ecran\nf - mode plein ecran\nm - afficher menu", 200, 220));
+	this->configurerUI();
 
 	m_cubeMap = CubeMap(100, &m_shaderTex, 
 		"Textures/ciel/XN.jpg",
@@ -93,8 +76,6 @@ void ofApp::draw(){
 	pushMatrix();
 		model.glTranslate(30.0f, 0.0f, 100.0f);
 		m_tretraedre.afficher(m_projection, model, view);
-
-
 		for (float i = 0; i < 360; i += 30){
 			pushMatrix();
 				model.glRotate(i + m_angle, 0.0f, 1.0f, 0.0f);
@@ -108,12 +89,6 @@ void ofApp::draw(){
 	pushMatrix();
 		m_axes.afficher(m_projection, model, view);
 		paysage.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE, intensiteLumiere);
-	popMatrix();
-
-	pushMatrix();
-		model.glTranslate(50, 0, 0);
-		model.glScale(10,10,10);
-		perso.afficher(m_projection, model, view, DIRECTION_LUMIERE, COUL_LUMIERE, intensiteLumiere);
 	popMatrix();
 
 	pushMatrix();
@@ -216,6 +191,24 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+void ofApp::configurerUI() {
+	paused.addListener(this, &ofApp::pauseToggled);
+	vertigoEnFonction.addListener(this, &ofApp::vertigoToggled);
+	vitesseCamera.addListener(this, &ofApp::speedChanged);
+	quantiteIntensiteLumiere.addListener(this, &ofApp::intensiteLumiereChangee);
+	
+	gui.setup("Parametres");
+	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
+	gui.add(paused.setup("p - Pause", false));
+	gui.add(rotationActive.setup("r - Rotation primitives", true));
+	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
+	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
+	gui.add(vitesseRotation.setup("vitesse de rotation", VITESSE_ROTATION_DEFAUT, 0.5, 5));
+	gui.add(quantiteIntensiteLumiere.setup("lumiere ambiante", intensiteLumiere, 0.0, 1.0));
+	gui.add(fps.setup("fps", ""));
+	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger a gauche\nd - bouger a droite\ni capture d'ecran\nf - mode plein ecran\nm - afficher menu", 200, 220));
 }
 
 void ofApp::pauseToggled(bool &paused) {

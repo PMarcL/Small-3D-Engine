@@ -40,6 +40,8 @@ public:
 		const vector<ofVec3f>& normals, const vector<GLuint>& indices, int nbSommets);
 	Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors, const vector<GLfloat>& texCoords,
 		const vector<ofVec3f>& normals, const vector<GLuint>& indices, int nbSommets);
+	Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors, const vector<ofVec2f>& texCoords,
+		const vector<ofVec3f>& normals, const vector<GLuint>& indices, int nbSommets);
 	~Mesh(void) {}
 	
 	void utilisationDesIndices(bool utiliser);
@@ -54,6 +56,7 @@ private:
 	void ajouterIndices(const vector<GLuint>& indices);
 	void ajouterPositions(const vector<ofVec3f>& positions);
 	void ajouterCouleurs(const vector<ofVec3f>& positions);
+	void ajouterTexCoords(const vector<ofVec2f>& texCoords);
 	void ajouterNormals(const vector<ofVec3f>& positions);
 	void genererBuffer();
 

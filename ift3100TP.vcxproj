@@ -100,6 +100,7 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
     <ClCompile Include="src\Axes.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\Courbe.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\CubeMap.cpp" />
     <ClCompile Include="src\modeleOBJ.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="src\Paysage.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\SurfaceCoons.cpp" />
     <ClCompile Include="src\Tetraedre.cpp" />
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
@@ -127,6 +129,7 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
     <ClInclude Include="src\Axes.h" />
     <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\Courbe.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\CubeMap.h" />
     <ClInclude Include="src\modeleOBJ.h" />
@@ -138,6 +141,7 @@
     <ClInclude Include="src\Paysage.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\SurfaceCoons.h" />
     <ClInclude Include="src\Tetraedre.h" />
     <ClInclude Include="src\Texture.h" />
   </ItemGroup>

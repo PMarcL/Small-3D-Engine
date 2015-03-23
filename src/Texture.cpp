@@ -29,8 +29,7 @@ bool Texture::charger()
 	}else if (image.type == OF_IMAGE_COLOR_ALPHA){
 		formatInterne = GL_RGBA;
 	}else //OF_IMAGE_GRAYSCALE
-		formatInterne = GL_RED;//à voir: Ajouter gestion d'erreur ici????<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
+		formatInterne = GL_RED;
 
 	// Destruction d'une éventuelle ancienne texture
 	if(glIsTexture(m_id) == GL_TRUE)
@@ -94,14 +93,12 @@ Texture::Texture(Texture const &textureACopier)
     // Copie de la texture
 
     m_fichierImage = textureACopier.m_fichierImage;
-    charger();
 }
 
 Texture& Texture::operator=(Texture const &textureACopier)
 {
 	// Copie de la texture
 	m_fichierImage = textureACopier.m_fichierImage;
-	charger();
 	
 	// Retour du pointeur *this
 	return *this;

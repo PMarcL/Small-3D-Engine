@@ -70,6 +70,28 @@ Mesh::Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors, cons
 	genererBuffer();
 }
 
+Mesh::Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors, const vector<ofVec2f>& texCoords,
+		   const vector<ofVec3f>& normals, const vector<GLuint>& indices, int nbSommets)
+{
+	utiliserIndices = false;
+	ajouterVertices(nbSommets);
+	ajouterPositions(positions);
+
+	if(colors.size() > 0)
+		ajouterCouleurs(colors);
+	if(texCoords.size() > 0) 
+		ajouterTexCoords(texCoords);
+	if(normals.size() > 0)
+		ajouterNormals(normals);
+	if(indices.size() > 0)
+	{
+		ajouterIndices(indices);
+		utiliserIndices = true;
+	}
+
+	genererBuffer();
+}
+
 void Mesh::ajouterVertices(int nbVertices)
 {
 	for(int i = 0; i < nbVertices; i++)
@@ -167,6 +189,17 @@ void Mesh::ajouterCouleurs(const vector<ofVec3f>& colors)
 		vertices[i].colorR = it->x;
 		vertices[i].colorG = it->y;
 		vertices[i].colorB = it->z;
+		it++;
+	}
+}
+
+void Mesh::ajouterTexCoords(const vector<ofVec2f>& texCoords)
+{
+	vector<ofVec2f>::const_iterator it = texCoords.begin();
+	for(int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i].texCoordX = it->x;
+		vertices[i].texCoordY = it->y;
 		it++;
 	}
 }

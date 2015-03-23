@@ -6,7 +6,7 @@
 #include "modeleOBJ.h"
 #include <stack>
 
-const static int NB_ARBRES = 30;
+const static int NB_ARBRES = 40;
 const static ofVec3f LUMIERE_AMBIANTE = ofVec3f(0.0, 0.0, 0.8);
 
 class Paysage
@@ -19,7 +19,9 @@ public:
 		const ofVec3f& directionLumiere, const ofVec3f& couleurLumiere, const float& intensiteLumiere);
 
 private:
-	void generationPositionArbres();
+	void generationPositionsArbres();
+	ofVec3f genererPositionAvecEspacement(int espacement);
+	bool positionEstEnConflit(int espacement, ofVec3f position);
 	void pushMatrix();
 	void popMatrix();
 
@@ -33,6 +35,8 @@ private:
 	Plane ocean;
 	Plane montagne;
 	ModeleOBJ arbre;
+	Texture texTree;
+	ModeleOBJ champignon;
 	vector<ofVec3f> positionsArbres;
 };
 
