@@ -22,9 +22,19 @@ void Lumiere::setIntensiteLumiereAmbiante(GLfloat intensite)
 	intensiteLumiereAmbiante = intensite;
 }
 
+void Lumiere::setPositionVue(ofVec3f position)
+{
+	positionVue = position;
+}
+
 ofVec3f Lumiere::getPosition() const
 {
 	return position;
+}
+
+ofVec3f Lumiere::getPositionVue() const
+{
+	return positionVue;
 }
 
 ofVec3f Lumiere::getCouleurDirectionnelle() const

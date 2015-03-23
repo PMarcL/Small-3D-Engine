@@ -50,6 +50,8 @@ void ModeleOBJ::chargerValeursIlluminationUniforms(const Lumiere& lumiere)
 	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "lumiereAmbiante"), 1, lumiere.getCouleurAmbiante().getPtr());
 	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "positionLumiere"), 1, lumiere.getPosition().getPtr());
 	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "couleurLumiere"), 1, lumiere.getCouleurDirectionnelle().getPtr());
+	glUniform1f(glGetUniformLocation(shader->getProgramID(), "intensiteSpeculaire"), lumiere.getIntensiteSpeculaire());
+	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "positionCamera"), 1, lumiere.getPositionVue().getPtr());
 }
 
 void ModeleOBJ::chargerMatricesMVPUniforms(const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)

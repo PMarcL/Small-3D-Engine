@@ -145,6 +145,8 @@ void Paysage::chargerValeursIlluminationUniforms(GLuint id, const Lumiere& lumie
 	glUniform3fv(glGetUniformLocation(id, "lumiereAmbiante"), 1, lumiere.getCouleurAmbiante().getPtr());
 	glUniform3fv(glGetUniformLocation(id, "positionLumiere"), 1, lumiere.getPosition().getPtr());
 	glUniform3fv(glGetUniformLocation(id, "couleurLumiere"), 1, lumiere.getCouleurDirectionnelle().getPtr());
+	glUniform1f(glGetUniformLocation(id, "intensiteSpeculaire"), lumiere.getIntensiteSpeculaire());
+	glUniform3fv(glGetUniformLocation(id, "positionCamera"), 1, lumiere.getPositionVue().getPtr());
 }
 
 void Paysage::chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)

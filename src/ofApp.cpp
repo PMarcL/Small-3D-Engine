@@ -66,6 +66,7 @@ void ofApp::draw(){
 	glEnable(GL_DEPTH_TEST);
 	
 	m_camera.lookAt(view);
+	lumiere.setPositionVue(m_camera.getPosition());
 
 	pushMatrix();
 		model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);

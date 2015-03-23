@@ -12,6 +12,8 @@ uniform vec3 lumiereAmbiante;
 uniform vec3 positionLumiere;
 uniform vec3 couleurLumiere;
 uniform float intensiteLumiere;
+uniform vec3 positionCamera;
+uniform float intensiteSpeculaire;
 
 void main()
 {
@@ -24,8 +26,14 @@ void main()
     float diff = max(dot(normal, directionLumiere), 0.0);
     vec3 diffuse = diff * couleurLumiere;
 
+	// Illumination spéculaire
+	vec3 directionCamera = normalize(positionCamera - fragPos);
+	vec3 directionReflection = reflect(-directionLumiere, normal);
+	float spec = pow(max(dot(directionCamera, directionReflection), 0.0), 32);
+	vec3 specular = intensiteSpeculaire * spec * couleurLumiere;
+	
 	// combinaison de la couleur de l'objet et de son illumination
 	vec4 couleurObjet = texture(Texture1, fragTexCoord);
-    vec3 result = (ambient + diffuse) * couleurObjet.xyz;
+    vec3 result = (ambient + diffuse + specular) * couleurObjet.xyz;
     color = vec4(result, 0.5f);
 }
