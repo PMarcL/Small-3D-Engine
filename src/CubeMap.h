@@ -14,19 +14,18 @@ class CubeMap
 		CubeMap(float taille, Shader* shader, string texXN, string texXP, string texYN, string texYP, string texZN, string texZP);
 		~CubeMap();
 		void afficher(ofMatrix4x4 &projection, ofMatrix4x4 &model, ofMatrix4x4 &view);
-		CubeMap& operator=(CubeMap const &cubeMapeACopier);
+		CubeMap& CubeMap::operator=(CubeMap const &cubeMapACopier);
 
-		//Propriétés
 		Shader* getShader() const;
 		int getTaille() const;
 				
 		Texture tex[6];
     private:
-		Shader* m_shader;
+		Shader* shader;
 		
-		int m_taille;
-		float m_vertices[108];
-		float m_coordTexture[72];
+		int taille;
+		float vertices[108];
+		float coordTexture[72];
 };
 
 #endif

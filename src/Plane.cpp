@@ -82,7 +82,10 @@ void Plane::afficher()
 {
 	if(useTexture)
 		chargerTextures();
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	mesh.dessiner();
+	glDisable(GL_CULL_FACE);
 }
 
 void Plane::chargerTextures()
@@ -129,13 +132,11 @@ void Plane::genereHauteursAleatoire(float minHeight, float maxHeight)
 
 void Plane::generePenteProgressive(float minHeight, float maxHeight)
 {
-	float x = 0;
 	for(int i = 1; i < vertices.size(); i++)
 	{
-		vertices[i].y = ofRandom(minHeight, maxHeight) * x;
+		vertices[i].y = ofRandom(minHeight, maxHeight) * i / 2;
 		minHeight++;
 		maxHeight++;
-		x++;
 	}
 
 	this->initialiserMesh();

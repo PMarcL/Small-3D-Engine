@@ -4,7 +4,6 @@
 #include "ofxGui.h"
 #include "Shader.h"
 #include "camera.h"
-#include "Cube.h"
 #include "Axes.h"
 #include "MousePositionHandler.h"
 #include "Paysage.h"
@@ -12,9 +11,8 @@
 #include "modeleOBJ.h"
 #include "CubeMap.h"
 #include <stack>
-#include "Tetraedre.h"
-#include "Octaedre.h"
 #include "Lumiere.h"
+#include "PrimitiveGeometrique.h"
 
 const static float VITESSE_ROTATION_DEFAUT = 2.0;
 const static float VITESSE_CAMERA_DEFAUT = 3.0;
@@ -54,33 +52,27 @@ class ofApp : public ofBaseApp{
 		void intensiteLumiereChangee(float& intensite);
 
 		stack<ofMatrix4x4> matrices;
-		Shader m_shader;
-		Shader m_shaderTex;
-		Camera m_camera;
-		Axes m_axes;
-		ofMatrix4x4 m_projection;
+		Shader shaderOrigine;
+		Shader shaderTex;
+		Camera camera;
+		Axes origineDuMonde;
+		ofMatrix4x4 projection;
 		ofMatrix4x4 model;
 		ofMatrix4x4 view;
 		MusiqueSFX son;
 		Paysage paysage;
-		CubeMap m_cubeMap;
-		Cube m_cube;
-		Tetraedre m_tretraedre;
-		Octaedre m_octaedre;
+		CubeMap cubeMap;
 		Lumiere lumiere;
 
-		int m_centreXFenetre;
-		int m_centreYFenetre;
+		int centreXFenetre;
+		int centreYFenetre;
 		int nbCaptureEcran;
-		float m_angle;
 		float angleChampDeVision;
 		MousePositionHandler* mouseHandler;
 
 		bool showMenu;
 		ofxFloatSlider quantiteIntensiteLumiere;
 		ofxFloatSlider vitesseCamera;
-		ofxFloatSlider vitesseRotation;
-		ofxToggle rotationActive;
 		ofxToggle vertigoEnFonction;
 		ofxToggle paused;
 		ofxLabel guiMessage;

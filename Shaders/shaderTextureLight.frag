@@ -20,13 +20,13 @@ void main()
 	// Lumière ambiante
     vec3 ambient = intensiteLumiere * lumiereAmbiante;
 
-    // Lumière diffuse
+    // Reflection diffuse
     vec3 normal = normalize(fragNormal);
     vec3 directionLumiere = normalize(positionLumiere - fragPos);
     float diff = max(dot(normal, directionLumiere), 0.0);
     vec3 diffuse = diff * couleurLumiere;
 
-	// Illumination spéculaire
+	// Reflection spéculaire
 	vec3 directionCamera = normalize(positionCamera - fragPos);
 	vec3 directionReflection = reflect(-directionLumiere, normal);
 	float spec = pow(max(dot(directionCamera, directionReflection), 0.0), 2);

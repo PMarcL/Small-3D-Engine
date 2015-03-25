@@ -33,7 +33,7 @@ void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 
 	glUseProgram(shader->getProgramID());
 
 	chargerValeursIlluminationUniforms(lumiere);
-	chargerMatricesMVPUniforms(projection, model, view);
+	chargerMatricesMVPUniforms(shader->getProgramID(), projection, model, view);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
@@ -54,11 +54,11 @@ void ModeleOBJ::chargerValeursIlluminationUniforms(const Lumiere& lumiere)
 	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "positionCamera"), 1, lumiere.getPositionVue().getPtr());
 }
 
-void ModeleOBJ::chargerMatricesMVPUniforms(const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)
+void ModeleOBJ::chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)
 {
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
+	glUniformMatrix4fv(glGetUniformLocation(id, "projection"), 1, GL_FALSE, projection.getPtr());
+	glUniformMatrix4fv(glGetUniformLocation(id, "model"), 1, GL_FALSE, model.getPtr());
+	glUniformMatrix4fv(glGetUniformLocation(id, "view"), 1, GL_FALSE, view.getPtr());
 }
 
 bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<ofVec2f>& texCoord, std::vector<ofVec3f>& normales)
@@ -146,52 +146,3 @@ bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<ofV
 		texCoord.push_back(tempTexCoords[uvIndices[i] - 1]);
 	}
 }
-
-
-/*
-bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<GLuint>& indices, std::vector<ofVec3f>& normales)
-{
-	vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-
-	ifstream fichier(cheminFichier);
-	if(!fichier)
-	{
-		cout << "Fichier: " << cheminFichier << " impossible a ouvrir!" << endl;
-		return false;
-	}
-
-	string ligne; 
-	while(getline(fichier, ligne))
-	{
-		string enTete = ligne.substr(0,2);
-		if(enTete == "v ")
-		{
-			istringstream s(ligne.substr(2));
-			ofVec3f vertex;
-			s >> vertex.x;
-			s >> vertex.y;
-			s >> vertex.z;
-			sommets.push_back(vertex);
-		}
-		else if(enTete == "f ")
-		{
-			istringstream s(ligne.substr(2));
-			GLushort a, b, c;
-			s >> a; s >> b, s >> c;
-			a--; b--; c--;
-			indices.push_back(a); indices.push_back(b); indices.push_back(c);
-		}
-		else if(ligne[0] == '#') {  }
-		else {  }
-	}
-	normales.resize(sommets.size(), ofVec3f(0.0, 0.0, 0.0));
-	for (int i = 0; i < indices.size(); i+=3) {
-		GLuint ia = indices[i];
-		GLuint ib = indices[i+1];
-		GLuint ic = indices[i+2];
-		ofVec3f normal = ofVec3f(sommets[ib]) - ofVec3f(sommets[ia]);
-		normal.cross(ofVec3f(sommets[ic]) - ofVec3f(sommets[ia]));
-		normal.normalize();
-		normales[ia] = normales[ib] = normales[ic] = normal;
-  }
-}*/

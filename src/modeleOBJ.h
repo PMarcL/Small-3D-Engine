@@ -17,7 +17,7 @@ public:
 
 private:
 	void chargerValeursIlluminationUniforms(const Lumiere& lumiere);
-	void chargerMatricesMVPUniforms(const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view);
+	void chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view);
 
 	Shader* shader;
 	Mesh mesh;

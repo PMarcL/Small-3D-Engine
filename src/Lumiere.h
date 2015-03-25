@@ -4,7 +4,7 @@
 
 const static float QUANTITE_LUMIERE_DEFAUT = 0.2;
 const static float INTENSITE_SPEC_DEFAUT = 0.5;
-const static ofVec3f POSITION_LUMIERE_DEFAUT = ofVec3f(1500, 2500, 500);
+const static ofVec3f POSITION_LUMIERE_DEFAUT = ofVec3f(1000, 1000, 2500);
 const static ofVec3f COUL_LUMIERE_DEFAUT = ofVec3f(1.0, 1.0, 1.0);
 const static ofVec3f COUL_AMBIANTE_DEFAUT = ofVec3f(0.3, 0.0, 0.8);
 

@@ -7,34 +7,30 @@ void ofApp::setup(){
 	ofSetFrameRate(60);
 	ofHideCursor();
 	
-	m_centreXFenetre = ofGetWindowWidth() * 0.5;
-	m_centreYFenetre = ofGetWindowHeight() * 0.5;
-	mouseX = m_centreXFenetre;
-	mouseY = m_centreYFenetre;
+	centreXFenetre = ofGetWindowWidth() * 0.5;
+	centreYFenetre = ofGetWindowHeight() * 0.5;
+	mouseX = centreXFenetre;
+	mouseY = centreYFenetre;
 	angleChampDeVision = ANGLE_VISION_NORMAL;
 	nbCaptureEcran = 0;
-	m_angle = 0.0;
 	showMenu = true;
 	paused = false;
 	
-	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
 	son.jouerMusiqueEtAmbiance();
 	
 	mouseHandler = new MousePositionHandler();
-	m_camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
-	m_shader = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
-	m_shader.charger();
-	m_axes = Axes(30, &m_shader);
-	m_cube = Cube(2.0, &m_shader);
-	m_tretraedre = Tetraedre(8.0, &m_shader);
-	m_octaedre = Octaedre(2.0, &m_shader);
+	camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
+	shaderOrigine = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
+	shaderOrigine.charger();
+	origineDuMonde = Axes(30, &shaderOrigine);
 
-	m_shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
-	m_shaderTex.charger();
+	shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
+	shaderTex.charger();
 	this->configurerUI();
 
-	m_cubeMap = CubeMap(100, &m_shaderTex, 
+	cubeMap = CubeMap(100, &shaderTex, 
 		"Textures/ciel/XN.jpg",
 		"Textures/ciel/XP.jpg",
 		"Textures/ciel/YN.jpg",
@@ -47,12 +43,9 @@ void ofApp::setup(){
 void ofApp::update(){
 	if(!paused){
 		mouseHandler->update(mouseX, mouseY);
-		m_camera.update();
-		if (rotationActive) {
-			m_angle += vitesseRotation;
-		}
-		
-		if(vertigoEnFonction && m_camera.isMovingForward())
+		camera.update();
+
+		if(vertigoEnFonction && camera.isMovingForward())
 			zoomIn();
 		else if(vertigoEnFonction && angleChampDeVision > ANGLE_VISION_NORMAL)
 			zoomOut();
@@ -64,40 +57,17 @@ void ofApp::update(){
 void ofApp::draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	
-	m_camera.lookAt(view);
-	lumiere.setPositionVue(m_camera.getPosition());
+	camera.lookAt(view);
+	lumiere.setPositionVue(camera.getPosition());
 
 	pushMatrix();
-		model.glTranslate(m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
-		m_cubeMap.afficher(m_projection, model, view);
-	popMatrix();
-	
-	pushMatrix();
-		model.glTranslate(30.0f, 0.0f, 100.0f);
-		m_tretraedre.afficher(m_projection, model, view);
-		for (float i = 0; i < 360; i += 30){
-			pushMatrix();
-				model.glRotate(i + m_angle, 0.0f, 1.0f, 0.0f);
-				model.glTranslate(30.0f, 0.0f, 0.0f);
-				m_octaedre.afficher(m_projection, model, view);
-			popMatrix();
-		}
-		m_octaedre.afficher(m_projection, model, view);
+		model.glTranslate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+		cubeMap.afficher(projection, model, view);
 	popMatrix();
 
 	pushMatrix();
-		m_axes.afficher(m_projection, model, view);
-		paysage.afficher(m_projection, model, view, lumiere);
-	popMatrix();
-
-	pushMatrix();
-		Cube cube(2.0, &m_shader);
-		model.glRotate(m_angle, 0, 1, 0);
-		for (int i = 0; i < 4; i++){
-			cube.afficher(m_projection, model, view);
-			model.glTranslate(3, 0, 0);
-		}
+		origineDuMonde.afficher(projection, model, view);
+		paysage.afficher(projection, model, view, lumiere);
 	popMatrix();
 	
 	glDisable(GL_LIGHTING);
@@ -110,13 +80,13 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	if(key == 'w' || key == 'W')
-		m_camera.setMoveForward(true);
+		camera.setMoveForward(true);
 	else if(key == 's' || key == 'S')
-		m_camera.setMoveBackward(true);
+		camera.setMoveBackward(true);
 	else if(key == 'a' || key == 'A')
-		m_camera.setMoveLeft(true);
+		camera.setMoveLeft(true);
 	else if(key == 'd' || key == 'D')
-		m_camera.setMoveRight(true);
+		camera.setMoveRight(true);
 	else if(key == OF_KEY_UP)
 		zoomIn();
 	else if(key == OF_KEY_DOWN)
@@ -138,17 +108,15 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
 	if(key == 'w' || key == 'W')
-		m_camera.setMoveForward(false);
+		camera.setMoveForward(false);
 	else if(key == 's' || key == 'S')
-		m_camera.setMoveBackward(false);
+		camera.setMoveBackward(false);
 	else if(key == 'a' || key == 'A')
-		m_camera.setMoveLeft(false);
+		camera.setMoveLeft(false);
 	else if(key == 'd' || key == 'D')
-		m_camera.setMoveRight(false);
+		camera.setMoveRight(false);
 	else if(key == 'p' || key == 'P'){
 		paused = !paused;
-	} else if(key == 'r' || key == 'r'){
-		rotationActive = !rotationActive;
 	}
 	else if(key == 'f' || key == 'F'){
 		ofToggleFullscreen();
@@ -178,9 +146,9 @@ void ofApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-	m_centreXFenetre = w * 0.5;
-	m_centreYFenetre = h * 0.5;
-	m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+	centreXFenetre = w * 0.5;
+	centreYFenetre = h * 0.5;
+	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 }
 
 //--------------------------------------------------------------
@@ -202,10 +170,8 @@ void ofApp::configurerUI() {
 	gui.setup("Parametres");
 	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
 	gui.add(paused.setup("p - Pause", false));
-	gui.add(rotationActive.setup("r - Rotation primitives", true));
 	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
-	gui.add(vitesseRotation.setup("vitesse de rotation", VITESSE_ROTATION_DEFAUT, 0.5, 5));
 	gui.add(quantiteIntensiteLumiere.setup("lumiere ambiante", lumiere.getIntensiteLumiereAmbiante(), 0.0, 1.0));
 	gui.add(fps.setup("fps", ""));
 	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger a gauche\nd - bouger a droite\ni capture d'ecran\nf - mode plein ecran\nm - afficher menu", 200, 220));
@@ -229,13 +195,13 @@ void ofApp::vertigoToggled(bool &enabled) {
 	}
 	else{
 		angleChampDeVision = ANGLE_VISION_NORMAL;
-		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth() / ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+		projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth() / ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 		vitesseCamera = 1;
 	}
 }
 
 void ofApp::speedChanged(float &speed) {
-	m_camera.setVitesse(speed);
+	camera.setVitesse(speed);
 }
 
 void ofApp::intensiteLumiereChangee(float & intensite)
@@ -248,7 +214,7 @@ void ofApp::zoomIn()
 	if(angleChampDeVision < 170.0)
 	{
 		angleChampDeVision += VERTIGO_DEGREE_PAR_FRAME;
-		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+		projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
 }
 
@@ -257,7 +223,7 @@ void ofApp::zoomOut()
 	if(angleChampDeVision > 1.0)
 	{
 		angleChampDeVision -= VERTIGO_DEGREE_PAR_FRAME;
-		m_projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+		projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
 }
 

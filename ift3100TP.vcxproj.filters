@@ -34,22 +34,13 @@
     <ClCompile Include="src\Axes.cpp">
       <Filter>src\Affichables</Filter>
     </ClCompile>
-    <ClCompile Include="src\Cube.cpp">
-      <Filter>src\Affichables</Filter>
-    </ClCompile>
     <ClCompile Include="src\CubeMap.cpp">
       <Filter>src\Affichables</Filter>
     </ClCompile>
     <ClCompile Include="src\modeleOBJ.cpp">
       <Filter>src\Affichables</Filter>
     </ClCompile>
-    <ClCompile Include="src\Octaedre.cpp">
-      <Filter>src\Affichables</Filter>
-    </ClCompile>
     <ClCompile Include="src\Plane.cpp">
-      <Filter>src\Affichables</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tetraedre.cpp">
       <Filter>src\Affichables</Filter>
     </ClCompile>
     <ClCompile Include="src\camera.cpp">
@@ -82,6 +73,10 @@
     <ClCompile Include="src\Lumiere.cpp">
       <Filter>src\Utilitaires</Filter>
     </ClCompile>
+    <ClCompile Include="src\PrimitivesData.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrimitiveGeometrique.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -137,22 +132,13 @@
     <ClInclude Include="src\Axes.h">
       <Filter>src\Affichables</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cube.h">
-      <Filter>src\Affichables</Filter>
-    </ClInclude>
     <ClInclude Include="src\CubeMap.h">
       <Filter>src\Affichables</Filter>
     </ClInclude>
     <ClInclude Include="src\modeleOBJ.h">
       <Filter>src\Affichables</Filter>
     </ClInclude>
-    <ClInclude Include="src\Octaedre.h">
-      <Filter>src\Affichables</Filter>
-    </ClInclude>
     <ClInclude Include="src\Plane.h">
-      <Filter>src\Affichables</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tetraedre.h">
       <Filter>src\Affichables</Filter>
     </ClInclude>
     <ClInclude Include="src\camera.h">
@@ -185,6 +171,10 @@
     <ClInclude Include="src\Lumiere.h">
       <Filter>src\Utilitaires</Filter>
     </ClInclude>
+    <ClInclude Include="src\PrimitivesData.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PrimitiveGeometrique.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

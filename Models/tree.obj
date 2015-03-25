@@ -1,6 +1,6 @@
 # Blender v2.73 (sub 0) OBJ File: 'arbre.blend'
 # www.blender.org
-mtllib arbre.mtl
+mtllib tree.mtl
 o tree
 v -0.907191 10.025100 0.063988
 v 4.431250 6.623600 0.827878

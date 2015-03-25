@@ -105,17 +105,16 @@
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\CubeMap.cpp" />
     <ClCompile Include="src\modeleOBJ.cpp" />
-    <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MousePositionHandler.cpp" />
     <ClCompile Include="src\MusiqueSFX.cpp" />
-    <ClCompile Include="src\Octaedre.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\Paysage.cpp" />
     <ClCompile Include="src\Plane.cpp" />
+    <ClCompile Include="src\PrimitiveGeometrique.cpp" />
+    <ClCompile Include="src\PrimitivesData.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SurfaceCoons.cpp" />
-    <ClCompile Include="src\Tetraedre.cpp" />
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -135,16 +134,15 @@
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\CubeMap.h" />
     <ClInclude Include="src\modeleOBJ.h" />
-    <ClInclude Include="src\Cube.h" />
     <ClInclude Include="src\MousePositionHandler.h" />
     <ClInclude Include="src\MusiqueSFX.h" />
-    <ClInclude Include="src\Octaedre.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Paysage.h" />
     <ClInclude Include="src\Plane.h" />
+    <ClInclude Include="src\PrimitiveGeometrique.h" />
+    <ClInclude Include="src\PrimitivesData.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\SurfaceCoons.h" />
-    <ClInclude Include="src\Tetraedre.h" />
     <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <ItemGroup>

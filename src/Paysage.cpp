@@ -9,8 +9,8 @@ Paysage::Paysage()
 	shaderUneTexture = Shader("Shaders/shaderTextureLight.vert", "Shaders/shaderTextureLight.frag");
 	shaderUneTexture.charger();
 
-	surfaceCentrale = Plane(1000, 20, 20);
-	surfaceCentrale.genereHauteursAleatoire(-20.0, -5.0);
+	surfaceCentrale = Plane(1000, 20, 60);
+	surfaceCentrale.genereHauteursAleatoire(-30.0, -5.0);
 	surfaceCentrale.ajouterTexture("Textures/rock.jpg");
 	surfaceCentrale.utiliserTextures(true);
 
@@ -19,7 +19,7 @@ Paysage::Paysage()
 	ocean.utiliserTextures(true);
 	ocean.setRatioTextureParCarre(0.1);
 
-	montagne = Plane(1000, 5, 5);
+	montagne = Plane(1000, 5, 10);
 	montagne.generePenteProgressive(0.0, 5.0);
 	montagne.ajouterTexture("Textures/rock.jpg");
 	montagne.utiliserTextures(true);
@@ -61,7 +61,7 @@ bool Paysage::positionEstEnConflit(int espacement, ofVec3f position)
 	return true;
 }
 
-void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 view, 
+void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 view,
 					   const Lumiere& lumiere)
 {
 	this->model = modelIn;
@@ -69,33 +69,16 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	pushMatrix();
 		glUseProgram(shaderUneTexture.getProgramID());
 		chargerValeursIlluminationUniforms(shaderUneTexture.getProgramID(), lumiere);
-		chargerMatricesMVPUniforms(shaderUneTexture.getProgramID(), projection, modelIn, view);
-		surfaceCentrale.afficher();
-		model.glTranslate(0.0, 0.0, 1000.0);
-		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-		surfaceCentrale.afficher();
-	popMatrix();
-	pushMatrix();
-		model.glTranslate(0.0, 0.0, -1000.0);
-		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+		model.glScale(1.5, 1.0, 4.0);
+		chargerMatricesMVPUniforms(shaderUneTexture.getProgramID(), projection, model, view);
 		surfaceCentrale.afficher();
 	popMatrix();
 
 	// Affichage de la montagne
 	pushMatrix();
-		model.glTranslate(-1000.0, -40.0, 0.0);
+		model.glTranslate(-1200.0, -40.0, 0.0);
 		model.glRotate(180.0f, 0.0, 1.0, 0.0);
-		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-		montagne.afficher();
-		
-		pushMatrix();
-			model.glTranslate(0.0, 0.0, 1000.0);
-			glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			montagne.afficher();
-		popMatrix();
-		
-		model.glTranslate(-150.0, -40.0, -900.0);
-		model.glRotate(20.0f, 0.0, 1.0, 0.0);
+		model.glScale(1.0, 1.0, 3.0);
 		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
 		montagne.afficher();
 	popMatrix();

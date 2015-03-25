@@ -1,7 +1,7 @@
 #include "CubeMap.h"
 
 CubeMap::CubeMap(float taille, Shader* shader, string texXN, string texXP, string texYN, string texYP, string texZN, string texZP):
-	m_taille(taille), m_shader(shader)
+	taille(taille), shader(shader)
 {
 
 	tex[0] = Texture(texXN);//Avant
@@ -20,7 +20,6 @@ CubeMap::CubeMap(float taille, Shader* shader, string texXN, string texXP, strin
 	}
 
 	taille /= 2;
-	// Vertices temporaires
 	float verticesTmp[] = {-taille, -taille, -taille,   taille, -taille, -taille,   taille, taille, -taille,     // Face 1
 						   -taille, -taille, -taille,   -taille, taille, -taille,   taille, taille, -taille,
 
@@ -39,11 +38,9 @@ CubeMap::CubeMap(float taille, Shader* shader, string texXN, string texXP, strin
 						   -taille, taille, taille,   taille, taille, taille,   taille, taille, -taille,         // Face 6
 						   -taille, taille, taille,   -taille, taille, -taille,   taille, taille, -taille};
 
-	// Copie des valeurs dans les tableaux finaux
 	for(int i(0); i < 108; i++)
-		m_vertices[i] = verticesTmp[i];
+		vertices[i] = verticesTmp[i];
 
-	// Coordonnées de texture temporaires
 	float coordTextureTmp[] = {
 		0, 0,	1, 0,	1, 1,	// Face 1
 		0, 0,	0, 1,	1, 1,
@@ -64,7 +61,7 @@ CubeMap::CubeMap(float taille, Shader* shader, string texXN, string texXP, strin
 		0, 0,	0, 1,	1, 1};
 
 	for(int i (0); i < 72; i++)
-		m_coordTexture[i] = coordTextureTmp[i];
+		coordTexture[i] = coordTextureTmp[i];
 }
 
 CubeMap::~CubeMap()
@@ -75,40 +72,29 @@ CubeMap::~CubeMap()
 void CubeMap::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &model, ofMatrix4x4 &view)
 {
 	glDisable(GL_LIGHTING);
-
-	// Désactivation de l'écriture dans le DepthBuffer
 	glDepthMask(GL_FALSE);
 
-	// Activation du shader
-	glUseProgram(m_shader->getProgramID());
-		// Envoi des vertices
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
+	glUseProgram(shader->getProgramID());
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
 		glEnableVertexAttribArray(0);
 		
-		// Envoi des textures
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, m_coordTexture);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, coordTexture);
         glEnableVertexAttribArray(2);
 		
-		// Envoi des matrices
-		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-		glUniformMatrix4fv(glGetUniformLocation(m_shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+		glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
 		
 		for(int i = 0; i < 6; i++){
 			glBindTexture(GL_TEXTURE_2D, tex[i].getID());
 			glDrawArrays(GL_TRIANGLES, i * 6, 6);
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
-		// Désactivation des tableaux
 		glDisableVertexAttribArray(2);
 		glDisableVertexAttribArray(0);
 		
-	// Désactivation du shader
 	glUseProgram(0);
-
-	// Réactivation de l'écriture dans le DepthBuffer
 	glDepthMask(GL_TRUE);
-
 	glEnable(GL_LIGHTING);
 }
 
@@ -126,11 +112,11 @@ CubeMap& CubeMap::operator=(CubeMap const &cubeMapACopier)
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	m_shader = cubeMapACopier.getShader();
+	shader = cubeMapACopier.getShader();
 
 	int taille = cubeMapACopier.getTaille();
 	taille /= 2;
-	// Vertices temporaires
+	
 	float verticesTmp[] = {-taille, -taille, -taille,   taille, -taille, -taille,   taille, taille, -taille,     // Face 1
 							-taille, -taille, -taille,   -taille, taille, -taille,   taille, taille, -taille,
 
@@ -149,11 +135,9 @@ CubeMap& CubeMap::operator=(CubeMap const &cubeMapACopier)
 							-taille, taille, taille,   taille, taille, taille,   taille, taille, -taille,         // Face 6
 							-taille, taille, taille,   -taille, taille, -taille,   taille, taille, -taille};
 
-	// Copie des valeurs dans les tableaux finaux
 	for(int i(0); i < 108; i++)
-		m_vertices[i] = verticesTmp[i];
+		vertices[i] = verticesTmp[i];
 
-	// Coordonnées de texture temporaires
 	float coordTextureTmp[] = {
 		0, 0,	1, 0,	1, 1,	// Face 1
 		0, 0,	0, 1,	1, 1,
@@ -174,17 +158,17 @@ CubeMap& CubeMap::operator=(CubeMap const &cubeMapACopier)
 		0, 0,	0, 1,	1, 1};
 
 	for(int i (0); i < 72; i++)
-		m_coordTexture[i] = coordTextureTmp[i];
+		coordTexture[i] = coordTextureTmp[i];
 
 	return *this;
 }
 
 Shader* CubeMap::getShader() const
 {
-	return m_shader;
+	return shader;
 }
 
 int CubeMap::getTaille() const
 {
-	return m_taille;
+	return taille;
 }

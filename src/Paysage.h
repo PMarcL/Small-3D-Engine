@@ -7,7 +7,7 @@
 #include "Lumiere.h"
 #include <stack>
 
-const static int NB_ARBRES = 40;
+const static int NB_ARBRES = 30;
 const static ofVec3f LUMIERE_AMBIANTE = ofVec3f(0.0, 0.0, 0.8);
 
 class Paysage
@@ -30,7 +30,6 @@ private:
 
 	ofVec3f lumiereAmbiante;
 	Shader shaderUneTexture;
-	Shader shaderPassThru;
 	Shader shaderOscillation;
 	stack<ofMatrix4x4> matrices;
 	ofMatrix4x4 model;
