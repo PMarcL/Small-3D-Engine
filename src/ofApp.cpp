@@ -65,10 +65,9 @@ void ofApp::draw(){
 		cubeMap.afficher(projection, model, view);
 	popMatrix();
 
-	pushMatrix();
-		origineDuMonde.afficher(projection, model, view);
-		paysage.afficher(projection, model, view, lumiere);
-	popMatrix();
+	origineDuMonde.afficher(projection, model, view);
+	paysage.afficher(projection, model, view, lumiere);
+	primitives.afficher(projection, model, view, lumiere);
 	
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
@@ -136,7 +135,8 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+	if(button == OF_MOUSE_BUTTON_3)
+		primitives.ajouterPrimitive(PrimitiveGeometrique(CUBE, PLASTIQUE_JAUNE, camera.getPosition() + 75 * camera.getOrientation(), 20.0));
 }
 
 //--------------------------------------------------------------

@@ -19,6 +19,7 @@ class Camera
 		float getSensibilite() const;
 		float getVitesse() const;
 		ofVec3f getPosition() const;
+		ofVec3f getOrientation() const;
 		bool isMovingForward() const;
 		bool isMovingBackward() const;
 		bool isMovingRight() const;

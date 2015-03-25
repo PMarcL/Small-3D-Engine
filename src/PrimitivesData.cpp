@@ -59,3 +59,71 @@ vector<float> getTexCoordPourPrimitive(PRIMITIVES primitive) {
 		break;
 	}
 }
+
+std::vector<float> getMateriauxData(MATERIAUX materiaux) {
+	switch(materiaux) {
+	case(PLASTIQUE_NOIR):
+		return vector<float>(PLASTIQUE_NOIR_DATA, PLASTIQUE_NOIR_DATA + sizeof(PLASTIQUE_NOIR_DATA) / sizeof(PLASTIQUE_NOIR_DATA[0]));
+		break;
+	case(PLASTIQUE_BLEU):
+		return vector<float>(PLASTIQUE_BLEU_DATA, PLASTIQUE_BLEU_DATA + sizeof(PLASTIQUE_BLEU_DATA) / sizeof(PLASTIQUE_BLEU_DATA[0]));
+		break;
+	case(PLASTIQUE_VERT):
+		return vector<float>(PLASTIQUE_VERT_DATA, PLASTIQUE_VERT_DATA + sizeof(PLASTIQUE_VERT_DATA) / sizeof(PLASTIQUE_VERT_DATA[0]));
+		break;
+	case(PLASTIQUE_ROUGE):
+		return vector<float>(PLASTIQUE_ROUGE_DATA, PLASTIQUE_ROUGE_DATA + sizeof(PLASTIQUE_ROUGE_DATA) / sizeof(PLASTIQUE_ROUGE_DATA[0]));
+		break;
+	case(PLASTIQUE_BLANC):
+		return vector<float>(PLASTIQUE_BLANC_DATA, PLASTIQUE_BLANC_DATA + sizeof(PLASTIQUE_BLANC_DATA) / sizeof(PLASTIQUE_BLANC_DATA[0]));
+		break;
+	case(PLASTIQUE_JAUNE):
+		return vector<float>(PLASTIQUE_JAUNE_DATA, PLASTIQUE_JAUNE_DATA + sizeof(PLASTIQUE_JAUNE_DATA) / sizeof(PLASTIQUE_JAUNE_DATA[0]));
+		break;
+	case(RUBBER_NOIR):
+		return vector<float>(RUBBER_NOIR_DATA, RUBBER_NOIR_DATA + sizeof(RUBBER_NOIR_DATA) / sizeof(RUBBER_NOIR_DATA[0]));
+		break;
+	case(RUBBER_ROUGE):
+		return vector<float>(RUBBER_ROUGE_DATA, RUBBER_ROUGE_DATA + sizeof(RUBBER_ROUGE_DATA) / sizeof(RUBBER_ROUGE_DATA[0]));
+		break;
+	case(RUBBER_BLEU):
+		return vector<float>(RUBBER_BLEU_DATA, RUBBER_BLEU_DATA + sizeof(RUBBER_BLEU_DATA) / sizeof(RUBBER_BLEU_DATA[0]));
+		break;
+	case(EMERAUDE):
+		return vector<float>(EMERAUDE_DATA, EMERAUDE_DATA + sizeof(EMERAUDE_DATA) / sizeof(EMERAUDE_DATA[0]));
+		break;
+	case(JADE):
+		return vector<float>(JADE_DATA, JADE_DATA + sizeof(JADE_DATA) / sizeof(JADE_DATA[0]));
+		break;
+	case(OBSIDIENNE):
+		return vector<float>(OBSIDIENNE_DATA, OBSIDIENNE_DATA + sizeof(OBSIDIENNE_DATA) / sizeof(OBSIDIENNE_DATA[0]));
+		break;
+	case(PERLE):
+		return vector<float>(PERLE_DATA, PERLE_DATA + sizeof(PERLE_DATA) / sizeof(PERLE_DATA[0]));
+		break;
+	case(RUBY):
+		return vector<float>(RUBY_DATA, RUBY_DATA + sizeof(RUBY_DATA) / sizeof(RUBY_DATA[0]));
+		break;
+	case(TURQUOISE):
+		return vector<float>(TURQUOISE_DATA, TURQUOISE_DATA + sizeof(TURQUOISE_DATA) / sizeof(TURQUOISE_DATA[0]));
+		break;
+	case(LAITON):
+		return vector<float>(LAITON_DATA, LAITON_DATA + sizeof(LAITON_DATA) / sizeof(LAITON_DATA[0]));
+		break;
+	case(BRONZE):
+		return vector<float>(BRONZE_DATA, BRONZE_DATA + sizeof(BRONZE_DATA) / sizeof(BRONZE_DATA[0]));
+		break;
+	case(CHROME):
+		return vector<float>(CHROME_DATA, CHROME_DATA + sizeof(CHROME_DATA) / sizeof(CHROME_DATA[0]));
+		break;
+	case(CUIVRE):
+		return vector<float>(CUIVRE_DATA, CUIVRE_DATA + sizeof(CUIVRE_DATA) / sizeof(CUIVRE_DATA[0]));
+		break;
+	case(OR):
+		return vector<float>(OR_DATA, OR_DATA + sizeof(OR_DATA) / sizeof(OR_DATA[0]));
+		break;
+	case(ARGENT):
+		return vector<float>(ARGENT_DATA, ARGENT_DATA + sizeof(ARGENT_DATA) / sizeof(ARGENT_DATA[0]));
+		break;
+	}
+}

@@ -3,7 +3,7 @@
 
 Lumiere::Lumiere(void)
 	:position(POSITION_LUMIERE_DEFAUT), couleurDirectionnelle(COUL_LUMIERE_DEFAUT), couleurAmbiante(COUL_AMBIANTE_DEFAUT),
-	intensiteLumiereAmbiante(QUANTITE_LUMIERE_DEFAUT), intensiteSpeculaire(INTENSITE_SPEC_DEFAUT)
+	couleurSpeculaire(REFLECTiON_SPEC_COUL), intensiteLumiereAmbiante(QUANTITE_LUMIERE_DEFAUT), intensiteSpeculaire(INTENSITE_SPEC_DEFAUT)
 {
 }
 
@@ -27,32 +27,26 @@ void Lumiere::setPositionVue(ofVec3f position)
 	positionVue = position;
 }
 
-ofVec3f Lumiere::getPosition() const
+void Lumiere::chargerValeursIlluminationUniforms(GLuint programId) const
 {
-	return position;
+	glUniform1f(glGetUniformLocation(programId, "intensiteLumiere"), intensiteLumiereAmbiante);
+	glUniform3fv(glGetUniformLocation(programId, "lumiereAmbiante"), 1, couleurAmbiante.getPtr());
+	glUniform3fv(glGetUniformLocation(programId, "positionLumiere"), 1, position.getPtr());
+	glUniform3fv(glGetUniformLocation(programId, "couleurLumiere"), 1, couleurDirectionnelle.getPtr());
+	glUniform1f(glGetUniformLocation(programId, "intensiteSpeculaire"), intensiteSpeculaire);
+	glUniform3fv(glGetUniformLocation(programId, "positionCamera"), 1, positionVue.getPtr());
 }
 
-ofVec3f Lumiere::getPositionVue() const
+void Lumiere::chargerValeursIlluminationStruct(GLuint programId) const
 {
-	return positionVue;
+	glUniform3fv(glGetUniformLocation(programId, "lumiere.ambiante"), 1, couleurAmbiante.getPtr());
+	glUniform3fv(glGetUniformLocation(programId, "lumiere.position"), 1, position.getPtr());
+	glUniform3fv(glGetUniformLocation(programId, "lumiere.diffuse"), 1, couleurDirectionnelle.getPtr());
+	glUniform3fv(glGetUniformLocation(programId, "lumiere.speculaire"), 1, couleurSpeculaire.getPtr());
+	glUniform3fv(glGetUniformLocation(programId, "positionCamera"), 1, positionVue.getPtr());
 }
 
-ofVec3f Lumiere::getCouleurDirectionnelle() const
-{
-	return couleurDirectionnelle;
-}
-
-ofVec3f Lumiere::getCouleurAmbiante() const
-{
-	return couleurAmbiante;
-}
-
-GLfloat Lumiere::getIntensiteLumiereAmbiante() const
+GLfloat Lumiere::getIntensiteLumiereAmbiante()
 {
 	return intensiteLumiereAmbiante;
-}
-
-GLfloat Lumiere::getIntensiteSpeculaire() const
-{
-	return intensiteSpeculaire;
 }

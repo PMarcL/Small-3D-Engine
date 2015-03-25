@@ -58,6 +58,11 @@ void Camera::lookAt(ofMatrix4x4 &modelview)
 	modelview.makeLookAtViewMatrix(m_position, m_pointCible, m_axeVertical);
 }
 
+ofVec3f Camera::getOrientation() const
+{
+	return m_orientation;
+}
+
 void Camera::orienter()
 {
     // Récupération des angles

@@ -44,7 +44,7 @@ ofVec3f Paysage::genererPositionAvecEspacement(int espacement)
 	ofVec3f position;
 	bool positionTrouvee = false;
 	while(!positionTrouvee) {
-		position = ofVec3f(ofRandom(-500.0, 500.0), -10.0, ofRandom(-1400.0, 1400.0));
+		position = ofVec3f(ofRandom(-500.0, 500.0), -20.0, ofRandom(-1400.0, 1400.0));
 		positionTrouvee = positionEstEnConflit(espacement, position);
 	}
 	return position;
@@ -68,7 +68,7 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	// Affichage de la surface de base
 	pushMatrix();
 		glUseProgram(shaderUneTexture.getProgramID());
-		chargerValeursIlluminationUniforms(shaderUneTexture.getProgramID(), lumiere);
+		lumiere.chargerValeursIlluminationUniforms(shaderUneTexture.getProgramID());
 		model.glScale(1.5, 1.0, 4.0);
 		chargerMatricesMVPUniforms(shaderUneTexture.getProgramID(), projection, model, view);
 		surfaceCentrale.afficher();
@@ -87,7 +87,7 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	pushMatrix();
 		glUseProgram(shaderOscillation.getProgramID());
 		model.glTranslate(980.0, -40.0, 0.0);
-		chargerValeursIlluminationUniforms(shaderOscillation.getProgramID(), lumiere);
+		lumiere.chargerValeursIlluminationUniforms(shaderOscillation.getProgramID());
 		chargerMatricesMVPUniforms(shaderOscillation.getProgramID(), projection, model, view);
 		glUniform1f(glGetUniformLocation(shaderOscillation.getProgramID(), "time"), ofGetElapsedTimef());
 		ocean.afficher();
@@ -120,16 +120,6 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
-}
-
-void Paysage::chargerValeursIlluminationUniforms(GLuint id, const Lumiere& lumiere)
-{
-	glUniform1f(glGetUniformLocation(id, "intensiteLumiere"), lumiere.getIntensiteLumiereAmbiante());
-	glUniform3fv(glGetUniformLocation(id, "lumiereAmbiante"), 1, lumiere.getCouleurAmbiante().getPtr());
-	glUniform3fv(glGetUniformLocation(id, "positionLumiere"), 1, lumiere.getPosition().getPtr());
-	glUniform3fv(glGetUniformLocation(id, "couleurLumiere"), 1, lumiere.getCouleurDirectionnelle().getPtr());
-	glUniform1f(glGetUniformLocation(id, "intensiteSpeculaire"), lumiere.getIntensiteSpeculaire());
-	glUniform3fv(glGetUniformLocation(id, "positionCamera"), 1, lumiere.getPositionVue().getPtr());
 }
 
 void Paysage::chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)

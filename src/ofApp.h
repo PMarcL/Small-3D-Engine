@@ -8,11 +8,11 @@
 #include "MousePositionHandler.h"
 #include "Paysage.h"
 #include "MusiqueSFX.h"
-#include "modeleOBJ.h"
 #include "CubeMap.h"
-#include <stack>
 #include "Lumiere.h"
-#include "PrimitiveGeometrique.h"
+#include "ConteneurPrimitives.h"
+
+#include <stack>
 
 const static float VITESSE_ROTATION_DEFAUT = 2.0;
 const static float VITESSE_CAMERA_DEFAUT = 3.0;
@@ -63,6 +63,7 @@ class ofApp : public ofBaseApp{
 		Paysage paysage;
 		CubeMap cubeMap;
 		Lumiere lumiere;
+		ConteneurPrimitives primitives;
 
 		int centreXFenetre;
 		int centreYFenetre;

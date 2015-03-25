@@ -32,7 +32,7 @@ void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 
 {
 	glUseProgram(shader->getProgramID());
 
-	chargerValeursIlluminationUniforms(lumiere);
+	lumiere.chargerValeursIlluminationUniforms(shader->getProgramID());
 	chargerMatricesMVPUniforms(shader->getProgramID(), projection, model, view);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -42,16 +42,6 @@ void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 
 	glDisable(GL_CULL_FACE);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
-}
-
-void ModeleOBJ::chargerValeursIlluminationUniforms(const Lumiere& lumiere)
-{
-	glUniform1f(glGetUniformLocation(shader->getProgramID(), "intensiteLumiere"), lumiere.getIntensiteLumiereAmbiante());
-	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "lumiereAmbiante"), 1, lumiere.getCouleurAmbiante().getPtr());
-	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "positionLumiere"), 1, lumiere.getPosition().getPtr());
-	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "couleurLumiere"), 1, lumiere.getCouleurDirectionnelle().getPtr());
-	glUniform1f(glGetUniformLocation(shader->getProgramID(), "intensiteSpeculaire"), lumiere.getIntensiteSpeculaire());
-	glUniform3fv(glGetUniformLocation(shader->getProgramID(), "positionCamera"), 1, lumiere.getPositionVue().getPtr());
 }
 
 void ModeleOBJ::chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)

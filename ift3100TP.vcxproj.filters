@@ -77,6 +77,7 @@
       <Filter>src\Utilitaires</Filter>
     </ClCompile>
     <ClCompile Include="src\PrimitiveGeometrique.cpp" />
+    <ClCompile Include="src\ConteneurPrimitives.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -175,6 +176,7 @@
       <Filter>src\Utilitaires</Filter>
     </ClInclude>
     <ClInclude Include="src\PrimitiveGeometrique.h" />
+    <ClInclude Include="src\ConteneurPrimitives.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
