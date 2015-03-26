@@ -60,8 +60,10 @@ void ConteneurPrimitives::selectionnerPrimitive(ofVec3f position, float rayon)
 			}
 		}
 	}
-	materiauPrimitiveSelectionnee = primitiveSelectionnee->getMateriau();
-	primitiveSelectionnee->setMateriau(SELECTION);
+	if(primitiveSelectionnee != NULL) {
+		materiauPrimitiveSelectionnee = primitiveSelectionnee->getMateriau();
+		primitiveSelectionnee->setMateriau(SELECTION);
+	}
 }
 
 bool ConteneurPrimitives::positionDansRayon(const ofVec3f& positionRef, const ofVec3f& positionCible, float rayon)

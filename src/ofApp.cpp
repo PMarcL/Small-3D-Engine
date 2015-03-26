@@ -1,5 +1,7 @@
 #include "ofApp.h"
 
+GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil);
+
 //--------------------------------------------------------------
 void ofApp::setup(){
 	

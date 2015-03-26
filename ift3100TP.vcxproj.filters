@@ -76,8 +76,12 @@
     <ClCompile Include="src\PrimitivesData.cpp">
       <Filter>src\Utilitaires</Filter>
     </ClCompile>
-    <ClCompile Include="src\PrimitiveGeometrique.cpp" />
-    <ClCompile Include="src\ConteneurPrimitives.cpp" />
+    <ClCompile Include="src\PrimitiveGeometrique.cpp">
+      <Filter>src\Affichables</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ConteneurPrimitives.cpp">
+      <Filter>src\Affichables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -175,8 +179,12 @@
     <ClInclude Include="src\PrimitivesData.h">
       <Filter>src\Utilitaires</Filter>
     </ClInclude>
-    <ClInclude Include="src\PrimitiveGeometrique.h" />
-    <ClInclude Include="src\ConteneurPrimitives.h" />
+    <ClInclude Include="src\PrimitiveGeometrique.h">
+      <Filter>src\Affichables</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ConteneurPrimitives.h">
+      <Filter>src\Affichables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
