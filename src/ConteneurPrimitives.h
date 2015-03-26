@@ -19,7 +19,8 @@ public:
 
 private:
 	void chargerMatricesMVPUniforms(const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view);
-	bool positionsDansRayon(const ofVec3f& positionRef, const ofVec3f& position, float rayon);
+	bool positionDansRayon(const ofVec3f& positionRef, const ofVec3f& position, float rayon);
+	float getDistanceEntreVecteur(const ofVec3f& positionRef, const ofVec3f& positionCible);
 
 	Shader shader;
 	vector<PrimitiveGeometrique> primitives;

@@ -1,5 +1,5 @@
 #include "ConteneurPrimitives.h"
-
+#include <cfloat>
 
 ConteneurPrimitives::ConteneurPrimitives(void)
 	:primitiveSelectionnee(NULL)
@@ -46,22 +46,32 @@ void ConteneurPrimitives::chargerMatricesMVPUniforms(const ofMatrix4x4& projecti
 
 void ConteneurPrimitives::selectionnerPrimitive(ofVec3f position, float rayon)
 {
+	float distanceMinimum = FLT_MAX;
 	for(int i = 0; i < primitives.size(); i++)
 	{
 		ofVec3f positionCourante = primitives[i].getPosition();
-		if(positionsDansRayon(position, positionCourante, rayon))
+		if(positionDansRayon(position, positionCourante, rayon))
 		{
-			materiauxPrimitiveSelectionnee = primitives[i].getMateriaux();
-			primitives[i].setMateriaux(JADE);
-			primitiveSelectionnee = &primitives[i];
-			break;
+			float distanceCourante = getDistanceEntreVecteur(position, positionCourante);
+			if(distanceCourante < distanceMinimum)
+			{
+				distanceMinimum = distanceCourante;
+				primitiveSelectionnee = &primitives[i];
+			}
 		}
 	}
+	materiauxPrimitiveSelectionnee = primitiveSelectionnee->getMateriaux();
+	primitiveSelectionnee->setMateriaux(SELECTION);
 }
 
-bool ConteneurPrimitives::positionsDansRayon(const ofVec3f& positionRef, const ofVec3f& positionCible, float rayon)
+bool ConteneurPrimitives::positionDansRayon(const ofVec3f& positionRef, const ofVec3f& positionCible, float rayon)
 {
 	return positionRef.x - positionCible.x < rayon && positionRef.y - positionCible.y < rayon && positionRef.z - positionCible.z < rayon;
+}
+
+float ConteneurPrimitives::getDistanceEntreVecteur(const ofVec3f& positionRef, const ofVec3f& positionCible)
+{
+	return sqrt(pow(positionRef.x - positionCible.x, 2) + pow(positionRef.y - positionCible.y, 2) + pow(positionRef.z - positionCible.z, 2));
 }
 
 void ConteneurPrimitives::relacherPrimitiveSelectionnee()

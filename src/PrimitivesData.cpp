@@ -125,5 +125,8 @@ std::vector<float> getMateriauxData(MATERIAUX materiaux) {
 	case(ARGENT):
 		return vector<float>(ARGENT_DATA, ARGENT_DATA + sizeof(ARGENT_DATA) / sizeof(ARGENT_DATA[0]));
 		break;
+	case(SELECTION):
+		return vector<float>(SELECTION_DATA, SELECTION_DATA + sizeof(SELECTION_DATA) / sizeof(SELECTION_DATA[0]));
+		break;
 	}
 }

@@ -41,7 +41,8 @@ enum MATERIAUX {
 	CHROME,
 	CUIVRE,
 	OR,
-	ARGENT
+	ARGENT,
+	SELECTION
 };
 
 std::vector<float> getSommetsPourPrimitive(PRIMITIVES primitive, int taille);
@@ -389,4 +390,11 @@ const static float ARGENT_DATA [] = {
 	0.50754, 0.50754, 0.50754,
 	0.508273, 0.508273, 0.508273,
 	0.4
+};
+
+const static float SELECTION_DATA [] = {
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	1.0
 };
