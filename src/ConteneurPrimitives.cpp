@@ -29,7 +29,7 @@ void ConteneurPrimitives::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, of
 		{
 			model.glTranslate(primitives[i].getPosition());
 			glUniformMatrix4fv(glGetUniformLocation(shader.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			primitives[i].chargerMateriauxUniforms(shader.getProgramID());
+			primitives[i].chargerMateriauUniforms(shader.getProgramID());
 			primitives[i].afficher();
 			model = modelSave;
 		}
@@ -60,8 +60,8 @@ void ConteneurPrimitives::selectionnerPrimitive(ofVec3f position, float rayon)
 			}
 		}
 	}
-	materiauxPrimitiveSelectionnee = primitiveSelectionnee->getMateriaux();
-	primitiveSelectionnee->setMateriaux(SELECTION);
+	materiauPrimitiveSelectionnee = primitiveSelectionnee->getMateriau();
+	primitiveSelectionnee->setMateriau(SELECTION);
 }
 
 bool ConteneurPrimitives::positionDansRayon(const ofVec3f& positionRef, const ofVec3f& positionCible, float rayon)
@@ -78,7 +78,7 @@ void ConteneurPrimitives::relacherPrimitiveSelectionnee()
 {
 	if(primitiveSelectionnee != NULL)
 	{
-		primitiveSelectionnee->setMateriaux(materiauxPrimitiveSelectionnee);
+		primitiveSelectionnee->setMateriau(materiauPrimitiveSelectionnee);
 		primitiveSelectionnee = NULL;
 	}
 }

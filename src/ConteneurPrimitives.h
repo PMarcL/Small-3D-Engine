@@ -25,6 +25,6 @@ private:
 	Shader shader;
 	vector<PrimitiveGeometrique> primitives;
 	PrimitiveGeometrique* primitiveSelectionnee;
-	MATERIAUX materiauxPrimitiveSelectionnee;
+	MATERIAUX materiauPrimitiveSelectionnee;
 };
 

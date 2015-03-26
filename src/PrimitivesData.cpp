@@ -60,8 +60,8 @@ vector<float> getTexCoordPourPrimitive(PRIMITIVES primitive) {
 	}
 }
 
-std::vector<float> getMateriauxData(MATERIAUX materiaux) {
-	switch(materiaux) {
+std::vector<float> getMateriauData(MATERIAUX materiau) {
+	switch(materiau) {
 	case(PLASTIQUE_NOIR):
 		return vector<float>(PLASTIQUE_NOIR_DATA, PLASTIQUE_NOIR_DATA + sizeof(PLASTIQUE_NOIR_DATA) / sizeof(PLASTIQUE_NOIR_DATA[0]));
 		break;

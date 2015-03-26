@@ -8,20 +8,20 @@ class PrimitiveGeometrique
 {
 public:
 	PrimitiveGeometrique(void);
-	PrimitiveGeometrique(PRIMITIVES primitive, MATERIAUX materiaux, ofVec3f position, int taille);
+	PrimitiveGeometrique(PRIMITIVES primitive, MATERIAUX materiau, ofVec3f position, int taille);
 	~PrimitiveGeometrique(void);
 
-	void setMateriaux(MATERIAUX materiaux);
+	void setMateriau(MATERIAUX materiau);
 	void afficher();
-	void chargerMateriauxUniforms(GLuint programId) const;
+	void chargerMateriauUniforms(GLuint programId) const;
 	ofVec3f getPosition();
-	MATERIAUX getMateriaux();
+	MATERIAUX getMateriau();
 	void setPosition(ofVec3f position);
 
 private:
 
 	Mesh mesh;
-	MATERIAUX materiaux;
+	MATERIAUX materiau;
 	ofVec3f position;
 	ofVec3f reflectionAmbiante;
 	ofVec3f reflectionDiffuse;

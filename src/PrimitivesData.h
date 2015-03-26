@@ -51,7 +51,7 @@ std::vector<float> getNormals(std::vector<float> sommets);
 
 std::vector<float> getTexCoordPourPrimitive(PRIMITIVES primitive);
 
-std::vector<float> getMateriauxData(MATERIAUX materiaux);
+std::vector<float> getMateriauData(MATERIAUX materiau);
 
 const static float CUBE_SOMMETS[] = {
 	1, -1, -1,		// side

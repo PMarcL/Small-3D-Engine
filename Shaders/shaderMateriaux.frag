@@ -14,7 +14,7 @@ struct Lumiere {
 	vec3 speculaire;
 };
 
-struct Materiaux {
+struct Materiau {
 	vec3 ambiante;
 	vec3 diffuse;
 	vec3 speculaire;
@@ -22,22 +22,22 @@ struct Materiaux {
 };
 
 uniform Lumiere lumiere;
-uniform Materiaux materiaux;
+uniform Materiau materiau;
 uniform vec3 positionCamera;
 
 void main()
 {
-	vec3 ambiante = lumiere.ambiante * materiaux.ambiante;
+	vec3 ambiante = lumiere.ambiante * materiau.ambiante;
 	
 	vec3 normal = normalize(fragNormal);
 	vec3 lumiereDirection = normalize(lumiere.position - fragPos);
 	float diff = max(dot(normal, lumiereDirection), 0.0f);
-	vec3 diffuse = lumiere.diffuse * (diff * materiaux.diffuse);
+	vec3 diffuse = lumiere.diffuse * (diff * materiau.diffuse);
 	
 	vec3 vueDirection = normalize(positionCamera - fragPos);
 	vec3 reflectionDirection = reflect(-lumiereDirection, normal);
-	float spec = pow(max(dot(vueDirection, reflectionDirection), 0.0), materiaux.brillance);
-	vec3 speculaire = lumiere.speculaire * (spec * materiaux.speculaire);
+	float spec = pow(max(dot(vueDirection, reflectionDirection), 0.0), materiau.brillance);
+	vec3 speculaire = lumiere.speculaire * (spec * materiau.speculaire);
 	
 	vec3 resultat = ambiante + diffuse + speculaire;
 	color = vec4(resultat, 1.0f);
