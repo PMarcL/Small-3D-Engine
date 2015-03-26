@@ -35,12 +35,14 @@ void EffetPleinEcran::afficher()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
     glBindVertexArray(0);
 	
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // Clear all relevant buffers
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
 	
 	glUseProgram(shaderBrouillard.getProgramID());
 	glBindVertexArray(quadVAO);

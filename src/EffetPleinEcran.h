@@ -11,6 +11,7 @@ public:
 
 	void afficher();
 	void chargerTexture(GLuint);
+	void redimensionner(int, int);
 	
 private:
 
