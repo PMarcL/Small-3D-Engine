@@ -76,8 +76,11 @@ float ConteneurPrimitives::getDistanceEntreVecteur(const ofVec3f& positionRef, c
 
 void ConteneurPrimitives::relacherPrimitiveSelectionnee()
 {
-	primitiveSelectionnee->setMateriaux(materiauxPrimitiveSelectionnee);
-	primitiveSelectionnee = NULL;
+	if(primitiveSelectionnee != NULL)
+	{
+		primitiveSelectionnee->setMateriaux(materiauxPrimitiveSelectionnee);
+		primitiveSelectionnee = NULL;
+	}
 }
 
 void ConteneurPrimitives::deplacerPrimitiveSelectionnee(ofVec3f position)
