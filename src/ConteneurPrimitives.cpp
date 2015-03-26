@@ -2,6 +2,7 @@
 
 
 ConteneurPrimitives::ConteneurPrimitives(void)
+	:primitiveSelectionnee(NULL)
 {
 	shader = Shader("Shaders/shaderMateriaux.vert", "Shaders/shaderMateriaux.frag");
 	shader.charger();
@@ -41,4 +42,36 @@ void ConteneurPrimitives::chargerMatricesMVPUniforms(const ofMatrix4x4& projecti
 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+}
+
+void ConteneurPrimitives::selectionnerPrimitive(ofVec3f position, float rayon)
+{
+	for(int i = 0; i < primitives.size(); i++)
+	{
+		ofVec3f positionCourante = primitives[i].getPosition();
+		if(positionsDansRayon(position, positionCourante, rayon))
+		{
+			materiauxPrimitiveSelectionnee = primitives[i].getMateriaux();
+			primitives[i].setMateriaux(JADE);
+			primitiveSelectionnee = &primitives[i];
+			break;
+		}
+	}
+}
+
+bool ConteneurPrimitives::positionsDansRayon(const ofVec3f& positionRef, const ofVec3f& positionCible, float rayon)
+{
+	return positionRef.x - positionCible.x < rayon && positionRef.y - positionCible.y < rayon && positionRef.z - positionCible.z < rayon;
+}
+
+void ConteneurPrimitives::relacherPrimitiveSelectionnee()
+{
+	primitiveSelectionnee->setMateriaux(materiauxPrimitiveSelectionnee);
+	primitiveSelectionnee = NULL;
+}
+
+void ConteneurPrimitives::deplacerPrimitiveSelectionnee(ofVec3f position)
+{
+	if(primitiveSelectionnee != NULL)
+		primitiveSelectionnee->setPosition(position);
 }

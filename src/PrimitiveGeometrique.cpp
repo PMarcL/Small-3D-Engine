@@ -2,7 +2,7 @@
 
 
 PrimitiveGeometrique::PrimitiveGeometrique(PRIMITIVES primitive, MATERIAUX materiaux, ofVec3f position, int taille)
-	:position(position)
+	:position(position), materiaux(materiaux)
 {
 	vector<float> sommets = getSommetsPourPrimitive(primitive, taille);
 	vector<float> normals = getNormals(sommets);
@@ -10,11 +10,7 @@ PrimitiveGeometrique::PrimitiveGeometrique(PRIMITIVES primitive, MATERIAUX mater
 
 	mesh = Mesh(sommets, vector<float>(), texCoords, normals, vector<GLuint>(), sommets.size()/3);
 
-	vector<float> materiauxInfo = getMateriauxData(materiaux);
-	reflectionAmbiante = ofVec3f(materiauxInfo[0], materiauxInfo[1], materiauxInfo[2]);
-	reflectionDiffuse = ofVec3f(materiauxInfo[3], materiauxInfo[4], materiauxInfo[5]);
-	reflectionSpeculaire = ofVec3f(materiauxInfo[6], materiauxInfo[7], materiauxInfo[8]);
-	brillance = materiauxInfo[9] * 128;
+	setMateriaux(materiaux);
 }
 
 
@@ -22,6 +18,20 @@ PrimitiveGeometrique::~PrimitiveGeometrique(void)
 {
 }
 
+MATERIAUX PrimitiveGeometrique::getMateriaux()
+{
+	return materiaux;
+}
+
+void PrimitiveGeometrique::setMateriaux(MATERIAUX materiaux)
+{
+	this->materiaux = materiaux;
+	vector<float> materiauxInfo = getMateriauxData(materiaux);
+	reflectionAmbiante = ofVec3f(materiauxInfo[0], materiauxInfo[1], materiauxInfo[2]);
+	reflectionDiffuse = ofVec3f(materiauxInfo[3], materiauxInfo[4], materiauxInfo[5]);
+	reflectionSpeculaire = ofVec3f(materiauxInfo[6], materiauxInfo[7], materiauxInfo[8]);
+	brillance = materiauxInfo[9] * 128;
+}
 
 void PrimitiveGeometrique::afficher()
 {
@@ -39,4 +49,9 @@ void PrimitiveGeometrique::chargerMateriauxUniforms(GLuint programId) const
 ofVec3f PrimitiveGeometrique::getPosition()
 {
 	return position;
+}
+
+void PrimitiveGeometrique::setPosition(ofVec3f position)
+{
+	this->position = position;
 }

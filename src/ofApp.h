@@ -19,6 +19,8 @@ const static float VITESSE_CAMERA_DEFAUT = 3.0;
 const static float FAR_PLANE_DISTANCE = 3000.0;
 const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
+const static float RAYON_DE_SELECTION = 50.0;
+const static float DIMENSION_PAR_DEFAUT = 20.0f;
 
 class ofApp : public ofBaseApp{
 
@@ -50,6 +52,7 @@ class ofApp : public ofBaseApp{
 		void vertigoToggled(bool & enabled);
 		void speedChanged(float & speed);
 		void intensiteLumiereChangee(float& intensite);
+		ofVec3f getPositionDevantCamera();
 
 		stack<ofMatrix4x4> matrices;
 		Shader shaderOrigine;

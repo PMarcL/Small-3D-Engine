@@ -44,7 +44,7 @@ void ofApp::update(){
 	if(!paused){
 		mouseHandler->update(mouseX, mouseY);
 		camera.update();
-
+		primitives.deplacerPrimitiveSelectionnee(getPositionDevantCamera());
 		if(vertigoEnFonction && camera.isMovingForward())
 			zoomIn();
 		else if(vertigoEnFonction && angleChampDeVision > ANGLE_VISION_NORMAL)
@@ -130,18 +130,25 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
+	if(button == OF_MOUSE_BUTTON_1)
+		primitives.selectionnerPrimitive(getPositionDevantCamera(), RAYON_DE_SELECTION);
 	if(button == OF_MOUSE_BUTTON_3)
-		primitives.ajouterPrimitive(PrimitiveGeometrique(CUBE, PLASTIQUE_JAUNE, camera.getPosition() + 75 * camera.getOrientation(), 20.0));
+		primitives.ajouterPrimitive(PrimitiveGeometrique(CUBE, PLASTIQUE_JAUNE, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
+}
+
+ofVec3f ofApp::getPositionDevantCamera() {
+	return camera.getPosition() + 75 * camera.getOrientation();
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+	if(button == OF_MOUSE_BUTTON_1)
+		primitives.relacherPrimitiveSelectionnee();
 }
 
 //--------------------------------------------------------------
