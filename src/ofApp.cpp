@@ -26,6 +26,8 @@ void ofApp::setup(){
 	shaderOrigine.charger();
 	origineDuMonde = Axes(30, &shaderOrigine);
 
+	
+
 	shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
 	shaderTex.charger();
 	this->configurerUI();
@@ -37,6 +39,8 @@ void ofApp::setup(){
 		"Textures/ciel/YP.jpg",
 		"Textures/ciel/ZN.jpg",
 		"Textures/ciel/ZP.jpg");
+
+	initializeFrameBuffers();
 }
 
 //--------------------------------------------------------------
@@ -55,6 +59,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	camera.lookAt(view);
@@ -68,6 +73,8 @@ void ofApp::draw(){
 	origineDuMonde.afficher(projection, model, view);
 	paysage.afficher(projection, model, view, lumiere);
 	primitives.afficher(projection, model, view, lumiere);
+
+	effetPleinEcran.afficher();
 	
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
@@ -149,6 +156,7 @@ void ofApp::windowResized(int w, int h){
 	centreXFenetre = w * 0.5;
 	centreYFenetre = h * 0.5;
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+	initializeFrameBuffers();
 }
 
 //--------------------------------------------------------------
@@ -238,6 +246,38 @@ void ofApp::popMatrix()
 	matrices.pop();
 }
 
+GLuint ofApp::genererTexturePleinEcran(int largeur, int hauteur)
+{
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, largeur, hauteur, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return textureID;
+}
+
+void ofApp::initializeFrameBuffers() 
+{
+	glGenFramebuffers(1, &framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer); 
+
+	GLuint texturePleinEcran = genererTexturePleinEcran(ofGetWindowWidth(), ofGetWindowHeight());
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texturePleinEcran, 0);
+
+	GLuint rbo;
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo); 
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, ofGetWindowWidth(), ofGetWindowHeight()); // Use a single renderbuffer object for both a depth AND stencil buffer.
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
+    // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	effetPleinEcran.chargerTexture(texturePleinEcran);
+}
 ofApp::~ofApp() {
 	delete mouseHandler;
 }

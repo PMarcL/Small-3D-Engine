@@ -15,6 +15,8 @@ uniform float intensiteLumiere;
 uniform vec3 positionCamera;
 uniform float intensiteSpeculaire;
 
+const float offset = 1.0 / 300;  
+
 void main()
 {
 	// Lumière ambiante
@@ -33,7 +35,43 @@ void main()
 	vec3 specular = intensiteSpeculaire * spec * couleurLumiere;
 	
 	// combinaison de la couleur de l'objet et de son illumination
-	vec4 couleurObjet = texture(Texture1, fragTexCoord);
+	
+	
+	 vec2 offsets[9] = vec2[](
+        vec2(-offset, offset),  // top-left
+        vec2(0.0f,    offset),  // top-center
+        vec2(offset,  offset),  // top-right
+        vec2(-offset, 0.0f),    // center-left
+        vec2(0.0f,    0.0f),    // center-center
+        vec2(offset,  0.0f),    // center-right
+        vec2(-offset, -offset), // bottom-left
+        vec2(0.0f,    -offset), // bottom-center
+        vec2(offset,  -offset)  // bottom-right    
+    );
+
+    float kernel[9] = float[](
+		1.0 / 16, 2.0 / 16, 1.0 / 16,
+		2.0 / 16, 4.0 / 16, 2.0 / 16,
+		1.0 / 16, 2.0 / 16, 1.0 / 16  
+	);
+    
+    vec3 samples[9];
+    for(int i = 0; i < 9; i++)
+    {
+        samples[i] = vec3(texture(Texture1, fragTexCoord.st + offsets[i]));
+    }
+    vec3 col;
+    for(int i = 0; i < 9; i++)
+        col += samples[i] * kernel[i];
+    
+	
+	vec4 couleurObjet = vec4(col, 1.0);	
+	
+	
+	
+	
     vec3 result = (ambient + diffuse + specular) * couleurObjet.xyz;
+	
+	
     color = vec4(result, 1.0f);
 }

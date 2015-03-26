@@ -11,6 +11,7 @@
 #include "CubeMap.h"
 #include "Lumiere.h"
 #include "ConteneurPrimitives.h"
+#include "EffetPleinEcran.h"
 
 #include <stack>
 
@@ -50,6 +51,7 @@ class ofApp : public ofBaseApp{
 		void vertigoToggled(bool & enabled);
 		void speedChanged(float & speed);
 		void intensiteLumiereChangee(float& intensite);
+		void initializeFrameBuffers();
 
 		stack<ofMatrix4x4> matrices;
 		Shader shaderOrigine;
@@ -64,6 +66,10 @@ class ofApp : public ofBaseApp{
 		CubeMap cubeMap;
 		Lumiere lumiere;
 		ConteneurPrimitives primitives;
+		EffetPleinEcran effetPleinEcran;
+
+		GLuint framebuffer;
+		GLuint genererTexturePleinEcran(int, int);
 
 		int centreXFenetre;
 		int centreYFenetre;

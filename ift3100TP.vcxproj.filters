@@ -78,6 +78,9 @@
     </ClCompile>
     <ClCompile Include="src\PrimitiveGeometrique.cpp" />
     <ClCompile Include="src\ConteneurPrimitives.cpp" />
+    <ClCompile Include="src\EffetPleinEcran.cpp">
+      <Filter>src\Affichables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -177,6 +180,9 @@
     </ClInclude>
     <ClInclude Include="src\PrimitiveGeometrique.h" />
     <ClInclude Include="src\ConteneurPrimitives.h" />
+    <ClInclude Include="src\EffetPleinEcran.h">
+      <Filter>src\Affichables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
