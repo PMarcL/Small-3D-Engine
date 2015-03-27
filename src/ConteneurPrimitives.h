@@ -14,6 +14,7 @@ public:
 	void ajouterPrimitive(PrimitiveGeometrique primitive);
 	void afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view, Lumiere lumiere);
 	void selectionnerPrimitive(ofVec3f position, float rayon);
+	void supprimerSelection();
 	void relacherPrimitiveSelectionnee();
 	void deplacerPrimitiveSelectionnee(ofVec3f position);
 

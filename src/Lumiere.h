@@ -8,6 +8,7 @@ const static ofVec3f POSITION_LUMIERE_DEFAUT = ofVec3f(1500, 1000, 1200);
 const static ofVec3f COUL_LUMIERE_DEFAUT = ofVec3f(0.5, 0.5, 0.5);
 const static ofVec3f COUL_AMBIANTE_DEFAUT = ofVec3f(0.11, 0.3, 0.8);
 const static ofVec3f REFLECTiON_SPEC_COUL = ofVec3f(1.0, 1.0, 1.0);
+const static ofVec3f DIRECTION_LUMIERE_DEFAUT = ofVec3f(0.5, 0.3, 0.5);
 
 class Lumiere
 {
@@ -24,6 +25,7 @@ public:
 
 private:
 
+	ofVec3f direction;
 	ofVec3f position;
 	ofVec3f positionVue;
 	ofVec3f couleurDirectionnelle;

@@ -76,6 +76,21 @@ float ConteneurPrimitives::getDistanceEntreVecteur(const ofVec3f& positionRef, c
 	return sqrt(pow(positionRef.x - positionCible.x, 2) + pow(positionRef.y - positionCible.y, 2) + pow(positionRef.z - positionCible.z, 2));
 }
 
+void ConteneurPrimitives::supprimerSelection()
+{
+	if(primitiveSelectionnee != NULL)
+	{
+		for(vector<PrimitiveGeometrique>::iterator i = primitives.begin();
+			i != primitives.end(); i++)
+		{
+			if(&(*i) == primitiveSelectionnee) {
+				primitives.erase(i);
+				break;
+			}
+		}
+	}
+}
+
 void ConteneurPrimitives::relacherPrimitiveSelectionnee()
 {
 	if(primitiveSelectionnee != NULL)

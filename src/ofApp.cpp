@@ -26,7 +26,7 @@ void ofApp::setup(){
 	camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
 	shaderOrigine = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	shaderOrigine.charger();
-	origineDuMonde = Axes(30, &shaderOrigine);
+	origineDuMonde = Axes(100, &shaderOrigine);
 
 	shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
 	shaderTex.charger();
@@ -68,8 +68,8 @@ void ofApp::draw(){
 	popMatrix();
 
 	origineDuMonde.afficher(projection, model, view);
-	paysage.afficher(projection, model, view, lumiere);
 	primitives.afficher(projection, model, view, lumiere);
+	paysage.afficher(projection, model, view, lumiere);
 	
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
@@ -123,6 +123,8 @@ void ofApp::keyReleased(int key){
 		ofToggleFullscreen();
 		mouseHandler->resetCusor();	
 	}
+	else if(key == 'x' || key == 'X')
+		primitives.supprimerSelection();
 }
 
 //--------------------------------------------------------------
@@ -142,7 +144,7 @@ void ofApp::mousePressed(int x, int y, int button){
 		if(button == OF_MOUSE_BUTTON_1)
 			primitives.selectionnerPrimitive(getPositionDevantCamera(), RAYON_DE_SELECTION);
 		if(button == OF_MOUSE_BUTTON_3)
-			primitives.ajouterPrimitive(PrimitiveGeometrique(CUBE, PLASTIQUE_JAUNE, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
+			primitives.ajouterPrimitive(PrimitiveGeometrique(CUBE, RUBY, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
 	}
 }
 

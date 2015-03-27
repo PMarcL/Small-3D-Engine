@@ -9,7 +9,8 @@ in vec3 fragPos;
 
 uniform sampler2D Texture1;
 uniform vec3 lumiereAmbiante;
-uniform vec3 positionLumiere;
+//uniform vec3 positionLumiere;
+uniform vec3 directionLumiere;
 uniform vec3 couleurLumiere;
 uniform float intensiteLumiere;
 uniform vec3 positionCamera;
@@ -22,7 +23,7 @@ void main()
 
     // Reflection diffuse
     vec3 normal = normalize(fragNormal);
-    vec3 directionLumiere = normalize(positionLumiere - fragPos);
+    vec3 directionLumiere = normalize(directionLumiere);
     float diff = max(dot(normal, directionLumiere), 0.0);
     vec3 diffuse = diff * couleurLumiere;
 

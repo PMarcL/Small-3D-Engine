@@ -8,7 +8,8 @@ in vec3 fragNormal;
 in vec3 fragPos;
 
 struct Lumiere {
-	vec3 position;
+	//vec3 position;
+	vec3 direction;
 	vec3 ambiante;
 	vec3 diffuse;
 	vec3 speculaire;
@@ -30,7 +31,7 @@ void main()
 	vec3 ambiante = lumiere.ambiante * materiau.ambiante;
 	
 	vec3 normal = normalize(fragNormal);
-	vec3 lumiereDirection = normalize(lumiere.position - fragPos);
+	vec3 lumiereDirection = normalize(lumiere.direction);
 	float diff = max(dot(normal, lumiereDirection), 0.0f);
 	vec3 diffuse = lumiere.diffuse * (diff * materiau.diffuse);
 	
