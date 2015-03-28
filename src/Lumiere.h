@@ -2,13 +2,39 @@
 
 #include "ofMain.h"
 
-const static float QUANTITE_LUMIERE_DEFAUT = 0.2;
-const static float INTENSITE_SPEC_DEFAUT = 0.5;
-const static ofVec3f POSITION_LUMIERE_DEFAUT = ofVec3f(1500, 1000, 1200);
-const static ofVec3f COUL_LUMIERE_DEFAUT = ofVec3f(0.5, 0.5, 0.5);
-const static ofVec3f COUL_AMBIANTE_DEFAUT = ofVec3f(0.11, 0.3, 0.8);
-const static ofVec3f REFLECTiON_SPEC_COUL = ofVec3f(1.0, 1.0, 1.0);
+const static ofVec3f NOIR = ofVec3f(0.0);
+const static ofVec3f COUL_DIFFUSE_DEFAUT = ofVec3f(0.5, 0.5, 0.5);
+const static ofVec3f COUL_AMBIANTE_DEFAUT = ofVec3f(0.01, 0.01, 0.1);
+const static ofVec3f COUL_REFLECTION_SPEC = ofVec3f(1.0, 1.0, 1.0);
 const static ofVec3f DIRECTION_LUMIERE_DEFAUT = ofVec3f(0.5, 0.3, 0.5);
+
+struct LumiereDirectionnelle {
+	ofVec3f direction;
+	ofVec3f ambiante;
+	ofVec3f diffuse;
+	ofVec3f speculaire;
+};
+
+struct LumierePonctuelle {
+	ofVec3f position;
+	ofVec3f ambiante;
+	ofVec3f diffuse;
+	ofVec3f speculaire;
+
+	float constante;
+	float lineaire;
+	float quadratique;
+};
+
+struct Projecteur {
+	ofVec3f direction;
+	ofVec3f position;
+	ofVec3f diffuse;
+	ofVec3f speculaire;
+
+	float coneInterne;
+	float coneExterne;
+};
 
 class Lumiere
 {
@@ -16,22 +42,24 @@ public:
 	Lumiere(void);
 	~Lumiere(void);
 
-	void deplacerLumiere(ofVec3f nouvellePosition);
-	void setIntensiteLumiereAmbiante(GLfloat intensite);
 	void setPositionVue(ofVec3f position);
 	void chargerValeursIlluminationUniforms(GLuint programId) const;
-	void chargerValeursIlluminationStruct(GLuint programId) const;
-	GLfloat getIntensiteLumiereAmbiante();
+	void ajouterProjecteur(Projecteur proj);
+	void ajouterLumierePonctuelle(LumierePonctuelle lumiere);
+	void ajouterLampeDePoche(ofVec3f position, ofVec3f direction);
+	void enleverLampeDePoche();
+	void mettreAJourLampeDePoche(ofVec3f position, ofVec3f direction);
 
 private:
+	void chargerLumiereDirectionnelle(GLuint programId) const;
+	void chargerProjecteurs(GLuint programId) const;
+	void chargerPonctuelles(GLuint programId) const;
 
-	ofVec3f direction;
-	ofVec3f position;
+	LumiereDirectionnelle lumDirectionnelle;
+	vector<LumierePonctuelle> lumPonctuelles;
+	vector<Projecteur> projecteurs;
+
+	Projecteur* lampeDePoche;
 	ofVec3f positionVue;
-	ofVec3f couleurDirectionnelle;
-	ofVec3f couleurAmbiante;
-	ofVec3f couleurSpeculaire;
-	GLfloat intensiteLumiereAmbiante;
-	GLfloat intensiteSpeculaire;
 };
 

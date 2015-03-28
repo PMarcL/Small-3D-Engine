@@ -50,8 +50,8 @@ class ofApp : public ofBaseApp{
 		void popMatrix();
 		void pauseToggled(bool & paused);
 		void vertigoToggled(bool & enabled);
-		void speedChanged(float & speed);
-		void intensiteLumiereChangee(float& intensite);
+		void lampeDePocheToggled(bool & enabled);
+		void vitesseCameraChanged(float& vitesse);
 		ofVec3f getPositionDevantCamera();
 
 		stack<ofMatrix4x4> matrices;
@@ -75,12 +75,16 @@ class ofApp : public ofBaseApp{
 		MousePositionHandler* mouseHandler;
 
 		bool showMenu;
-		ofxFloatSlider quantiteIntensiteLumiere;
 		ofxFloatSlider vitesseCamera;
 		ofxToggle vertigoEnFonction;
 		ofxToggle paused;
+		ofxToggle lampeDePoche;
 		ofxLabel guiMessage;
 		ofxLabel fps;
 		ofxLabel usageMessage;
 		ofxPanel gui;
+
+		Shader shaderLampe;
+		PrimitiveGeometrique positionLampe;
+		PrimitiveGeometrique positionPonctuelle;
 };

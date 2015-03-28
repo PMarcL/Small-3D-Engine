@@ -86,6 +86,7 @@ void CubeMap::afficher(ofMatrix4x4 &projection, ofMatrix4x4 &model, ofMatrix4x4 
 		glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
 		
 		for(int i = 0; i < 6; i++){
+			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, tex[i].getID());
 			glDrawArrays(GL_TRIANGLES, i * 6, 6);
 			glBindTexture(GL_TEXTURE_2D, 0);

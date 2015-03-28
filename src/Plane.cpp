@@ -1,7 +1,7 @@
 #include "Plane.h"
 
 Plane::Plane(int size, int numColumn, int numRow)
-	:nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
+	:nbColonnes(numColumn), nbLignes(numRow), taille(size)
 {
 	ratioTextureParCarre = 1.0;
 	this->ajouterSommets();
@@ -80,32 +80,10 @@ void Plane::initialiserMesh()
 
 void Plane::afficher()
 {
-	if(useTexture)
-		chargerTextures();
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	mesh.dessiner();
 	glDisable(GL_CULL_FACE);
-}
-
-void Plane::chargerTextures()
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture.getID());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
-}
-
-void Plane::ajouterTexture(const string& texPath)
-{
-	texture.setFichierImage(texPath);
-	texture.charger();
-}
-
-void Plane::utiliserTextures(bool utiliser)
-{
-	useTexture = utiliser;
 }
 
 void Plane::ajouterTexCoordPourChaqueSommet()
