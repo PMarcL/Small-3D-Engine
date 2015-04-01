@@ -7,7 +7,7 @@
 class PrimitiveGeometrique
 {
 public:
-	PrimitiveGeometrique(void);
+	PrimitiveGeometrique(void){}
 	PrimitiveGeometrique(PRIMITIVES primitive, MATERIAUX materiau, ofVec3f position, int taille);
 	~PrimitiveGeometrique(void);
 

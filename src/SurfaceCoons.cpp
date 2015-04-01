@@ -83,10 +83,10 @@ void SurfaceCoons::calculerNormales()
 
 void SurfaceCoons::afficher()
 {
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	mesh.dessiner();
 
-	//glDisable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
 }

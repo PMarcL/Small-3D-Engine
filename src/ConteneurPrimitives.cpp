@@ -22,7 +22,7 @@ void ConteneurPrimitives::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, of
 {
 	glUseProgram(shader.getProgramID());
 
-		lumiere.chargerValeursIlluminationStruct(shader.getProgramID());
+		lumiere.chargerValeursIlluminationUniforms(shader.getProgramID());
 		chargerMatricesMVPUniforms(projection, model, view);
 		ofMatrix4x4 modelSave = model;
 		for(int i = 0; i < primitives.size(); i++)
