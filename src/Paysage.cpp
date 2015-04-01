@@ -16,8 +16,8 @@ Paysage::Paysage()
 	texRocheSpeculaire = Texture("Textures/rock_specular.jpg");
 	texRocheSpeculaire.charger();
 
-	ocean = Plane(1000, 100, 100);
-	ocean.setRatioTextureParCarre(0.1);
+	ocean = Plane(1000, 100, 300);
+	ocean.setRatioTextureParCarre(0.5);
 	texEau = Texture("Textures/water1.jpg");
 	texEau.charger();
 	texEauSpeculaire = Texture("Textures/water1_specular.jpg");
@@ -86,13 +86,14 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 
 	// Affichage de la montagne
 	pushMatrix();
-		model.glTranslate(-1200.0, -40.0, 0.0);
-		model.glRotate(180.0f, 0.0, 1.0, 0.0);
+		model.glTranslate(-1200.0, -80.0, 0.0);
+		model.glRotate(180.0f, -0.01, 1.0, 0);
 		model.glScale(1.0, 1.0, 3.0);
 		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
 		montagne.afficher();
 	popMatrix();
 
+	// affichage des arbres
 	glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "diffuseMap"), 0);
 	glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "specularMap"), 1);
 	glActiveTexture(GL_TEXTURE0);
@@ -113,6 +114,7 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	pushMatrix();
 		glUseProgram(shaderOscillation.getProgramID());
 		model.glTranslate(980.0, -40.0, 0.0);
+		model.glScale(10, 10, 30);
 		lumiere.chargerValeursIlluminationUniforms(shaderOscillation.getProgramID());
 		glUniform1i(glGetUniformLocation(shaderOscillation.getProgramID(), "diffuseMap"), 0);
 		glUniform1i(glGetUniformLocation(shaderOscillation.getProgramID(), "specularMap"), 1);
@@ -123,20 +125,6 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 		chargerMatricesMVPUniforms(shaderOscillation.getProgramID(), projection, model, view);
 		glUniform1f(glGetUniformLocation(shaderOscillation.getProgramID(), "time"), ofGetElapsedTimef());
 		ocean.afficher();
-	
-		pushMatrix();
-			model.glTranslate(0.0, 0.0, -1000.0);
-			model.glRotate(90.0, 0.0, 1.0, 0.0);
-			glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			ocean.afficher();
-		popMatrix();
-
-		pushMatrix();
-			model.glTranslate(0.0, 0.0, 1000.0);
-			model.glRotate(90.0, 0.0, 1.0, 0.0);
-			glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			ocean.afficher();
-		popMatrix();
 	popMatrix();
 	
 	glActiveTexture(GL_TEXTURE0);

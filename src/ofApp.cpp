@@ -50,16 +50,16 @@ void ofApp::setup(){
 	lampeCentrale.coneInterne = cos(ofDegToRad(10.0));
 	lumiere.ajouterProjecteur(lampeCentrale);
 
-	positionPonctuelle = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(500.0, 100.0, -200.0), 50.0);
-	LumierePonctuelle lumiereMouvante;
-	lumiereMouvante.position = positionPonctuelle.getPosition();
-	lumiereMouvante.ambiante = ofVec3f(0.3, 0.3, 0.3);
-	lumiereMouvante.diffuse = ofVec3f(0.6, 0.9, 0.6);
-	lumiereMouvante.speculaire = ofVec3f(0.9, 1.0, 0.9);
-	lumiereMouvante.constante = 0.000005;
-	lumiereMouvante.lineaire = 0.000009;
-	lumiereMouvante.quadratique = 0.000032;
-	lumiere.ajouterLumierePonctuelle(lumiereMouvante);
+	positionPonctuelle = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(1000.0, 100.0, -200.0), 50.0);
+	LumierePonctuelle lumierePonctuelle;
+	lumierePonctuelle.position = positionPonctuelle.getPosition();
+	lumierePonctuelle.ambiante = ofVec3f(0.3, 0.3, 0.3);
+	lumierePonctuelle.diffuse = ofVec3f(0.6, 0.9, 0.6);
+	lumierePonctuelle.speculaire = ofVec3f(0.9, 1.0, 0.9);
+	lumierePonctuelle.constante = 0.000005;
+	lumierePonctuelle.lineaire = 0.000009;
+	lumierePonctuelle.quadratique = 0.000032;
+	lumiere.ajouterLumierePonctuelle(lumierePonctuelle);
 }
 
 //--------------------------------------------------------------
@@ -232,7 +232,7 @@ void ofApp::configurerUI() {
 	gui.add(lampeDePoche.setup("q - Lamp de poche", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
 	gui.add(fps.setup("fps", ""));
-	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger a gauche\nd - bouger a droite\ni capture d'ecran\nf - mode plein ecran\nm - afficher menu", 200, 220));
+	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger a gauche\nd - bouger a droite\ni - capture d'ecran\nf - mode plein ecran\nm - afficher menu", 200, 220));
 }
 
 void ofApp::pauseToggled(bool &paused) {

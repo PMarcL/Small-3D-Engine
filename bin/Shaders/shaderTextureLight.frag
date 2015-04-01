@@ -24,15 +24,32 @@ struct Projecteur {
 	float coneInterne;
 };
 
-uniform LumiereDirectionnelle lumDirectionnelle;
-uniform Projecteur projecteur;
+struct Ponctuelle {
+	vec3 position;
+	vec3 ambiante;
+	vec3 diffuse;
+	vec3 speculaire;
+	
+	float constante;
+	float lineaire;
+	float quadratique;
+};
 
+#define NB_PROJECTEURS_MAX 10
+#define NB_LUMIERES_PONCTUELLES_MAX 10
+
+uniform LumiereDirectionnelle lumDirectionnelle;
+uniform int nbProjecteurs;
+uniform Projecteur projecteur[NB_PROJECTEURS_MAX];
+uniform int nbPonctuelles;
+uniform Ponctuelle ponctuelles[NB_LUMIERES_PONCTUELLES_MAX];
 uniform sampler2D diffuseMap;
 uniform sampler2D specularMap;
 uniform vec3 positionCamera;
 
 vec3 calculerIlluminationDirectionnelle(LumiereDirectionnelle lumiere, vec3 normal, vec3 directionCamera);
 vec3 calculerProjecteur(Projecteur proj, vec3 normal, vec3 directionCamera);
+vec3 CalculerPonctuelle(Ponctuelle lumiere, vec3 normal, vec3 directionCamera);
 
 void main()
 {
@@ -41,9 +58,16 @@ void main()
 	vec3 directionCamera = normalize(positionCamera - fragPos);
 	
 	vec3 resultatDir = calculerIlluminationDirectionnelle(lumDirectionnelle, normal, directionCamera);
-	vec3 resultatProj = calculerProjecteur(projecteur, normal, directionCamera);
+	vec3 resultatProj;
+	for(int i = 0; i < nbProjecteurs; i++) {
+		resultatProj += calculerProjecteur(projecteur[i], normal, directionCamera);
+	}
+	vec3 resultatPonctuelles;
+	for(int i = 0; i < nbPonctuelles; i++) {
+		resultatPonctuelles += CalculerPonctuelle(ponctuelles[i], normal, directionCamera);
+	}
 	
-    color = vec4(resultatDir + resultatProj, 1.0f);
+    color = vec4(resultatDir + resultatProj + resultatPonctuelles, 1.0f);
 }
 
 vec3 calculerIlluminationDirectionnelle(LumiereDirectionnelle lumiere, vec3 normal, vec3 directionCamera)
@@ -86,7 +110,29 @@ vec3 calculerProjecteur(Projecteur proj, vec3 normal, vec3 directionCamera)
 	return (diffuse + specular);
 }
 
-
+vec3 CalculerPonctuelle(Ponctuelle lumiere, vec3 normal, vec3 directionCamera)
+{
+    vec3 directionLumiere = normalize(lumiere.position - fragPos);
+    
+    float diff = max(dot(normal, directionLumiere), 0.0);
+    
+    vec3 directionReflection = reflect(-directionLumiere, normal);
+    float spec = pow(max(dot(directionCamera, directionReflection), 0.0), 2);
+    
+	// Attenuation
+    float distance    = length(lumiere.position - fragPos);
+    float attenuation = 1.0f / (lumiere.constante + lumiere.lineaire * distance + 
+  			     lumiere.quadratique * (distance * distance));
+    
+	// Resultat combiné
+    vec3 ambiante  = lumiere.ambiante  * vec3(texture(diffuseMap, fragTexCoord));
+    vec3 diffuse  = lumiere.diffuse  * diff * vec3(texture(diffuseMap, fragTexCoord));
+    vec3 speculaire = lumiere.speculaire * spec * vec3(texture(specularMap, fragTexCoord));
+    ambiante  *= attenuation;
+    diffuse  *= attenuation;
+    speculaire *= attenuation;
+    return (ambiante + diffuse + speculaire);
+} 
 
 
 
