@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "modeleOBJ.h"
 #include "Lumiere.h"
+#include "Texture.h"
 #include <stack>
 
 const static int NB_ARBRES = 30;
@@ -37,6 +38,14 @@ private:
 	Plane montagne;
 	ModeleOBJ arbre;
 	Texture texTree;
+	Texture texTreeSpeculaire;
+	Texture texTreeNormal;
+	Texture texRoche;
+	Texture texRocheSpeculaire;
+	Texture texRocheNormal;
+	Texture texEau;
+	Texture texEauSpeculaire;
+	Texture texEauNormal;
 	ModeleOBJ champignon;
 	vector<ofVec3f> positionsArbres;
 };

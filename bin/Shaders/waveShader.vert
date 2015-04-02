@@ -23,7 +23,7 @@ void main()
 	gl_Position = Position;
 
 	fragColor = color;
-	fragTexCoord = texCoord;
+	fragTexCoord = vec2(texCoord.x + sin(time/4), texCoord.y + sin(time/4));
 	fragNormal = mat3(transpose(inverse(model))) * normal;
 	fragPos = vec3(model * vec4(position, 1.0));
 }

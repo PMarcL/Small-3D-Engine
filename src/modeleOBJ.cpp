@@ -16,8 +16,6 @@ ModeleOBJ::~ModeleOBJ(void)
 
 ModeleOBJ::ModeleOBJ(const string& cheminOBJ)
 {
-	shader = new Shader("Shaders/shaderTextureLight.vert", "Shaders/shaderTextureLight.frag");
-	shader->charger();
 	vector<ofVec3f> vertices;
 	vector<ofVec3f> normals;
 	vector<ofVec2f> texCoords;
@@ -27,28 +25,14 @@ ModeleOBJ::ModeleOBJ(const string& cheminOBJ)
 
 }
 
-void ModeleOBJ::afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
-						 const Lumiere& lumiere)
+void ModeleOBJ::afficher()
 {
-	glUseProgram(shader->getProgramID());
-
-	lumiere.chargerValeursIlluminationUniforms(shader->getProgramID());
-	chargerMatricesMVPUniforms(shader->getProgramID(), projection, model, view);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
 	mesh.dessiner();
 
 	glDisable(GL_CULL_FACE);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glUseProgram(0);
-}
-
-void ModeleOBJ::chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view)
-{
-	glUniformMatrix4fv(glGetUniformLocation(id, "projection"), 1, GL_FALSE, projection.getPtr());
-	glUniformMatrix4fv(glGetUniformLocation(id, "model"), 1, GL_FALSE, model.getPtr());
-	glUniformMatrix4fv(glGetUniformLocation(id, "view"), 1, GL_FALSE, view.getPtr());
 }
 
 bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<ofVec2f>& texCoord, std::vector<ofVec3f>& normales)

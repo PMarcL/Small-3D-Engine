@@ -1,8 +1,8 @@
 #include "PrimitiveGeometrique.h"
 
 
-PrimitiveGeometrique::PrimitiveGeometrique(PRIMITIVES primitive, MATERIAUX materiaux, ofVec3f position, int taille)
-	:position(position)
+PrimitiveGeometrique::PrimitiveGeometrique(PRIMITIVES primitive, MATERIAUX materiau, ofVec3f position, int taille)
+	:position(position), materiau(materiau)
 {
 	vector<float> sommets = getSommetsPourPrimitive(primitive, taille);
 	vector<float> normals = getNormals(sommets);
@@ -10,11 +10,7 @@ PrimitiveGeometrique::PrimitiveGeometrique(PRIMITIVES primitive, MATERIAUX mater
 
 	mesh = Mesh(sommets, vector<float>(), texCoords, normals, vector<GLuint>(), sommets.size()/3);
 
-	vector<float> materiauxInfo = getMateriauxData(materiaux);
-	reflectionAmbiante = ofVec3f(materiauxInfo[0], materiauxInfo[1], materiauxInfo[2]);
-	reflectionDiffuse = ofVec3f(materiauxInfo[3], materiauxInfo[4], materiauxInfo[5]);
-	reflectionSpeculaire = ofVec3f(materiauxInfo[6], materiauxInfo[7], materiauxInfo[8]);
-	brillance = materiauxInfo[9] * 128;
+	setMateriau(materiau);
 }
 
 
@@ -22,21 +18,40 @@ PrimitiveGeometrique::~PrimitiveGeometrique(void)
 {
 }
 
+MATERIAUX PrimitiveGeometrique::getMateriau()
+{
+	return materiau;
+}
+
+void PrimitiveGeometrique::setMateriau(MATERIAUX materiau)
+{
+	this->materiau = materiau;
+	vector<float> materiauInfo = getMateriauData(materiau);
+	reflectionAmbiante = ofVec3f(materiauInfo[0], materiauInfo[1], materiauInfo[2]);
+	reflectionDiffuse = ofVec3f(materiauInfo[3], materiauInfo[4], materiauInfo[5]);
+	reflectionSpeculaire = ofVec3f(materiauInfo[6], materiauInfo[7], materiauInfo[8]);
+	brillance = materiauInfo[9] * 128;
+}
 
 void PrimitiveGeometrique::afficher()
 {
 	mesh.dessiner();
 }
 
-void PrimitiveGeometrique::chargerMateriauxUniforms(GLuint programId) const
+void PrimitiveGeometrique::chargerMateriauUniforms(GLuint programId) const
 {
-	glUniform3fv(glGetUniformLocation(programId, "materiaux.ambiante"), 1, reflectionAmbiante.getPtr());
-	glUniform3fv(glGetUniformLocation(programId, "materiaux.diffuse"), 1, reflectionDiffuse.getPtr());
-	glUniform3fv(glGetUniformLocation(programId, "materiaux.speculaire"), 1, reflectionSpeculaire.getPtr());
-	glUniform1f(glGetUniformLocation(programId, "materiaux.brillance"), brillance);
+	glUniform3fv(glGetUniformLocation(programId, "materiau.ambiante"), 1, reflectionAmbiante.getPtr());
+	glUniform3fv(glGetUniformLocation(programId, "materiau.diffuse"), 1, reflectionDiffuse.getPtr());
+	glUniform3fv(glGetUniformLocation(programId, "materiau.speculaire"), 1, reflectionSpeculaire.getPtr());
+	glUniform1f(glGetUniformLocation(programId, "materiau.brillance"), brillance);
 }
 
 ofVec3f PrimitiveGeometrique::getPosition()
 {
 	return position;
+}
+
+void PrimitiveGeometrique::setPosition(ofVec3f position)
+{
+	this->position = position;
 }

@@ -41,7 +41,8 @@ enum MATERIAUX {
 	CHROME,
 	CUIVRE,
 	OR,
-	ARGENT
+	ARGENT,
+	SELECTION
 };
 
 std::vector<float> getSommetsPourPrimitive(PRIMITIVES primitive, int taille);
@@ -50,7 +51,7 @@ std::vector<float> getNormals(std::vector<float> sommets);
 
 std::vector<float> getTexCoordPourPrimitive(PRIMITIVES primitive);
 
-std::vector<float> getMateriauxData(MATERIAUX materiaux);
+std::vector<float> getMateriauData(MATERIAUX materiau);
 
 const static float CUBE_SOMMETS[] = {
 	1, -1, -1,		// side
@@ -389,4 +390,11 @@ const static float ARGENT_DATA [] = {
 	0.50754, 0.50754, 0.50754,
 	0.508273, 0.508273, 0.508273,
 	0.4
+};
+
+const static float SELECTION_DATA [] = {
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	1.0
 };

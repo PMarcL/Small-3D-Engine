@@ -24,6 +24,8 @@ Mesh::Mesh(const vector<GLfloat>& positions, const vector<GLfloat>& couleurs,
 		ajouterIndices(indices);
 		utiliserIndices = true;
 	}
+	if(!normals.empty())
+		ajouterTangentes();
 
 	genererBuffer();
 }
@@ -44,6 +46,9 @@ Mesh::Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors,
 		ajouterIndices(indices);
 		utiliserIndices = true;
 	}
+
+	if(!normals.empty())
+		ajouterTangentes();
 
 	genererBuffer();
 }
@@ -67,6 +72,9 @@ Mesh::Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors, cons
 		utiliserIndices = true;
 	}
 
+	if(!normals.empty())
+		ajouterTangentes();
+
 	genererBuffer();
 }
 
@@ -88,6 +96,9 @@ Mesh::Mesh(const vector<ofVec3f>& positions, const vector<ofVec3f>& colors, cons
 		ajouterIndices(indices);
 		utiliserIndices = true;
 	}
+
+	if(!normals.empty())
+		ajouterTangentes();
 
 	genererBuffer();
 }
@@ -216,6 +227,75 @@ void Mesh::ajouterNormals(const vector<ofVec3f>& normals)
 	}
 }
 
+void Mesh::ajouterTangentes() 
+{
+	if(!indices.empty())
+		ajouterTangentesAvecIndices();
+	else
+		ajouterTangentesAvecListeSommets();
+}
+
+void Mesh::ajouterTangentesAvecListeSommets()
+{
+	for(int i = 0; i < vertices.size(); i += 3)
+	{
+		Vertex& v0 = vertices[i];
+		Vertex& v1 = vertices[i + 1];
+		Vertex& v2 = vertices[i + 2];
+
+		ofVec3f tangente = calculerTangentePourSommets(v0, v1, v2);
+
+		ajouterTangenteAuSommet(v0, tangente);
+		ajouterTangenteAuSommet(v1, tangente);
+		ajouterTangenteAuSommet(v2, tangente);
+	}
+}
+
+void Mesh::ajouterTangentesAvecIndices()
+{
+	for(int i = 0; i < indices.size(); i += 3)
+	{
+		Vertex& v0 = vertices[indices[i]];
+		Vertex& v1 = vertices[indices[i + 1]];
+		Vertex& v2 = vertices[indices[i + 2]];
+
+		ofVec3f tangente = calculerTangentePourSommets(v0, v1, v2);
+
+		ajouterTangenteAuSommet(v0, tangente);
+		ajouterTangenteAuSommet(v1, tangente);
+		ajouterTangenteAuSommet(v2, tangente);
+	}
+}
+
+ofVec3f Mesh::calculerTangentePourSommets(Vertex& v0, Vertex& v1, Vertex& v2)
+{
+	ofVec3f arete1 = ofVec3f(v1.x, v1.y, v1.z) - ofVec3f(v0.x, v0.y, v0.z);
+	ofVec3f arete2 = ofVec3f(v2.x, v2.y, v2.z) - ofVec3f(v0.x, v0.y, v0.z);
+
+	float deltaU1 = v1.texCoordX - v0.texCoordX;
+	float deltaV1 = v1.texCoordY - v0.texCoordY;
+	float deltaU2 = v2.texCoordX - v0.texCoordX;
+	float deltaV2 = v2.texCoordY - v0.texCoordY;
+
+	float f = 1.0 / (deltaU1 * deltaV2 - deltaU2 * deltaV1);
+
+	ofVec3f tangente;
+
+	tangente.x = f * (deltaV2 * arete1.x - deltaV1 * arete2.x);
+	tangente.y = f * (deltaV2 * arete1.y - deltaV1 * arete2.y);
+	tangente.z = f * (deltaV2 * arete1.z - deltaV1 * arete2.z);
+
+	return tangente.normalize();
+}
+
+void Mesh::ajouterTangenteAuSommet(Vertex& v, ofVec3f& tangente)
+{
+	v.tangenteX = tangente.x;
+	v.tangenteY = tangente.y;
+	v.tangenteZ = tangente.z;
+}
+
+
 void Mesh::genererBuffer()
 {
 	glGenBuffers(1, &elementArrayBuffer);
@@ -235,6 +315,8 @@ void Mesh::genererBuffer()
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, NB_VERTEX_ATTRIB * sizeof(GLfloat), (GLvoid*)(8 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, NB_VERTEX_ATTRIB * sizeof(GLfloat), (GLvoid*)(11 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(4);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

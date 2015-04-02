@@ -11,23 +11,34 @@ Paysage::Paysage()
 
 	surfaceCentrale = Plane(1000, 20, 60);
 	surfaceCentrale.genereHauteursAleatoire(-30.0, -5.0);
-	surfaceCentrale.ajouterTexture("Textures/rock.jpg");
-	surfaceCentrale.utiliserTextures(true);
+	texRoche = Texture("Textures/rock.jpg");
+	texRoche.charger();
+	texRocheSpeculaire = Texture("Textures/rock_specular.jpg");
+	texRocheSpeculaire.charger();
+	texRocheNormal = Texture("Textures/rockNormalMap.jpg");
+	texRocheNormal.charger();
 
-	ocean = Plane(1000, 100, 100);
-	ocean.ajouterTexture("Textures/water1.jpg");
-	ocean.utiliserTextures(true);
-	ocean.setRatioTextureParCarre(0.1);
+	ocean = Plane(1000, 100, 300);
+	ocean.setRatioTextureParCarre(0.5);
+	texEau = Texture("Textures/water1.jpg");
+	texEau.charger();
+	texEauSpeculaire = Texture("Textures/water1_specular.jpg");
+	texEauSpeculaire.charger();
+	texEauNormal = Texture("Textures/waterNormalMap.jpg");
+	texEauNormal.charger();
+
 
 	montagne = Plane(1000, 5, 10);
 	montagne.generePenteProgressive(0.0, 5.0);
-	montagne.ajouterTexture("Textures/rock.jpg");
-	montagne.utiliserTextures(true);
 
 	arbre = ModeleOBJ("Models/tree.obj");
 	generationPositionsArbres();
 	texTree = Texture("Textures/wood.jpg");
 	texTree.charger();
+	texTreeSpeculaire = Texture("Textures/wood_specular.jpg");
+	texTreeSpeculaire.charger();
+	texTreeNormal = Texture("Textures/woodNormalMap.jpg");
+	texTreeNormal.charger();
 }
 
 void Paysage::generationPositionsArbres()
@@ -69,6 +80,15 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	pushMatrix();
 		glUseProgram(shaderUneTexture.getProgramID());
 		lumiere.chargerValeursIlluminationUniforms(shaderUneTexture.getProgramID());
+		glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "diffuseMap"), 0);
+		glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "specularMap"), 1);
+		glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "normalMap"), 2);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texRoche.getID());
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texRocheSpeculaire.getID());
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, texRocheNormal.getID());
 		model.glScale(1.5, 1.0, 4.0);
 		chargerMatricesMVPUniforms(shaderUneTexture.getProgramID(), projection, model, view);
 		surfaceCentrale.afficher();
@@ -76,48 +96,58 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 
 	// Affichage de la montagne
 	pushMatrix();
-		model.glTranslate(-1200.0, -40.0, 0.0);
-		model.glRotate(180.0f, 0.0, 1.0, 0.0);
+		model.glTranslate(-1200.0, -80.0, 0.0);
+		model.glRotate(180.0f, -0.01, 1.0, 0);
 		model.glScale(1.0, 1.0, 3.0);
 		glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
 		montagne.afficher();
 	popMatrix();
+
+	// affichage des arbres
+	glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "diffuseMap"), 0);
+	glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "specularMap"), 1);
+	glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "normalMap"), 2);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texTree.getID());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texTreeSpeculaire.getID());
+	glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, texTreeNormal.getID());
+	for(int i = 0; i < NB_ARBRES; i++)
+	{
+		pushMatrix();
+			model.glTranslate(positionsArbres[i]);
+			model.glScale(50, 50, 50);
+			glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+			arbre.afficher();		
+		popMatrix();
+	}
 	
 	// Affichage de l'océan
 	pushMatrix();
 		glUseProgram(shaderOscillation.getProgramID());
 		model.glTranslate(980.0, -40.0, 0.0);
+		model.glScale(10, 10, 30);
 		lumiere.chargerValeursIlluminationUniforms(shaderOscillation.getProgramID());
+		glUniform1i(glGetUniformLocation(shaderOscillation.getProgramID(), "diffuseMap"), 0);
+		glUniform1i(glGetUniformLocation(shaderOscillation.getProgramID(), "specularMap"), 1);
+		glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "normalMap"), 2);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texEau.getID());
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texEauSpeculaire.getID());
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, texEauNormal.getID());
 		chargerMatricesMVPUniforms(shaderOscillation.getProgramID(), projection, model, view);
 		glUniform1f(glGetUniformLocation(shaderOscillation.getProgramID(), "time"), ofGetElapsedTimef());
 		ocean.afficher();
-	
-		pushMatrix();
-			model.glTranslate(0.0, 0.0, -1000.0);
-			model.glRotate(90.0, 0.0, 1.0, 0.0);
-			glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			ocean.afficher();
-		popMatrix();
-
-		pushMatrix();
-			model.glTranslate(0.0, 0.0, 1000.0);
-			model.glRotate(90.0, 0.0, 1.0, 0.0);
-			glUniformMatrix4fv(glGetUniformLocation(shaderOscillation.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			ocean.afficher();
-		popMatrix();
-
 	popMatrix();
 	
-	for(int i = 0; i < NB_ARBRES; i++)
-	{
-		pushMatrix();
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texTree.getID());
-			model.glTranslate(positionsArbres[i]);
-			model.glScale(50, 50, 50);
-			arbre.afficher(projection, model, view, lumiere);		
-		popMatrix();
-	}
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
 }

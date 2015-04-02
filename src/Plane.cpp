@@ -1,12 +1,11 @@
 #include "Plane.h"
 
 Plane::Plane(int size, int numColumn, int numRow)
-	:nbColonnes(numColumn), nbLignes(numRow), taille(size), useTexture(false)
+	:nbColonnes(numColumn), nbLignes(numRow), taille(size)
 {
 	ratioTextureParCarre = 1.0;
 	this->ajouterSommets();
 	this->ajouterIndices();
-	this->ajouterCouleurs();
 	this->ajouterTexCoordPourChaqueSommet();
 	this->calculerNormals();
 	this->initialiserMesh();
@@ -44,20 +43,6 @@ void Plane::ajouterIndices()
 	}
 }
 
-void Plane::ajouterCouleurs()
-{
-	for(int i = 0; i < nbColonnes; i++)
-	{
-		for(int j = 0; j < nbLignes; j++)
-		{
-			colors.push_back(ofVec3f(1.0, 0.0, 0.0));
-			colors.push_back(ofVec3f(0.0, 1.0, 0.0));
-			colors.push_back(ofVec3f(0.0, 0.0, 1.0));
-			colors.push_back(ofVec3f(1.0, 0.0, 1.0));
-		}
-	}
-}
-
 void Plane::calculerNormals()
 {
 	normals.resize(vertices.size());
@@ -75,37 +60,15 @@ void Plane::calculerNormals()
 
 void Plane::initialiserMesh()
 {
-	mesh = Mesh(vertices, colors, texCoords, normals, indices, (nbColonnes + 1) * (nbLignes + 1));
+	mesh = Mesh(vertices, vector<ofVec3f>(), texCoords, normals, indices, (nbColonnes + 1) * (nbLignes + 1));
 }
 
 void Plane::afficher()
 {
-	if(useTexture)
-		chargerTextures();
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	mesh.dessiner();
 	glDisable(GL_CULL_FACE);
-}
-
-void Plane::chargerTextures()
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture.getID());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
-}
-
-void Plane::ajouterTexture(const string& texPath)
-{
-	texture.setFichierImage(texPath);
-	texture.charger();
-}
-
-void Plane::utiliserTextures(bool utiliser)
-{
-	useTexture = utiliser;
 }
 
 void Plane::ajouterTexCoordPourChaqueSommet()

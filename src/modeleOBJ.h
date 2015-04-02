@@ -12,13 +12,9 @@ public:
 	ModeleOBJ(const string& cheminOBJ);
 	~ModeleOBJ(void);
 
-	void afficher(ofMatrix4x4 projection, ofMatrix4x4 model, ofMatrix4x4 view,
-		const Lumiere& lumiere);
+	void afficher();
 
 private:
-	void chargerMatricesMVPUniforms(GLuint id, const ofMatrix4x4& projection, const ofMatrix4x4& model, const ofMatrix4x4& view);
-
-	Shader* shader;
 	Mesh mesh;
 };
 
