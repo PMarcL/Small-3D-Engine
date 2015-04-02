@@ -130,3 +130,87 @@ std::vector<float> getMateriauData(MATERIAUX materiau) {
 		break;
 	}
 }
+
+PRIMITIVES getPrimitivePourInt(int noPrimitive)
+{
+	switch(noPrimitive) {
+	case(1):
+		return CUBE;
+		break;
+	case(2):
+		return TETRAEDRE;
+		break;
+	case(3):
+		return OCTAEDRE;
+		break;
+	}
+}
+
+MATERIAUX getMateriauPourInt(int noMateriau)
+{
+	switch(noMateriau) {
+	case(1):
+		return PLASTIQUE_NOIR;
+		break;
+	case(2):
+		return PLASTIQUE_BLEU;
+		break;
+	case(3):
+		return PLASTIQUE_VERT;
+		break;
+	case(4):
+		return PLASTIQUE_ROUGE;
+		break;
+	case(5):
+		return PLASTIQUE_BLANC;
+		break;
+	case(6):
+		return PLASTIQUE_JAUNE;
+		break;
+	case(7):
+		return RUBBER_NOIR;
+		break;
+	case(8):
+		return RUBBER_ROUGE;
+		break;
+	case(9):
+		return RUBBER_BLEU;
+		break;
+	case(10):
+		return EMERAUDE;
+		break;
+	case(11):
+		return JADE;
+		break;
+	case(12):
+		return OBSIDIENNE;
+		break;
+	case(13):
+		return PERLE;
+		break;
+	case(14):
+		return RUBY;
+		break;
+	case(15):
+		return TURQUOISE;
+		break;
+	case(16):
+		return LAITON;
+		break;
+	case(17):
+		return BRONZE;
+		break;
+	case(18):
+		return CHROME;
+		break;
+	case(19):
+		return CUIVRE;
+		break;
+	case(20):
+		return OR;
+		break;
+	case(21):
+		return ARGENT;
+		break;
+	}
+}

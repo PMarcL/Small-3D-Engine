@@ -112,7 +112,7 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texTreeSpeculaire.getID());
 	glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, texTreeNormal.getID());
+	glBindTexture(GL_TEXTURE_2D, texTreeNormal.getID());
 	for(int i = 0; i < NB_ARBRES; i++)
 	{
 		pushMatrix();

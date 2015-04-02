@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 
-const static ofVec3f NOIR = ofVec3f(0.0);
 const static ofVec3f COUL_DIFFUSE_DEFAUT = ofVec3f(0.5, 0.5, 0.5);
 const static ofVec3f COUL_AMBIANTE_DEFAUT = ofVec3f(0.01, 0.01, 0.1);
 const static ofVec3f COUL_REFLECTION_SPEC = ofVec3f(1.0, 1.0, 1.0);

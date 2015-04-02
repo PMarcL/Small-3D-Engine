@@ -38,83 +38,63 @@ void Lumiere::chargerLumiereDirectionnelle(GLuint programId) const
 
 void Lumiere::chargerProjecteurs(GLuint programId) const
 {
-	if(projecteurs.empty())
+	glUniform1i(glGetUniformLocation(programId, "nbProjecteurs"), projecteurs.size());
+	for(int i = 0; i < projecteurs.size(); i++)
 	{
-		glUniform1i(glGetUniformLocation(programId, "nbProjecteurs"), 1);
-		// S'il n'y a pas de projecteur, on doit absolument envoyer la couleur noir pour la couleur du projecteur.
-		// Sinon, les infos du dernier projecteur reste actif dans le GPU
-		glUniform3fv(glGetUniformLocation(programId, "projecteur[0].direction"), 1, NOIR.getPtr());
-		glUniform3fv(glGetUniformLocation(programId, "projecteur[0].diffuse"), 1, NOIR.getPtr());
-		glUniform3fv(glGetUniformLocation(programId, "projecteur[0].speculaire"), 1, NOIR.getPtr());
+		stringstream projecteurTableau;
+		projecteurTableau << "projecteur[" << i << "].";
+		string formatedString = projecteurTableau.str();
+		formatedString.append("position");
+		glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, projecteurs[i].position.getPtr());
+		formatedString = projecteurTableau.str();
+		formatedString.append("direction");
+		glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, projecteurs[i].direction.getPtr());
+		formatedString = projecteurTableau.str();
+		formatedString.append("diffuse");
+		glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, projecteurs[i].diffuse.getPtr());
+		formatedString = projecteurTableau.str();
+		formatedString.append("speculaire");
+		glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, projecteurs[i].speculaire.getPtr());
+		formatedString = projecteurTableau.str();
+		formatedString.append("coneInterne");
+		glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), projecteurs[i].coneInterne);
+		formatedString = projecteurTableau.str();
+		formatedString.append("coneExterne");
+		glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), projecteurs[i].coneExterne);
 	}
-	else
-	{
-		glUniform1i(glGetUniformLocation(programId, "nbProjecteurs"), projecteurs.size());
-		for(int i = 0; i < projecteurs.size(); i++)
-		{
-			stringstream projecteurTableau;
-			projecteurTableau << "projecteur[" << i << "].";
-			string formatedString = projecteurTableau.str();
-			formatedString.append("position");
-			glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, projecteurs[i].position.getPtr());
-			formatedString = projecteurTableau.str();
-			formatedString.append("direction");
-			glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, projecteurs[i].direction.getPtr());
-			formatedString = projecteurTableau.str();
-			formatedString.append("diffuse");
-			glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, projecteurs[i].diffuse.getPtr());
-			formatedString = projecteurTableau.str();
-			formatedString.append("speculaire");
-			glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, projecteurs[i].speculaire.getPtr());
-			formatedString = projecteurTableau.str();
-			formatedString.append("coneInterne");
-			glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), projecteurs[i].coneInterne);
-			formatedString = projecteurTableau.str();
-			formatedString.append("coneExterne");
-			glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), projecteurs[i].coneExterne);
-		}
-	}
+
 }
 
 void Lumiere::chargerPonctuelles(GLuint programId) const
 {
-	if(lumPonctuelles.empty())
+	glUniform1i(glGetUniformLocation(programId, "nbPonctuelles"), lumPonctuelles.size());
+	for(int i = 0; i < lumPonctuelles.size(); i++)
 	{
-		glUniform1i(glGetUniformLocation(programId, "nbPonctuelles"), 1);
-		glUniform3fv(glGetUniformLocation(programId, "ponctuelles[0].ambiante"), 1, NOIR.getPtr());
-		glUniform3fv(glGetUniformLocation(programId, "ponctuelles[0].diffuse"), 1, NOIR.getPtr());
-		glUniform3fv(glGetUniformLocation(programId, "ponctuelles[0].speculaire"), 1, NOIR.getPtr());
+		stringstream ponctuelleTableau;
+		ponctuelleTableau << "ponctuelles[" << i << "].";
+		string formatedString = ponctuelleTableau.str();
+		formatedString.append("position");
+		glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, lumPonctuelles[i].position.getPtr());
+		formatedString = ponctuelleTableau.str();
+		formatedString.append("ambiante");
+		glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, lumPonctuelles[i].ambiante.getPtr());
+		formatedString = ponctuelleTableau.str();
+		formatedString.append("diffuse");
+		glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, lumPonctuelles[i].diffuse.getPtr());
+		formatedString = ponctuelleTableau.str();
+		formatedString.append("speculaire");
+		glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, lumPonctuelles[i].speculaire.getPtr());
+		formatedString = ponctuelleTableau.str();
+		formatedString.append("constante");
+		glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), lumPonctuelles[i].constante);
+		formatedString = ponctuelleTableau.str();
+		formatedString.append("lineaire");
+		glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), lumPonctuelles[i].lineaire);
+		formatedString = ponctuelleTableau.str();
+		formatedString.append("quadratique");
+		glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), lumPonctuelles[i].quadratique);
 	}
-	else
-	{
-		glUniform1i(glGetUniformLocation(programId, "nbPonctuelles"), lumPonctuelles.size());
-		for(int i = 0; i < lumPonctuelles.size(); i++)
-		{
-			stringstream ponctuelleTableau;
-			ponctuelleTableau << "ponctuelles[" << i << "].";
-			string formatedString = ponctuelleTableau.str();
-			formatedString.append("position");
-			glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, lumPonctuelles[i].position.getPtr());
-			formatedString = ponctuelleTableau.str();
-			formatedString.append("ambiante");
-			glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, lumPonctuelles[i].ambiante.getPtr());
-			formatedString = ponctuelleTableau.str();
-			formatedString.append("diffuse");
-			glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, lumPonctuelles[i].diffuse.getPtr());
-			formatedString = ponctuelleTableau.str();
-			formatedString.append("speculaire");
-			glUniform3fv(glGetUniformLocation(programId, formatedString.c_str()), 1, lumPonctuelles[i].speculaire.getPtr());
-			formatedString = ponctuelleTableau.str();
-			formatedString.append("constante");
-			glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), lumPonctuelles[i].constante);
-			formatedString = ponctuelleTableau.str();
-			formatedString.append("lineaire");
-			glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), lumPonctuelles[i].lineaire);
-			formatedString = ponctuelleTableau.str();
-			formatedString.append("quadratique");
-			glUniform1f(glGetUniformLocation(programId, formatedString.c_str()), lumPonctuelles[i].quadratique);
-		}
-	}
+
 }
 
 void Lumiere::ajouterProjecteur(Projecteur proj)

@@ -16,11 +16,13 @@
 
 const static float VITESSE_ROTATION_DEFAUT = 2.0;
 const static float VITESSE_CAMERA_DEFAUT = 3.0;
-const static float FAR_PLANE_DISTANCE = 3000.0;
+const static float FAR_PLANE_DISTANCE = 10000.0;
 const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
 const static float RAYON_DE_SELECTION = 50.0;
 const static float DIMENSION_PAR_DEFAUT = 20.0f;
+const static int NB_MAX_PRIMITIVE = 3;
+const static int NB_MAX_MATERIAU = 21;
 
 class ofApp : public ofBaseApp{
 
@@ -52,6 +54,8 @@ class ofApp : public ofBaseApp{
 		void vertigoToggled(bool & enabled);
 		void lampeDePocheToggled(bool & enabled);
 		void vitesseCameraChanged(float& vitesse);
+		void primitiveChanged(int& primitive);
+		void ofApp::materiauChanged(int& materiau);
 		ofVec3f getPositionDevantCamera();
 
 		stack<ofMatrix4x4> matrices;
@@ -67,6 +71,8 @@ class ofApp : public ofBaseApp{
 		CubeMap cubeMap;
 		Lumiere lumiere;
 		ConteneurPrimitives primitives;
+		PRIMITIVES primitiveSelectionnee;
+		MATERIAUX materiauSelectionne;
 
 		int centreXFenetre;
 		int centreYFenetre;
@@ -76,13 +82,26 @@ class ofApp : public ofBaseApp{
 
 		bool showMenu;
 		ofxFloatSlider vitesseCamera;
+		ofxIntSlider typePrimitive;
+		ofxIntSlider typeMateriau;
 		ofxToggle vertigoEnFonction;
 		ofxToggle paused;
 		ofxToggle lampeDePoche;
 		ofxLabel guiMessage;
 		ofxLabel fps;
 		ofxLabel usageMessage;
+		ofxLabel usageMessage2;
+		ofxLabel usageMessage3;
+		ofxLabel usageMessage4;
+		ofxLabel usageMessage5;
+		ofxLabel usageMessage6;
+		ofxLabel usageMessage7;
+		ofxLabel usageMessage8;
+		ofxLabel usageMessage9;
+		ofxLabel usageMessage10;
+		ofxLabel usageMessage11;
 		ofxPanel gui;
+		ofxLabel primitivesMessage;
 
 		Shader shaderLampe;
 		PrimitiveGeometrique positionLampe;

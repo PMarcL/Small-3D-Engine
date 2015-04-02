@@ -53,6 +53,10 @@ std::vector<float> getTexCoordPourPrimitive(PRIMITIVES primitive);
 
 std::vector<float> getMateriauData(MATERIAUX materiau);
 
+PRIMITIVES getPrimitivePourInt(int noPrimitive);
+
+MATERIAUX getMateriauPourInt(int noMateriau);
+
 const static float CUBE_SOMMETS[] = {
 	1, -1, -1,		// side
 	-1, -1, -1,
