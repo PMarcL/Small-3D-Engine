@@ -3,38 +3,44 @@
 
 EffetPleinEcran::EffetPleinEcran()
 {
-	shaderBrouillard = Shader("Shaders/ShaderPleinEcran.vert", "Shaders/ShaderBrouillard.frag");
+	shaderBrouillard = Shader("Shaders/shaderPleinEcran.vert", "Shaders/shaderBrouillard.frag");
 	shaderBrouillard.charger();
 }
 
-void EffetPleinEcran::afficher()
+void EffetPleinEcran::afficher(GLuint texture)
 {
-	GLuint rectanglePleinEcran = creerRectanglePleinEcran();
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glDisable(GL_DEPTH_TEST);
 	glDisable(GL_LIGHTING);
 	
 	glUseProgram(shaderBrouillard.getProgramID());
-	glBindVertexArray(rectanglePleinEcran);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindVertexArray(0);
+	
+	GLuint rectangle = creerRectanglePleinEcran();
 
+	glActiveTexture(GL_TEXTURE0 + 1);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glUniform1i(glGetUniformLocation(shaderBrouillard.getProgramID(), "screenTexture"), 1);
+	glBindVertexArray(rectangle);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+	
 	glUseProgram(0);
 }
 
 void EffetPleinEcran::chargerTexture(GLuint texture) 
 {
 	textureID = texture;
+	std::cout << "nouvelle texture:" << textureID<< std::endl;
 }
 
 GLuint EffetPleinEcran::creerRectanglePleinEcran()
 {
-	GLfloat verticesPleinEcran[] = { 
+	
+	GLfloat quadVertices[] = {
+
         -1.0f,  1.0f,  0.0f, 1.0f,
         -1.0f, -1.0f,  0.0f, 0.0f,
          1.0f, -1.0f,  1.0f, 0.0f,
@@ -42,18 +48,19 @@ GLuint EffetPleinEcran::creerRectanglePleinEcran()
         -1.0f,  1.0f,  0.0f, 1.0f,
          1.0f, -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f,  1.0f, 1.0f
-    };
-	GLuint rectangleArrayVertices, quadVBO;
-    glGenVertexArrays(1, &rectangleArrayVertices);
+    };	
+	
+	GLuint quadVAO, quadVBO;
+    glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
-    glBindVertexArray(rectangleArrayVertices);
+    glBindVertexArray(quadVAO);
     glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesPleinEcran), &verticesPleinEcran, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
     glBindVertexArray(0);
 
-	return rectangleArrayVertices;
+	return quadVAO;
 }

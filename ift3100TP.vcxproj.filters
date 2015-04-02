@@ -82,6 +82,10 @@
     <ClCompile Include="src\ConteneurPrimitives.cpp">
       <Filter>src\Affichables</Filter>
     </ClCompile>
+    <ClCompile Include="src\EffetPleinEcran.cpp" />
+    <ClCompile Include="src\Framebuffer.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -184,6 +188,13 @@
     </ClInclude>
     <ClInclude Include="src\ConteneurPrimitives.h">
       <Filter>src\Affichables</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EffetPleinEcran.h" />
+    <ClInclude Include="src\ShaderTmp.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framebuffer.h">
+      <Filter>src\Utilitaires</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

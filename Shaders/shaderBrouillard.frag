@@ -1,10 +1,11 @@
 #version 430 core
-in vec2 TexCoords;
-out vec4 color;
 
+layout (location = 0) out vec4 color;
 uniform sampler2D screenTexture;
+
+in vec2 texcoords;
 
 void main()
 { 
-    color = texture(screenTexture, TexCoords);
+    color = texture(screenTexture, texcoords);
 }

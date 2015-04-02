@@ -12,6 +12,7 @@
 #include "Lumiere.h"
 #include "ConteneurPrimitives.h"
 #include "EffetPleinEcran.h"
+#include "Framebuffer.h"
 
 #include <stack>
 
@@ -53,7 +54,6 @@ class ofApp : public ofBaseApp{
 		void vertigoToggled(bool & enabled);
 		void lampeDePocheToggled(bool & enabled);
 		void vitesseCameraChanged(float& vitesse);
-		void initializeFrameBuffers();
 		ofVec3f getPositionDevantCamera();
 
 		stack<ofMatrix4x4> matrices;
@@ -71,8 +71,7 @@ class ofApp : public ofBaseApp{
 		ConteneurPrimitives primitives;
 		EffetPleinEcran effetPleinEcran;
 
-		GLuint framebuffer;
-		GLuint genererTexturePleinEcran(int, int);
+		Framebuffer fbo;
 
 		int centreXFenetre;
 		int centreYFenetre;

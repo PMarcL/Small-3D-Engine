@@ -39,8 +39,8 @@ void ofApp::setup(){
 		"Textures/ciel/ZN.jpg",
 		"Textures/ciel/ZP.jpg");
 
-	glDepthFunc(GL_LESS);
-	initializeFrameBuffers();
+	fbo.generateFBO(ofGetWindowWidth(), ofGetWindowHeight());
+
 	positionLampe = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(0.0, 500.0, 0.0), 50.0);
 
 	Projecteur lampeCentrale;
@@ -83,44 +83,51 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
-	camera.lookAt(view);
-	lumiere.setPositionVue(camera.getPosition());
-
-	pushMatrix();
-		model.glTranslate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-		cubeMap.afficher(projection, model, view);
-	popMatrix();
-
-	origineDuMonde.afficher(projection, model, view);
-	primitives.afficher(projection, model, view, lumiere);
-	paysage.afficher(projection, model, view, lumiere);
+	fbo.bind();
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_LIGHTING);
+		camera.lookAt(view);
+		lumiere.setPositionVue(camera.getPosition());
 	
-	pushMatrix();
-		glUseProgram(shaderLampe.getProgramID());
-			model.glTranslate(positionLampe.getPosition());
-			glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
-			glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-			positionLampe.afficher();
-			popMatrix();
-			pushMatrix();
-			model.glTranslate(positionPonctuelle.getPosition());
-			glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			positionPonctuelle.afficher();
-		glUseProgram(0);
-	popMatrix();
+		pushMatrix();
+			model.glTranslate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+			cubeMap.afficher(projection, model, view);
+		popMatrix();
+	
+		
+		origineDuMonde.afficher(projection, model, view);
+		primitives.afficher(projection, model, view, lumiere);
+		paysage.afficher(projection, model, view, lumiere);
+	
+		pushMatrix();
+			glUseProgram(shaderLampe.getProgramID());
+				model.glTranslate(positionLampe.getPosition());
+				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
+				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
+				positionLampe.afficher();
+				popMatrix();
+				pushMatrix();
+				model.glTranslate(positionPonctuelle.getPosition());
+				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+				positionPonctuelle.afficher();
+			glUseProgram(0);
+		popMatrix();
+	
+	}
+	fbo.unbind();
 
-	effetPleinEcran.afficher();
+	effetPleinEcran.afficher(fbo.getColorTexture());
+	
 	
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	if (showMenu) {
 		gui.draw();
 	}
+	
 }
 
 //--------------------------------------------------------------
@@ -213,7 +220,7 @@ void ofApp::windowResized(int w, int h){
 	centreXFenetre = w * 0.5;
 	centreYFenetre = h * 0.5;
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
-	initializeFrameBuffers();
+	fbo.generateFBO(w,h);
 }
 
 //--------------------------------------------------------------
@@ -308,39 +315,6 @@ void ofApp::popMatrix()
 	matrices.pop();
 }
 
-GLuint ofApp::genererTexturePleinEcran(int largeur, int hauteur)
-{
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, largeur, hauteur, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    return textureID;
-}
-
-void ofApp::initializeFrameBuffers() 
-{
-	glGenFramebuffers(1, &framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer); 
-
-	GLuint texturePleinEcran = genererTexturePleinEcran(ofGetWindowWidth(), ofGetWindowHeight());
-	
-	GLuint rbo;
-    glGenRenderbuffers(1, &rbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, rbo); 
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ofGetWindowWidth(), ofGetWindowHeight());
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texturePleinEcran, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo); 
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	cout << "w:" << ofGetWindowWidth() << endl;
-	cout << "h:" << ofGetWindowHeight() << endl;
-	effetPleinEcran.chargerTexture(texturePleinEcran);
-}
 ofApp::~ofApp() {
 	delete mouseHandler;
 }
