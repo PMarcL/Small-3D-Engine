@@ -6,7 +6,6 @@ Plane::Plane(int size, int numColumn, int numRow)
 	ratioTextureParCarre = 1.0;
 	this->ajouterSommets();
 	this->ajouterIndices();
-	this->ajouterCouleurs();
 	this->ajouterTexCoordPourChaqueSommet();
 	this->calculerNormals();
 	this->initialiserMesh();
@@ -44,20 +43,6 @@ void Plane::ajouterIndices()
 	}
 }
 
-void Plane::ajouterCouleurs()
-{
-	for(int i = 0; i < nbColonnes; i++)
-	{
-		for(int j = 0; j < nbLignes; j++)
-		{
-			colors.push_back(ofVec3f(1.0, 0.0, 0.0));
-			colors.push_back(ofVec3f(0.0, 1.0, 0.0));
-			colors.push_back(ofVec3f(0.0, 0.0, 1.0));
-			colors.push_back(ofVec3f(1.0, 0.0, 1.0));
-		}
-	}
-}
-
 void Plane::calculerNormals()
 {
 	normals.resize(vertices.size());
@@ -75,7 +60,7 @@ void Plane::calculerNormals()
 
 void Plane::initialiserMesh()
 {
-	mesh = Mesh(vertices, colors, texCoords, normals, indices, (nbColonnes + 1) * (nbLignes + 1));
+	mesh = Mesh(vertices, vector<ofVec3f>(), texCoords, normals, indices, (nbColonnes + 1) * (nbLignes + 1));
 }
 
 void Plane::afficher()

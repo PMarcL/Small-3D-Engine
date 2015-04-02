@@ -23,14 +23,12 @@ public:
 private:
 	void initialiserMesh();
 	void ajouterIndices();
-	void ajouterCouleurs();
 	void ajouterSommets();
 	void calculerNormals();
 	void ajouterNormals(const vector<ofVec3f>& normalsCalcule);
 	void ajouterTexCoordPourChaqueSommet();
 	
 	vector<ofVec3f> vertices;
-	vector<ofVec3f> colors;
 	vector<GLuint> indices;
 	vector<GLfloat> texCoords;
 	vector<ofVec3f> normals;

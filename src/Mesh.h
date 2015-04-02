@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-const static int NB_VERTEX_ATTRIB = 11;
+const static int NB_VERTEX_ATTRIB = 14;
 
 struct Vertex {
 	Vertex()
@@ -26,6 +26,10 @@ struct Vertex {
 	GLfloat normalX;
 	GLfloat normalY;
 	GLfloat normalZ;
+
+	GLfloat tangenteX;
+	GLfloat tangenteY;
+	GLfloat tangenteZ;
 };
 
 
@@ -58,6 +62,11 @@ private:
 	void ajouterCouleurs(const vector<ofVec3f>& positions);
 	void ajouterTexCoords(const vector<ofVec2f>& texCoords);
 	void ajouterNormals(const vector<ofVec3f>& positions);
+	void ajouterTangentes();
+	void ajouterTangentesAvecIndices();
+	void ajouterTangentesAvecListeSommets();
+	ofVec3f calculerTangentePourSommets(Vertex& v0, Vertex& v1, Vertex& v2);
+	void ajouterTangenteAuSommet(Vertex& v, ofVec3f& tangente);
 	void genererBuffer();
 
 	bool utiliserIndices;

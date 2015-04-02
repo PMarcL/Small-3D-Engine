@@ -39,10 +39,13 @@ private:
 	ModeleOBJ arbre;
 	Texture texTree;
 	Texture texTreeSpeculaire;
+	Texture texTreeNormal;
 	Texture texRoche;
 	Texture texRocheSpeculaire;
+	Texture texRocheNormal;
 	Texture texEau;
 	Texture texEauSpeculaire;
+	Texture texEauNormal;
 	ModeleOBJ champignon;
 	vector<ofVec3f> positionsArbres;
 };
