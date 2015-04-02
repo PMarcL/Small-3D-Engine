@@ -19,7 +19,7 @@ void ofApp::setup(){
 	
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
-	son.jouerMusiqueEtAmbiance();
+	//son.jouerMusiqueEtAmbiance();
 	
 	mouseHandler = new MousePositionHandler();
 	camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
