@@ -14,13 +14,12 @@ public:
 	void redimensionner(int, int);
 	
 private:
-
 	Shader shaderBrouillard;
 	GLfloat verticesPleinEcran[24];
 	GLuint textureID;
-
 	int largeur;
 	int hauteur;
 
+	GLuint creerRectanglePleinEcran();
 };
 

@@ -3,50 +3,24 @@
 
 EffetPleinEcran::EffetPleinEcran()
 {
-	shaderBrouillard = Shader("Shaders/quadPleinEcran.vert", "Shaders/ShaderBrouillard.frag");
+	shaderBrouillard = Shader("Shaders/ShaderPleinEcran.vert", "Shaders/ShaderBrouillard.frag");
 	shaderBrouillard.charger();
-
-	 GLfloat verticesTemporaires[] = { 
-        -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
-    };
-	
-	 for(int i=0; i < 24; i++) {
-		verticesPleinEcran[i] = verticesTemporaires[i];
-	}
 }
 
 void EffetPleinEcran::afficher()
 {
-	GLuint quadVAO, quadVBO;
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &quadVBO);
-    glBindVertexArray(quadVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesPleinEcran), &verticesPleinEcran, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
-    glBindVertexArray(0);
-	
+	GLuint rectanglePleinEcran = creerRectanglePleinEcran();
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    // Clear all relevant buffers
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
 	glDisable(GL_LIGHTING);
 	
 	glUseProgram(shaderBrouillard.getProgramID());
-	glBindVertexArray(quadVAO);
-    glBindTexture(GL_TEXTURE_2D, textureID);	// Use the color attachment texture as the texture of the quad plane
+	glBindVertexArray(rectanglePleinEcran);
+    glBindTexture(GL_TEXTURE_2D, textureID);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 
@@ -58,3 +32,28 @@ void EffetPleinEcran::chargerTexture(GLuint texture)
 	textureID = texture;
 }
 
+GLuint EffetPleinEcran::creerRectanglePleinEcran()
+{
+	GLfloat verticesPleinEcran[] = { 
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+	GLuint rectangleArrayVertices, quadVBO;
+    glGenVertexArrays(1, &rectangleArrayVertices);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(rectangleArrayVertices);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesPleinEcran), &verticesPleinEcran, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+    glBindVertexArray(0);
+
+	return rectangleArrayVertices;
+}

@@ -251,24 +251,11 @@ void ofApp::popMatrix()
 GLuint ofApp::genererTexturePleinEcran(int largeur, int hauteur)
 {
     GLuint textureID;
-    //glGenTextures(1, &textureID);
-    //glBindTexture(GL_TEXTURE_2D, textureID);
-    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, largeur, hauteur, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    //glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    //glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //glBindTexture(GL_TEXTURE_2D, 0);
-
-	glGenTextures(1, &textureID);
+    glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmap generation included in OpenGL v1.4
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, largeur, hauteur, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, largeur, hauteur, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
     return textureID;
 }
@@ -283,11 +270,10 @@ void ofApp::initializeFrameBuffers()
 	GLuint rbo;
     glGenRenderbuffers(1, &rbo);
     glBindRenderbuffer(GL_RENDERBUFFER, rbo); 
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ofGetWindowWidth(), ofGetWindowHeight()); // Use a single renderbuffer object for both a depth AND stencil buffer.
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ofGetWindowWidth(), ofGetWindowHeight());
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texturePleinEcran, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
-    // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo); 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
