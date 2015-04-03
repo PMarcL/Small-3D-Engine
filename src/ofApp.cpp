@@ -120,8 +120,6 @@ void ofApp::draw(){
 	fbo.unbind();
 
 	effetPleinEcran.afficher(fbo.getColorTexture());
-	
-	
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	if (showMenu) {

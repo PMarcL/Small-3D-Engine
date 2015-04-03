@@ -6,6 +6,7 @@ in vec3 fragColor;
 in vec2 fragTexCoord;
 in vec3 fragNormal;
 in vec3 fragPos;
+in vec3 fragTangente;
 
 struct LumiereDirectionnelle {
 	vec3 direction;
@@ -45,16 +46,18 @@ uniform int nbPonctuelles;
 uniform Ponctuelle ponctuelles[NB_LUMIERES_PONCTUELLES_MAX];
 uniform sampler2D diffuseMap;
 uniform sampler2D specularMap;
+uniform sampler2D normalMap;
 uniform vec3 positionCamera;
 
 vec3 calculerIlluminationDirectionnelle(LumiereDirectionnelle lumiere, vec3 normal, vec3 directionCamera);
 vec3 calculerProjecteur(Projecteur proj, vec3 normal, vec3 directionCamera);
-vec3 CalculerPonctuelle(Ponctuelle lumiere, vec3 normal, vec3 directionCamera);
+vec3 calculerPonctuelle(Ponctuelle lumiere, vec3 normal, vec3 directionCamera);
+vec3 calculerNormal();
 
 void main()
 {
 
-	vec3 normal = normalize(fragNormal);
+	vec3 normal = calculerNormal();
 	vec3 directionCamera = normalize(positionCamera - fragPos);
 	
 	vec3 resultatDir = calculerIlluminationDirectionnelle(lumDirectionnelle, normal, directionCamera);
@@ -64,10 +67,26 @@ void main()
 	}
 	vec3 resultatPonctuelles;
 	for(int i = 0; i < nbPonctuelles; i++) {
-		resultatPonctuelles += CalculerPonctuelle(ponctuelles[i], normal, directionCamera);
+		resultatPonctuelles += calculerPonctuelle(ponctuelles[i], normal, directionCamera);
 	}
 	
     color = vec4(resultatDir + resultatProj + resultatPonctuelles, 1.0f);
+}
+
+vec3 calculerNormal()
+{
+	vec3 normal = normalize(fragNormal);
+	vec3 tangente = normalize(fragTangente);
+	tangente = normalize(tangente - dot(tangente, normal) * normal);
+	vec3 biTangente = cross(tangente, normal);
+	
+	vec3 normalTexture = vec3(texture(normalMap, fragTexCoord));
+	normalTexture = 2.0 * normalTexture - vec3(1.0);
+	
+	mat3 espaceTangent = mat3(tangente, biTangente, normal);
+	vec3 normalAjustee = espaceTangent * normalTexture;
+	
+	return normalize(normalAjustee);
 }
 
 vec3 calculerIlluminationDirectionnelle(LumiereDirectionnelle lumiere, vec3 normal, vec3 directionCamera)
@@ -110,7 +129,7 @@ vec3 calculerProjecteur(Projecteur proj, vec3 normal, vec3 directionCamera)
 	return (diffuse + specular);
 }
 
-vec3 CalculerPonctuelle(Ponctuelle lumiere, vec3 normal, vec3 directionCamera)
+vec3 calculerPonctuelle(Ponctuelle lumiere, vec3 normal, vec3 directionCamera)
 {
     vec3 directionLumiere = normalize(lumiere.position - fragPos);
     

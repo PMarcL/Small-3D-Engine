@@ -6,6 +6,7 @@ in vec3 fragColor;
 in vec2 fragTexCoord;
 in vec3 fragNormal;
 in vec3 fragPos;
+in vec3 fragTangente;
 
 struct LumiereDirectionnelle {
 	vec3 direction;
@@ -45,16 +46,19 @@ uniform int nbPonctuelles;
 uniform Ponctuelle ponctuelles[NB_LUMIERES_PONCTUELLES_MAX];
 uniform sampler2D diffuseMap;
 uniform sampler2D specularMap;
+uniform sampler2D normalMap;
 uniform vec3 positionCamera;
+uniform float time;
 
 vec3 calculerIlluminationDirectionnelle(LumiereDirectionnelle lumiere, vec3 normal, vec3 directionCamera);
 vec3 calculerProjecteur(Projecteur proj, vec3 normal, vec3 directionCamera);
 vec3 CalculerPonctuelle(Ponctuelle lumiere, vec3 normal, vec3 directionCamera);
+vec3 calculerNormal();
 
 void main()
 {
 
-	vec3 normal = normalize(fragNormal);
+	vec3 normal = calculerNormal();
 	vec3 directionCamera = normalize(positionCamera - fragPos);
 	
 	vec3 resultatDir = calculerIlluminationDirectionnelle(lumDirectionnelle, normal, directionCamera);
@@ -68,6 +72,22 @@ void main()
 	}
 	
     color = vec4(resultatDir + resultatProj + resultatPonctuelles, 0.7f);
+}
+
+vec3 calculerNormal()
+{
+	vec3 normal = normalize(fragNormal);
+	vec3 tangente = normalize(fragTangente);
+	tangente = normalize(tangente - dot(tangente, normal) * normal);
+	vec3 biTangente = cross(tangente, normal);
+	
+	vec3 normalTexture = vec3(texture(normalMap, vec2(fragTexCoord.x - time/3.0, fragTexCoord.y + time/3.0)));
+	normalTexture = 2.0 * normalTexture - vec3(1.0);
+	
+	mat3 espaceTangent = mat3(tangente, biTangente, normal);
+	vec3 normalAjustee = espaceTangent * normalTexture;
+	
+	return normalize(normalAjustee);
 }
 
 vec3 calculerIlluminationDirectionnelle(LumiereDirectionnelle lumiere, vec3 normal, vec3 directionCamera)

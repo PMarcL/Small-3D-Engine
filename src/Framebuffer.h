@@ -6,9 +6,10 @@
 class Framebuffer
 {
 private:
-	unsigned int FBO;
+	GLuint FBO;
+	GLuint rbo;
 	        
-	unsigned int texture_depth;	
+	GLuint texture_depth;	
 	std::vector<GLenum> drawbuffer;
 
 	void destroy();
@@ -22,8 +23,8 @@ public:
 	unsigned int texture_color; 
 
 	void generateFBO(unsigned int width, unsigned int height);
-	unsigned int getColorTexture();
-	unsigned int getDepthTexture();
+	GLuint getColorTexture();
+	GLuint getDepthTexture();
 	void resize(unsigned int width, unsigned int height);
 	void bind();
 	void unbind();
