@@ -18,7 +18,8 @@ enum PRIMITIVES {
 	CUBE,
 	TETRAEDRE,
 	OCTAEDRE,
-	CONE
+	CONE,
+	SPHERE
 };
 
 enum MATERIAUX {
@@ -61,6 +62,10 @@ MATERIAUX getMateriauPourInt(int noMateriau);
 const static float CONE_PRECISION = 500.0;
 const static float CONE_HAUTEUR = 1.0;
 const static float CONE_RAYON = 0.5;
+
+const static float SPHERE_RAYON = 1.0;
+const static float SPHERE_PRECISION_LAT = 240;
+const static float SPHERE_PRECISION_LON = 160;
 
 const static float CUBE_SOMMETS[] = {
 	1, -1, -1,		// side
