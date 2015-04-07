@@ -21,7 +21,7 @@ const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
 const static float RAYON_DE_SELECTION = 50.0;
 const static float DIMENSION_PAR_DEFAUT = 20.0f;
-const static int NB_MAX_PRIMITIVE = 3;
+const static int NB_MAX_PRIMITIVE = 4;
 const static int NB_MAX_MATERIAU = 21;
 
 class ofApp : public ofBaseApp{

@@ -2,6 +2,8 @@
 #include "ofMain.h"
 
 void ajusterTailleSommets(vector<float>& sommets, float taille);
+vector<float> genererSommetsCone();
+vector<float> genererTexCoordsCone();
 
 vector<float> getSommetsPourPrimitive(PRIMITIVES primitive, int taille) {
 	vector<float> sommets;
@@ -15,11 +17,48 @@ vector<float> getSommetsPourPrimitive(PRIMITIVES primitive, int taille) {
 	case(TETRAEDRE):
 		sommets = vector<float>(TETRAEDRE_SOMMETS, TETRAEDRE_SOMMETS + sizeof(TETRAEDRE_SOMMETS) / sizeof(TETRAEDRE_SOMMETS[0]));
 		break;
+	case(CONE):
+		sommets = genererSommetsCone();
+		break;
 	default:
 		break;
 	}
 
 	ajusterTailleSommets(sommets, taille*0.5);
+	return sommets;
+}
+
+vector<float> genererSommetsCone() {
+	vector<float> sommets;
+	float angleEntreSommets = (2*PI) / CONE_PRECISION;
+	for(int i = 0; i < CONE_PRECISION; i++) {
+		// base du cone
+		sommets.push_back(0);
+		sommets.push_back(0);
+		sommets.push_back(0);
+
+		sommets.push_back(CONE_RAYON * cos((i + 1) * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin((i + 1) * angleEntreSommets));
+
+		sommets.push_back(CONE_RAYON * cos(i * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin(i * angleEntreSommets));
+		
+		// Côté du cone
+		sommets.push_back(0);
+		sommets.push_back(CONE_HAUTEUR);
+		sommets.push_back(0);
+
+		sommets.push_back(CONE_RAYON * cos((i + 1) * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin((i + 1) * angleEntreSommets));
+
+		sommets.push_back(CONE_RAYON * cos(i * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin(i * angleEntreSommets));
+	}
+
 	return sommets;
 }
 
@@ -57,7 +96,41 @@ vector<float> getTexCoordPourPrimitive(PRIMITIVES primitive) {
 	case(TETRAEDRE):
 		return vector<float>(TETRAEDRE_TEXCOORD, TETRAEDRE_TEXCOORD + sizeof(TETRAEDRE_TEXCOORD) / sizeof(TETRAEDRE_TEXCOORD[0]));
 		break;
+	case(CONE):
+		return genererTexCoordsCone();
+		break;
 	}
+}
+
+vector<float> genererTexCoordsCone() {
+	vector<float> texCoords;
+	vector<float> sommets;
+	float angleEntreSommets = (2*PI) / CONE_PRECISION;
+	// représente la distance entre chaque sommet autour de la base
+	float distanceEntreSommets = (2*PI*CONE_RAYON) / CONE_PRECISION;
+	for(int i = 0; i < CONE_PRECISION; i++) {
+		// base du cone
+		texCoords.push_back(1.0 / 2.0);
+		texCoords.push_back(1.0 / 2.0);
+
+		texCoords.push_back(0.5 * cos((i + 1) * angleEntreSommets));
+		texCoords.push_back(0.5 * sin((i + 1) * angleEntreSommets));
+
+		texCoords.push_back(0.5 * cos(i * angleEntreSommets));
+		texCoords.push_back(0.5 * sin(i * angleEntreSommets));
+
+		// côté du cône
+		texCoords.push_back(1.0 / 2.0);
+		texCoords.push_back(1.0);
+
+		texCoords.push_back((i + 1) * distanceEntreSommets);
+		texCoords.push_back(0);
+
+		texCoords.push_back(i * distanceEntreSommets);
+		texCoords.push_back(0);
+	}
+
+	return texCoords;
 }
 
 std::vector<float> getMateriauData(MATERIAUX materiau) {
@@ -142,6 +215,9 @@ PRIMITIVES getPrimitivePourInt(int noPrimitive)
 		break;
 	case(3):
 		return OCTAEDRE;
+		break;
+	case(4):
+		return CONE;
 		break;
 	}
 }

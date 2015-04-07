@@ -17,7 +17,8 @@
 enum PRIMITIVES {
 	CUBE,
 	TETRAEDRE,
-	OCTAEDRE
+	OCTAEDRE,
+	CONE
 };
 
 enum MATERIAUX {
@@ -56,6 +57,10 @@ std::vector<float> getMateriauData(MATERIAUX materiau);
 PRIMITIVES getPrimitivePourInt(int noPrimitive);
 
 MATERIAUX getMateriauPourInt(int noMateriau);
+
+const static float CONE_PRECISION = 500.0;
+const static float CONE_HAUTEUR = 1.0;
+const static float CONE_RAYON = 0.5;
 
 const static float CUBE_SOMMETS[] = {
 	1, -1, -1,		// side
