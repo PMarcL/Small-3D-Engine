@@ -13,17 +13,25 @@ public:
 	void afficher(GLuint);
 	void chargerTexture(GLuint);
 	void redimensionner(int, int);
+	void activerEffetBrouillard();
+	void activerEffetNoirEtBlanc();
+	void activerEffetLignes();
+	void desactiverEffet();
+	enum Effet { AUCUN, BROUILLARD, NOIR_ET_BLANC, LIGNES };
 	
 private:
 	Texture image;
 	GLuint vao;
 	GLuint vbo;
-	Shader shaderBrouillard;
+	Shader shaderActif;
 	GLfloat verticesPleinEcran[24];
 	GLuint textureID;
 	GLuint screenTextureID;
 	int largeur;
 	int hauteur;
+
+	
+	Effet effetCourant;
 
 	void creerRectanglePleinEcran();
 };

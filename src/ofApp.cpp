@@ -14,6 +14,9 @@ void ofApp::setup(){
 	showMenu = true;
 	paused = false;
 	lampeDePoche = false;
+	effetBrouillard = false;
+	effetNoirEtBlanc = false;
+	effetLignes = false;
 	primitiveSelectionnee = CUBE;
 	materiauSelectionne = RUBY;
 	
@@ -121,7 +124,18 @@ void ofApp::draw(){
 	}
 	fbo.unbind();
 
+	if(effetBrouillard) {
+		effetPleinEcran.activerEffetBrouillard();
+	} else if(effetNoirEtBlanc) {
+		effetPleinEcran.activerEffetNoirEtBlanc();
+	} else if(effetLignes) {
+		effetPleinEcran.activerEffetLignes();
+	} else {
+		effetPleinEcran.desactiverEffet();
+	}
+	
 	effetPleinEcran.afficher(fbo.getColorTexture());
+
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	if (showMenu) {
@@ -146,6 +160,12 @@ void ofApp::keyPressed(int key){
 		zoomOut();
 	else if(key == 'v' || key == 'V')
 		vertigoEnFonction = !vertigoEnFonction;
+	else if(key == 'b' || key == 'B')
+		effetBrouillard = !effetBrouillard;
+	else if(key == 'n' || key == 'N')
+		effetNoirEtBlanc = !effetNoirEtBlanc;
+	else if(key == 'l' || key == 'L')
+		effetLignes = !effetLignes;
 	else if(key == 'i' || key == 'I')
 	{
 		ofImage fenetre;
@@ -236,6 +256,9 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::configurerUI() {
 	paused.addListener(this, &ofApp::pauseToggled);
 	vertigoEnFonction.addListener(this, &ofApp::vertigoToggled);
+	effetBrouillard.addListener(this, &ofApp::effetBrouillardToggled);
+	effetNoirEtBlanc.addListener(this, &ofApp::effetNoirEtBlancToggled);
+	effetLignes.addListener(this, &ofApp::effetLignesToggled);
 	lampeDePoche.addListener(this, &ofApp::lampeDePocheToggled);
 	vitesseCamera.addListener(this, &ofApp::vitesseCameraChanged);
 	typePrimitive.addListener(this, &ofApp::primitiveChanged);
@@ -245,6 +268,9 @@ void ofApp::configurerUI() {
 	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
 	gui.add(paused.setup("p - Pause", false));
 	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
+	gui.add(effetBrouillard.setup("b - Effet brouillard", false));
+	gui.add(effetNoirEtBlanc.setup("n - Effet noir et blanc", false));
+	gui.add(effetLignes.setup("l - Effet lignes", false));
 	gui.add(lampeDePoche.setup("q - Lamp de poche", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
 	gui.add(fps.setup("fps", ""));
@@ -292,6 +318,27 @@ void ofApp::vertigoToggled(bool &enabled) {
 		vitesseCamera = VITESSE_CAMERA_DEFAUT;
 		angleChampDeVision = ANGLE_VISION_NORMAL;
 		projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth() / ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+	}
+}
+
+void ofApp::effetBrouillardToggled(bool &enabled) {
+	if (enabled){
+		effetLignes = false;
+		effetNoirEtBlanc = false;
+	}
+}
+
+void ofApp::effetNoirEtBlancToggled(bool &enabled) {
+	if (enabled){
+		effetBrouillard = false;
+		effetLignes = false;
+	}
+}
+
+void ofApp::effetLignesToggled(bool &enabled) {
+	if (enabled){
+		effetBrouillard = false;
+		effetNoirEtBlanc = false;
 	}
 }
 

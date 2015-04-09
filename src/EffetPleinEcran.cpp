@@ -3,15 +3,14 @@
 
 EffetPleinEcran::EffetPleinEcran()
 {
-	shaderBrouillard = Shader("Shaders/shaderPleinEcran.vert", "Shaders/shaderBrouillard.frag");
-	shaderBrouillard.charger();
+	desactiverEffet();
 
 	creerRectanglePleinEcran();
 }
 
 void EffetPleinEcran::afficher(GLuint texture)
 {	
-	glUseProgram(shaderBrouillard.getProgramID());
+	glUseProgram(shaderActif.getProgramID());
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -57,4 +56,40 @@ void EffetPleinEcran::creerRectanglePleinEcran()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
     glBindVertexArray(0);
+}
+
+void EffetPleinEcran::activerEffetBrouillard()
+{
+	if(effetCourant != BROUILLARD) {
+		shaderActif = Shader("Shaders/shaderPleinEcran.vert", "Shaders/shaderEffetBrouillard.frag");
+		shaderActif.charger();
+		effetCourant = BROUILLARD;
+	}
+}
+
+void EffetPleinEcran::activerEffetNoirEtBlanc()
+{
+	if(effetCourant != NOIR_ET_BLANC) {
+		shaderActif = Shader("Shaders/shaderPleinEcran.vert", "Shaders/shaderEffetNoirEtBlanc.frag");
+		shaderActif.charger();
+		effetCourant = NOIR_ET_BLANC;
+	}
+}
+
+void EffetPleinEcran::activerEffetLignes()
+{
+	if(effetCourant != LIGNES) {
+		shaderActif = Shader("Shaders/shaderPleinEcran.vert", "Shaders/shaderEffetLignes.frag");
+		shaderActif.charger();
+		effetCourant = LIGNES;
+	}
+}
+
+void EffetPleinEcran::desactiverEffet()
+{
+	if(effetCourant != AUCUN) {
+		shaderActif = Shader("Shaders/shaderPleinEcran.vert", "Shaders/shaderEffetAucun.frag");
+		shaderActif.charger();
+		effetCourant = AUCUN;
+	}
 }
