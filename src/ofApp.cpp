@@ -22,7 +22,7 @@ void ofApp::setup(){
 	
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
-	//son.jouerMusiqueEtAmbiance();
+	son.jouerMusiqueEtAmbiance();
 	
 	mouseHandler = new MousePositionHandler();
 	camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
@@ -160,11 +160,11 @@ void ofApp::keyPressed(int key){
 		zoomOut();
 	else if(key == 'v' || key == 'V')
 		vertigoEnFonction = !vertigoEnFonction;
-	else if(key == 'b' || key == 'B')
+	else if(key == '1')
 		effetBrouillard = !effetBrouillard;
-	else if(key == 'n' || key == 'N')
+	else if(key == '2')
 		effetNoirEtBlanc = !effetNoirEtBlanc;
-	else if(key == 'l' || key == 'L')
+	else if(key == '3')
 		effetLignes = !effetLignes;
 	else if(key == 'i' || key == 'I')
 	{
@@ -268,9 +268,9 @@ void ofApp::configurerUI() {
 	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
 	gui.add(paused.setup("p - Pause", false));
 	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
-	gui.add(effetBrouillard.setup("b - Effet brouillard", false));
-	gui.add(effetNoirEtBlanc.setup("n - Effet noir et blanc", false));
-	gui.add(effetLignes.setup("l - Effet lignes", false));
+	gui.add(effetBrouillard.setup("1 - Effet brouillard", false));
+	gui.add(effetNoirEtBlanc.setup("2 - Effet noir et blanc", false));
+	gui.add(effetLignes.setup("3 - Effet lignes", false));
 	gui.add(lampeDePoche.setup("q - Lamp de poche", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
 	gui.add(fps.setup("fps", ""));
