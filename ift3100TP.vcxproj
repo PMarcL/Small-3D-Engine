@@ -98,6 +98,8 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="src\Framebuffer.cpp" />
+    <ClCompile Include="src\EffetPleinEcran.cpp" />
     <ClCompile Include="src\Axes.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\ConteneurPrimitives.cpp" />
@@ -128,6 +130,9 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="src\Framebuffer.h" />
+    <ClInclude Include="src\ShaderTmp.h" />
+    <ClInclude Include="src\EffetPleinEcran.h" />
     <ClInclude Include="src\Axes.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\ConteneurPrimitives.h" />

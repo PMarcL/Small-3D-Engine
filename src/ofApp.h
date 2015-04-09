@@ -11,6 +11,8 @@
 #include "CubeMap.h"
 #include "Lumiere.h"
 #include "ConteneurPrimitives.h"
+#include "EffetPleinEcran.h"
+#include "Framebuffer.h"
 
 #include <stack>
 
@@ -52,6 +54,9 @@ class ofApp : public ofBaseApp{
 		void popMatrix();
 		void pauseToggled(bool & paused);
 		void vertigoToggled(bool & enabled);
+		void effetBrouillardToggled(bool & enabled);
+		void effetNoirEtBlancToggled(bool & enabled);
+		void effetLignesToggled(bool & enabled);
 		void lampeDePocheToggled(bool & enabled);
 		void vitesseCameraChanged(float& vitesse);
 		void primitiveChanged(int& primitive);
@@ -71,8 +76,11 @@ class ofApp : public ofBaseApp{
 		CubeMap cubeMap;
 		Lumiere lumiere;
 		ConteneurPrimitives primitives;
+		EffetPleinEcran effetPleinEcran;
+
 		PRIMITIVES primitiveSelectionnee;
 		MATERIAUX materiauSelectionne;
+		Framebuffer fbo;
 
 		int centreXFenetre;
 		int centreYFenetre;
@@ -87,6 +95,9 @@ class ofApp : public ofBaseApp{
 		ofxToggle vertigoEnFonction;
 		ofxToggle paused;
 		ofxToggle lampeDePoche;
+		ofxToggle effetBrouillard;
+		ofxToggle effetNoirEtBlanc;
+		ofxToggle effetLignes;
 		ofxLabel guiMessage;
 		ofxLabel fps;
 		ofxLabel usageMessage;
