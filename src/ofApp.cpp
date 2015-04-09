@@ -14,10 +14,12 @@ void ofApp::setup(){
 	showMenu = true;
 	paused = false;
 	lampeDePoche = false;
+	primitiveSelectionnee = CUBE;
+	materiauSelectionne = RUBY;
 	
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
-	son.jouerMusiqueEtAmbiance();
+	//son.jouerMusiqueEtAmbiance();
 	
 	mouseHandler = new MousePositionHandler();
 	camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
@@ -41,7 +43,7 @@ void ofApp::setup(){
 
 	fbo.generateFBO(ofGetWindowWidth(), ofGetWindowHeight());
 
-	positionLampe = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(0.0, 500.0, 0.0), 50.0);
+	positionLampe = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(0.0, 500.0, 0.0), 20.0);
 
 	Projecteur lampeCentrale;
 	lampeCentrale.position = positionLampe.getPosition();
@@ -52,7 +54,7 @@ void ofApp::setup(){
 	lampeCentrale.coneInterne = cos(ofDegToRad(10.0));
 	lumiere.ajouterProjecteur(lampeCentrale);
 
-	positionPonctuelle = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(1000.0, 100.0, -200.0), 50.0);
+	positionPonctuelle = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(1000.0, 100.0, -200.0), 20.0);
 	LumierePonctuelle lumierePonctuelle;
 	lumierePonctuelle.position = positionPonctuelle.getPosition();
 	lumierePonctuelle.ambiante = ofVec3f(0.3, 0.3, 0.3);
@@ -196,7 +198,7 @@ void ofApp::mousePressed(int x, int y, int button){
 		if(button == OF_MOUSE_BUTTON_1)
 			primitives.selectionnerPrimitive(getPositionDevantCamera(), RAYON_DE_SELECTION);
 		if(button == OF_MOUSE_BUTTON_3)
-			primitives.ajouterPrimitive(PrimitiveGeometrique(CUBE, RUBY, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
+			primitives.ajouterPrimitive(PrimitiveGeometrique(primitiveSelectionnee, materiauSelectionne, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
 	}
 }
 
@@ -236,6 +238,8 @@ void ofApp::configurerUI() {
 	vertigoEnFonction.addListener(this, &ofApp::vertigoToggled);
 	lampeDePoche.addListener(this, &ofApp::lampeDePocheToggled);
 	vitesseCamera.addListener(this, &ofApp::vitesseCameraChanged);
+	typePrimitive.addListener(this, &ofApp::primitiveChanged);
+	typeMateriau.addListener(this, &ofApp::materiauChanged);
 	
 	gui.setup("Parametres");
 	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
@@ -244,18 +248,39 @@ void ofApp::configurerUI() {
 	gui.add(lampeDePoche.setup("q - Lamp de poche", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
 	gui.add(fps.setup("fps", ""));
-	gui.add(usageMessage.setup("Autres fonctions", "\nw - avancer\ns - reculer\na - bouger a gauche\nd - bouger a droite\ni - capture d'ecran\nf - mode plein ecran\nm - afficher menu", 200, 220));
+	gui.add(primitivesMessage.setup("", "Les prochains curseurs\npermettent de choisir\nla primitive qui sera\ncreer et le materiau qui\nla compose.", 200, 150));
+	gui.add(typePrimitive.setup("Primitives", 1, 1, NB_MAX_PRIMITIVE));
+	gui.add(typeMateriau.setup("Materiaux", 14, 1, NB_MAX_MATERIAU));
+	gui.add(usageMessage.setup("", "Autres fonctions : ", 200, 20));
+	gui.add(usageMessage2.setup("","w - avancer", 200, 20));
+	gui.add(usageMessage3.setup("","s - reculer", 200, 20));
+	gui.add(usageMessage4.setup("","a - bouger a gauche", 200, 20));
+	gui.add(usageMessage5.setup("","d - bouger a droite", 200, 20));
+	gui.add(usageMessage6.setup("","i - capture d'ecran", 200, 20));
+	gui.add(usageMessage7.setup("","f - mode plein ecran", 200, 20));
+	gui.add(usageMessage8.setup("","m - afficher menu", 200, 20));
+	gui.add(usageMessage9.setup("","Interaction primitives :", 200, 20));
+	gui.add(usageMessage10.setup("","Clique Droit - creer", 200, 20));
+	gui.add(usageMessage11.setup("","Clique Droit - selection", 200, 20));
+}
+
+void ofApp::primitiveChanged(int& primitive)
+{
+	primitiveSelectionnee = getPrimitivePourInt(primitive);
+}
+
+void ofApp::materiauChanged(int& materiau)
+{
+	materiauSelectionne = getMateriauPourInt(materiau);
 }
 
 void ofApp::pauseToggled(bool &paused) {
 	if (paused){
 		ofShowCursor();
-		son.actionnerPauseMusiqueEtAmbiance();
 	}
 	else {
 		ofHideCursor();
 		mouseHandler->resetCusor();
-		son.desactionnerPauseMusiqueEtAmbiance();
 	}
 }
 
