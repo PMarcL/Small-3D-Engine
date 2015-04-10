@@ -11,6 +11,12 @@
 #include "CubeMap.h"
 #include "Lumiere.h"
 #include "ConteneurPrimitives.h"
+#include "GraphScene.h"
+#include "NoeudMesh.h"
+#include "NoeudShader.h"
+#include "NoeudMateriau.h"
+#include "GenerateurMesh.h"
+#include "EditeurMesh.h"
 
 #include <stack>
 
@@ -73,6 +79,10 @@ class ofApp : public ofBaseApp{
 		ConteneurPrimitives primitives;
 		PRIMITIVES primitiveSelectionnee;
 		MATERIAUX materiauSelectionne;
+		GraphScene* graphScene;
+		NoeudShader* shaderPrimitives;
+		EditeurMesh editeurMesh;
+		NoeudMateriau* noeudMateriau;
 
 		int centreXFenetre;
 		int centreYFenetre;

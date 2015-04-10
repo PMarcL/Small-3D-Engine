@@ -16,7 +16,10 @@ void ofApp::setup(){
 	lampeDePoche = false;
 	primitiveSelectionnee = CUBE;
 	materiauSelectionne = RUBY;
-	
+	graphScene = new GraphScene();
+	editeurMesh.setEchelle(10);
+	noeudMateriau = new NoeudMateriau(MATERIAUX::RUBY);
+
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
 	//son.jouerMusiqueEtAmbiance();
@@ -25,19 +28,25 @@ void ofApp::setup(){
 	camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
 	shaderOrigine = Shader("Shaders/shader3D.vert", "Shaders/shader3D.frag");
 	shaderOrigine.charger();
+	graphScene->shaderIdOrigine = shaderOrigine.getProgramID();
 	origineDuMonde = Axes(100, &shaderOrigine);
+
+	shaderPrimitives = new NoeudShader(Shader("Shaders/shaderMateriaux.vert", "Shaders/shaderMateriaux.frag"));
+	graphScene->ajouterEnfant(shaderPrimitives);
+	shaderPrimitives->shader.charger();
+	shaderPrimitives->ajouterEnfant(noeudMateriau);
 
 	shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
 	shaderTex.charger();
 	this->configurerUI();
 
 	cubeMap = CubeMap(100, &shaderTex, 
-		"Textures/ciel/XN.jpg",
-		"Textures/ciel/XP.jpg",
-		"Textures/ciel/YN.jpg",
-		"Textures/ciel/YP.jpg",
-		"Textures/ciel/ZN.jpg",
-		"Textures/ciel/ZP.jpg");
+		"Textures/ciel/XN.png",
+		"Textures/ciel/XP.png",
+		"Textures/ciel/YN.png",
+		"Textures/ciel/YP.png",
+		"Textures/ciel/ZN.png",
+		"Textures/ciel/ZP.png");
 
 	shaderLampe = Shader("Shaders/shaderLumiere.vert", "Shaders/shaderLumiere.frag");
 	shaderLampe.charger();
@@ -70,7 +79,8 @@ void ofApp::update(){
 		mouseHandler->update(mouseX, mouseY);
 		camera.update();
 		lumiere.mettreAJourLampeDePoche(camera.getPosition(), camera.getOrientation());
-		primitives.deplacerPrimitiveSelectionnee(getPositionDevantCamera());
+		//primitives.deplacerPrimitiveSelectionnee(getPositionDevantCamera());
+		editeurMesh.deplacerSelection(getPositionDevantCamera());
 		
 		if(vertigoEnFonction && camera.isMovingForward())
 			zoomIn();
@@ -93,25 +103,27 @@ void ofApp::draw(){
 		cubeMap.afficher(projection, model, view);
 	popMatrix();
 
-	origineDuMonde.afficher(projection, model, view);
-	primitives.afficher(projection, model, view, lumiere);
-	paysage.afficher(projection, model, view, lumiere);
-	
-	pushMatrix();
-		glUseProgram(shaderLampe.getProgramID());
-			model.glTranslate(positionLampe.getPosition());
-			glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
-			glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-			positionLampe.afficher();
-			popMatrix();
-			pushMatrix();
-			model.glTranslate(positionPonctuelle.getPosition());
-			glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			positionPonctuelle.afficher();
-		glUseProgram(0);
-	popMatrix();
+	graphScene->afficher(&projection, &view, &lumiere);
 
+	origineDuMonde.afficher(projection, model, view);
+	//primitives.afficher(projection, model, view, lumiere);
+	paysage.afficher(projection, model, view, lumiere);
+
+	//pushMatrix();
+	//	glUseProgram(shaderLampe.getProgramID());
+	//		model.glTranslate(positionLampe.getPosition());
+	//		glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+	//		glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
+	//		glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
+	//		positionLampe.afficher();
+	//		popMatrix();
+	//		pushMatrix();
+	//		model.glTranslate(positionPonctuelle.getPosition());
+	//		glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+	//		positionPonctuelle.afficher();
+	//	glUseProgram(0);
+	//popMatrix();
+	
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	if (showMenu) {
@@ -164,8 +176,10 @@ void ofApp::keyReleased(int key){
 		ofToggleFullscreen();
 		mouseHandler->resetCusor();	
 	}
-	else if(key == 'x' || key == 'X')
-		primitives.supprimerSelection();
+	else if(key == 'x' || key == 'X'){
+		//primitives.supprimerSelection();
+		editeurMesh.supprimerSelection();
+	}
 	else if(key == 'q' || key == 'Q')
 		lampeDePoche = !lampeDePoche;
 }
@@ -184,10 +198,17 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
 	if(!paused)
 	{
-		if(button == OF_MOUSE_BUTTON_1)
-			primitives.selectionnerPrimitive(getPositionDevantCamera(), RAYON_DE_SELECTION);
-		if(button == OF_MOUSE_BUTTON_3)
-			primitives.ajouterPrimitive(PrimitiveGeometrique(primitiveSelectionnee, materiauSelectionne, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
+		if(button == OF_MOUSE_BUTTON_1){
+			//primitives.selectionnerPrimitive(getPositionDevantCamera(), RAYON_DE_SELECTION);
+			editeurMesh.selectionnerMesh((NoeudMesh*)graphScene->trouverMesh(getPositionDevantCamera(), RAYON_DE_SELECTION));
+		}
+		if(button == OF_MOUSE_BUTTON_3){
+			//primitives.ajouterPrimitive(PrimitiveGeometrique(primitiveSelectionnee, materiauSelectionne, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
+			//NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT));
+			NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererObj("Models/champignon.obj"));
+			noeudMesh->matriceTransformations.glTranslate(editeurMesh.positionAEchelle(getPositionDevantCamera()));
+			noeudMateriau->ajouterEnfant((Noeud*)noeudMesh);
+		}
 	}
 }
 
@@ -199,8 +220,10 @@ ofVec3f ofApp::getPositionDevantCamera() {
 void ofApp::mouseReleased(int x, int y, int button){
 	if(!paused)
 	{
-		if(button == OF_MOUSE_BUTTON_1)
-			primitives.relacherPrimitiveSelectionnee();
+		if(button == OF_MOUSE_BUTTON_1){
+			//primitives.relacherPrimitiveSelectionnee();
+			editeurMesh.relacherSelection();
+		}
 	}
 }
 

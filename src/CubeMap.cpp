@@ -3,13 +3,13 @@
 CubeMap::CubeMap(float taille, Shader* shader, string texXN, string texXP, string texYN, string texYP, string texZN, string texZP):
 	taille(taille), shader(shader)
 {
-
-	tex[0] = Texture(texXN);//Avant
-	tex[1] = Texture(texYP);//Droit
-	tex[2] = Texture(texZP);//Dessous
-	tex[3] = Texture(texXP);//Derriere
-	tex[4] = Texture(texYN);//Gauche
-	tex[5] = Texture(texZN);//Haut
+	//Selon un systeme de main droite
+	tex[0] = Texture(texZN);//Z negatif
+	tex[1] = Texture(texXP);//X positif
+	tex[2] = Texture(texYN);//Y negatif
+	tex[3] = Texture(texZP);//Z positif
+	tex[4] = Texture(texXN);//X negatif
+	tex[5] = Texture(texYP);//Y positif
 
 	for(int i = 0; i < 6; i++){
 		tex[i].charger();
