@@ -84,7 +84,6 @@ void ofApp::update(){
 		mouseHandler->update(mouseX, mouseY);
 		camera.update();
 		lumiere.mettreAJourLampeDePoche(camera.getPosition(), camera.getOrientation());
-		//primitives.deplacerPrimitiveSelectionnee(getPositionDevantCamera());
 		editeurMesh.deplacerSelection(getPositionDevantCamera());
 		
 		if(vertigoEnFonction && camera.isMovingForward())
@@ -114,7 +113,6 @@ void ofApp::draw(){
 		graphScene->afficher(&projection, &view, &lumiere);
 		
 		origineDuMonde.afficher(projection, model, view);
-		//primitives.afficher(projection, model, view, lumiere);
 		paysage.afficher(projection, model, view, lumiere);
 	
 		/*pushMatrix();
@@ -206,7 +204,6 @@ void ofApp::keyReleased(int key){
 		mouseHandler->resetCusor();	
 	}
 	else if(key == 'x' || key == 'X'){
-		//primitives.supprimerSelection();
 		editeurMesh.supprimerSelection();
 	}
 	else if(key == 'q' || key == 'Q')
@@ -228,11 +225,9 @@ void ofApp::mousePressed(int x, int y, int button){
 	if(!paused)
 	{
 		if(button == OF_MOUSE_BUTTON_1){
-			//primitives.selectionnerPrimitive(getPositionDevantCamera(), RAYON_DE_SELECTION);
 			editeurMesh.selectionnerMesh((NoeudMesh*)graphScene->trouverMesh(getPositionDevantCamera(), RAYON_DE_SELECTION));
 		}
 		if(button == OF_MOUSE_BUTTON_3){
-			//primitives.ajouterPrimitive(PrimitiveGeometrique(primitiveSelectionnee, materiauSelectionne, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
 			NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT));
 			//NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererObj("Models/champignon.obj"));
 			noeudMesh->matriceTransformations.glTranslate(editeurMesh.positionAEchelle(getPositionDevantCamera()));
@@ -250,7 +245,6 @@ void ofApp::mouseReleased(int x, int y, int button){
 	if(!paused)
 	{
 		if(button == OF_MOUSE_BUTTON_1){
-			//primitives.relacherPrimitiveSelectionnee();
 			editeurMesh.relacherSelection();
 		}
 	}

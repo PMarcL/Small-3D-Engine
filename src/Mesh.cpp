@@ -326,12 +326,15 @@ void Mesh::dessiner()
 	glBindVertexArray(vertexArrayObject);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	if (utiliserIndices) {
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	}
 	else {
 		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 	}
-
+	glDisable(GL_CULL_FACE);
 	glBindVertexArray(0);
 }

@@ -46,14 +46,14 @@ vector<float> genererSommetsCone() {
 		sommets.push_back(0);
 		sommets.push_back(0);
 
+		sommets.push_back(CONE_RAYON * cos(i * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin(i * angleEntreSommets));
+
 		sommets.push_back(CONE_RAYON * cos((i + 1) * angleEntreSommets)); 
 		sommets.push_back(0);
 		sommets.push_back(CONE_RAYON * sin((i + 1) * angleEntreSommets));
 
-		sommets.push_back(CONE_RAYON * cos(i * angleEntreSommets)); 
-		sommets.push_back(0);
-		sommets.push_back(CONE_RAYON * sin(i * angleEntreSommets));
-		
 		// Côté du cone
 		sommets.push_back(0);
 		sommets.push_back(CONE_HAUTEUR);

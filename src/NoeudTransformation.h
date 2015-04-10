@@ -10,7 +10,7 @@ public:
 
 	ofMatrix4x4 matriceTransformations;
 
-	virtual void afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau);	
+	virtual void afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau);
 protected:
 	void ajouterModele(vector<ofMatrix4x4*>* modeles);
 	void retirerModele(vector<ofMatrix4x4*>* modeles);

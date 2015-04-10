@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "Lumiere.h"
-#include "PrimitivesData.h"//Changer pour un materiau data
+#include "PrimitivesData.h"//Changer pour un materiau data<<<<<<<<<<
 
 class Noeud
 {

@@ -1,5 +1,4 @@
-#ifndef DEF_AXES
-#define DEF_AXES
+#pragma once
 
 // Includes
 #include "ofMain.h"
@@ -18,5 +17,3 @@ class Axes
 		float m_vertices[18];
 		float m_couleurs[18];
 };
-
-#endif
