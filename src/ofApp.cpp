@@ -46,8 +46,10 @@ void ofApp::setup(){
 
 	fbo.generateFBO(ofGetWindowWidth(), ofGetWindowHeight());
 
-	positionLampe = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(0.0, 500.0, 0.0), 20.0);
+	shaderLampe = Shader("Shaders/shaderLumiere.vert", "Shaders/shaderLumiere.frag");
+	shaderLampe.charger();
 
+	positionLampe = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(0.0, 500.0, 0.0), 20.0);
 	Projecteur lampeCentrale;
 	lampeCentrale.position = positionLampe.getPosition();
 	lampeCentrale.direction = ofVec3f(0.0, -1.0, 0.0);
