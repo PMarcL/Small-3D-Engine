@@ -2,6 +2,14 @@
 #include "ofMain.h"
 
 void ajusterTailleSommets(vector<float>& sommets, float taille);
+vector<float> genererSommetsCone();
+vector<float> genererTexCoordsCone();
+void genererSommetsSphere(vector<float>& sommets);
+void generationDesSommetsInitiauxSphere(vector<ofVec3f>& sommets);
+void triangularisationDessusSphere(vector<ofVec3f>& sommetsInit, vector<float>& sommets);
+void triangularisationDessousSphere(vector<ofVec3f>& sommetsInit, vector<float>& sommets);
+void triangularisationPartieCentraleSphere(vector<ofVec3f>& sommetsInit, vector<float>& sommets);
+vector<float> genererTexCoordsSphere();
 
 vector<float> getSommetsPourPrimitive(PRIMITIVES primitive, int taille) {
 	vector<float> sommets;
@@ -15,12 +23,153 @@ vector<float> getSommetsPourPrimitive(PRIMITIVES primitive, int taille) {
 	case(TETRAEDRE):
 		sommets = vector<float>(TETRAEDRE_SOMMETS, TETRAEDRE_SOMMETS + sizeof(TETRAEDRE_SOMMETS) / sizeof(TETRAEDRE_SOMMETS[0]));
 		break;
+	case(CONE):
+		sommets = genererSommetsCone();
+		break;
+	case(SPHERE):
+		genererSommetsSphere(sommets);
+		break;
 	default:
 		break;
 	}
 
 	ajusterTailleSommets(sommets, taille*0.5);
 	return sommets;
+}
+
+vector<float> genererSommetsCone() {
+	vector<float> sommets;
+	float angleEntreSommets = (2*PI) / CONE_PRECISION;
+	for(int i = 0; i < CONE_PRECISION; i++) {
+		// base du cone
+		sommets.push_back(0);
+		sommets.push_back(0);
+		sommets.push_back(0);
+
+		sommets.push_back(CONE_RAYON * cos((i + 1) * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin((i + 1) * angleEntreSommets));
+
+		sommets.push_back(CONE_RAYON * cos(i * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin(i * angleEntreSommets));
+		
+		// Côté du cone
+		sommets.push_back(0);
+		sommets.push_back(CONE_HAUTEUR);
+		sommets.push_back(0);
+
+		sommets.push_back(CONE_RAYON * cos((i + 1) * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin((i + 1) * angleEntreSommets));
+
+		sommets.push_back(CONE_RAYON * cos(i * angleEntreSommets)); 
+		sommets.push_back(0);
+		sommets.push_back(CONE_RAYON * sin(i * angleEntreSommets));
+	}
+
+	return sommets;
+}
+
+void genererSommetsSphere(vector<float>& sommets) {
+	vector<ofVec3f> sommetsInit;
+	generationDesSommetsInitiauxSphere(sommetsInit);
+
+	triangularisationDessusSphere(sommetsInit, sommets);
+	triangularisationPartieCentraleSphere(sommetsInit, sommets);
+	triangularisationDessousSphere(sommetsInit, sommets);
+}
+
+void generationDesSommetsInitiauxSphere(vector<ofVec3f>& sommets) {
+	float deuxPI = 2 * PI;
+	sommets.push_back(ofVec3f(0, SPHERE_RAYON, 0));
+	for( int lat = 0; lat < SPHERE_PRECISION_LAT; lat++ )
+	{
+		float a1 = PI * (float)(lat+1) / (SPHERE_PRECISION_LAT+1);
+		float sin1 = sin(a1);
+		float cos1 = cos(a1);
+ 
+		for( int lon = 0; lon <= SPHERE_PRECISION_LON; lon++ )
+		{
+			float a2 = deuxPI * (float)(lon == SPHERE_PRECISION_LON ? 0 : lon) / SPHERE_PRECISION_LON;
+			float sin2 = sin(a2);
+			float cos2 = cos(a2);
+ 
+			sommets.push_back(ofVec3f(sin1 * cos2, cos1, sin1 * sin2) * SPHERE_RAYON);
+		}
+	}
+	sommets.push_back(ofVec3f(0, -SPHERE_RAYON, 0));
+}
+
+void triangularisationDessusSphere(vector<ofVec3f>& sommetsInit, vector<float>& sommets) {
+	for( int lon = 0; lon < SPHERE_PRECISION_LON; lon++ )
+	{
+		sommets.push_back(sommetsInit[lon+2].x);
+		sommets.push_back(sommetsInit[lon+2].y);
+		sommets.push_back(sommetsInit[lon+2].z);
+
+		sommets.push_back(sommetsInit[lon+1].x);
+		sommets.push_back(sommetsInit[lon+1].y);
+		sommets.push_back(sommetsInit[lon+1].z);
+
+		sommets.push_back(sommetsInit[0].x);
+		sommets.push_back(sommetsInit[0].y);
+		sommets.push_back(sommetsInit[0].z);
+	}
+}
+
+void triangularisationPartieCentraleSphere(vector<ofVec3f>& sommetsInit, vector<float>& sommets) {
+	for( int lat = 0; lat < SPHERE_PRECISION_LAT - 1; lat++ )
+	{
+		for( int lon = 0; lon < SPHERE_PRECISION_LON; lon++ )
+		{
+			int current = lon + lat * (SPHERE_PRECISION_LON + 1) + 1;
+			int next = current + SPHERE_PRECISION_LON + 1;
+ 
+			sommets.push_back(sommetsInit[current].x);
+			sommets.push_back(sommetsInit[current].y);
+			sommets.push_back(sommetsInit[current].z);
+
+			sommets.push_back(sommetsInit[current + 1].x);
+			sommets.push_back(sommetsInit[current + 1].y);
+			sommets.push_back(sommetsInit[current + 1].z);
+			
+			sommets.push_back(sommetsInit[next + 1].x);
+			sommets.push_back(sommetsInit[next + 1].y);
+			sommets.push_back(sommetsInit[next + 1].z);
+			
+ 
+			sommets.push_back(sommetsInit[current].x);
+			sommets.push_back(sommetsInit[current].y);
+			sommets.push_back(sommetsInit[current].z);
+
+			sommets.push_back(sommetsInit[next + 1].x);
+			sommets.push_back(sommetsInit[next + 1].y);
+			sommets.push_back(sommetsInit[next + 1].z);
+			
+			sommets.push_back(sommetsInit[next].x);
+			sommets.push_back(sommetsInit[next].y);
+			sommets.push_back(sommetsInit[next].z);
+		}
+	}
+}
+
+void triangularisationDessousSphere(vector<ofVec3f>& sommetsInit, vector<float>& sommets) {
+	int nbSommets = sommetsInit.size();
+	for( int lon = 0; lon < SPHERE_PRECISION_LON; lon++ )
+	{
+		sommets.push_back(sommetsInit[nbSommets - 1].x);
+		sommets.push_back(sommetsInit[nbSommets - 1].y);
+		sommets.push_back(sommetsInit[nbSommets - 1].z);
+		
+		sommets.push_back(sommetsInit[nbSommets - (lon+2) - 1].x);
+		sommets.push_back(sommetsInit[nbSommets - (lon+2) - 1].y);
+		sommets.push_back(sommetsInit[nbSommets - (lon+2) - 1].z);
+		
+		sommets.push_back(sommetsInit[nbSommets - (lon+1) - 1].x);
+		sommets.push_back(sommetsInit[nbSommets - (lon+1) - 1].y);
+		sommets.push_back(sommetsInit[nbSommets - (lon+1) - 1].z);
+	}
 }
 
 void ajusterTailleSommets(vector<float>& sommets, float taille) {
@@ -57,7 +206,51 @@ vector<float> getTexCoordPourPrimitive(PRIMITIVES primitive) {
 	case(TETRAEDRE):
 		return vector<float>(TETRAEDRE_TEXCOORD, TETRAEDRE_TEXCOORD + sizeof(TETRAEDRE_TEXCOORD) / sizeof(TETRAEDRE_TEXCOORD[0]));
 		break;
+	case(CONE):
+		return genererTexCoordsCone();
+	case(SPHERE):
+		return genererTexCoordsSphere();
+		break;
 	}
+}
+
+vector<float> genererTexCoordsCone() {
+	vector<float> texCoords;
+	float angleEntreSommets = (2*PI) / CONE_PRECISION;
+	// représente la distance entre chaque sommet autour de la base
+	float distanceEntreSommets = (2*PI*CONE_RAYON) / CONE_PRECISION;
+	for(int i = 0; i < CONE_PRECISION; i++) {
+		// base du cone
+		texCoords.push_back(1.0 / 2.0);
+		texCoords.push_back(1.0 / 2.0);
+
+		texCoords.push_back(0.5 * cos((i + 1) * angleEntreSommets));
+		texCoords.push_back(0.5 * sin((i + 1) * angleEntreSommets));
+
+		texCoords.push_back(0.5 * cos(i * angleEntreSommets));
+		texCoords.push_back(0.5 * sin(i * angleEntreSommets));
+
+		// côté du cône
+		texCoords.push_back(1.0 / 2.0);
+		texCoords.push_back(1.0);
+
+		texCoords.push_back((i + 1) * distanceEntreSommets);
+		texCoords.push_back(0);
+
+		texCoords.push_back(i * distanceEntreSommets);
+		texCoords.push_back(0);
+	}
+
+	return texCoords;
+}
+
+vector<float> genererTexCoordsSphere() {
+	vector<float> texCoords;
+	for(int i = 0; i < (6 * SPHERE_PRECISION_LON * SPHERE_PRECISION_LAT); i++) {
+		texCoords.push_back(0);
+		texCoords.push_back(0);
+	}
+	return texCoords;
 }
 
 std::vector<float> getMateriauData(MATERIAUX materiau) {
@@ -145,6 +338,11 @@ PRIMITIVES getPrimitivePourInt(int noPrimitive)
 		break;
 	case(3):
 		return OCTAEDRE;
+		break;
+	case(4):
+		return CONE;
+	case(5):
+		return SPHERE;
 		break;
 	}
 }

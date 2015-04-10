@@ -14,6 +14,9 @@ void ofApp::setup(){
 	showMenu = true;
 	paused = false;
 	lampeDePoche = false;
+	effetBrouillard = false;
+	effetNoirEtBlanc = false;
+	effetLignes = false;
 	primitiveSelectionnee = CUBE;
 	materiauSelectionne = RUBY;
 	graphScene = new GraphScene();
@@ -22,7 +25,7 @@ void ofApp::setup(){
 
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
-	//son.jouerMusiqueEtAmbiance();
+	son.jouerMusiqueEtAmbiance();
 	
 	mouseHandler = new MousePositionHandler();
 	camera = Camera(ofVec3f(6, 6, 6), ofVec3f(0, 0, 0), ofVec3f(0, 1, 0), 0.4, 1.50, mouseHandler);
@@ -48,8 +51,8 @@ void ofApp::setup(){
 		"Textures/ciel/ZN.png",
 		"Textures/ciel/ZP.png");
 
-	shaderLampe = Shader("Shaders/shaderLumiere.vert", "Shaders/shaderLumiere.frag");
-	shaderLampe.charger();
+	fbo.generateFBO(ofGetWindowWidth(), ofGetWindowHeight());
+
 	positionLampe = PrimitiveGeometrique(OCTAEDRE, ARGENT, ofVec3f(0.0, 500.0, 0.0), 20.0);
 
 	Projecteur lampeCentrale;
@@ -93,36 +96,54 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
-	camera.lookAt(view);
-	lumiere.setPositionVue(camera.getPosition());
+	fbo.bind();
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_LIGHTING);
+		camera.lookAt(view);
+		lumiere.setPositionVue(camera.getPosition());
+	
+		pushMatrix();
+			model.glTranslate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+			cubeMap.afficher(projection, model, view);
+		popMatrix();
+	
+		graphScene->afficher(&projection, &view, &lumiere);
+		
+		origineDuMonde.afficher(projection, model, view);
+		//primitives.afficher(projection, model, view, lumiere);
+		paysage.afficher(projection, model, view, lumiere);
+	
+		/*pushMatrix();
+			glUseProgram(shaderLampe.getProgramID());
+				model.glTranslate(positionLampe.getPosition());
+				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
+				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
+				positionLampe.afficher();
+				popMatrix();
+				pushMatrix();
+				model.glTranslate(positionPonctuelle.getPosition());
+				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+				positionPonctuelle.afficher();
+			glUseProgram(0);
+		popMatrix();*/
+	
+	}
+	fbo.unbind();
 
-	pushMatrix();
-		model.glTranslate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-		cubeMap.afficher(projection, model, view);
-	popMatrix();
-
-	graphScene->afficher(&projection, &view, &lumiere);
-
-	origineDuMonde.afficher(projection, model, view);
-	//primitives.afficher(projection, model, view, lumiere);
-	paysage.afficher(projection, model, view, lumiere);
-
-	//pushMatrix();
-	//	glUseProgram(shaderLampe.getProgramID());
-	//		model.glTranslate(positionLampe.getPosition());
-	//		glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-	//		glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "view"), 1, GL_FALSE, view.getPtr());
-	//		glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "projection"), 1, GL_FALSE, projection.getPtr());
-	//		positionLampe.afficher();
-	//		popMatrix();
-	//		pushMatrix();
-	//		model.glTranslate(positionPonctuelle.getPosition());
-	//		glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-	//		positionPonctuelle.afficher();
-	//	glUseProgram(0);
-	//popMatrix();
+	if(effetBrouillard) {
+		effetPleinEcran.activerEffetBrouillard();
+	} else if(effetNoirEtBlanc) {
+		effetPleinEcran.activerEffetNoirEtBlanc();
+	} else if(effetLignes) {
+		effetPleinEcran.activerEffetLignes();
+	} else {
+		effetPleinEcran.desactiverEffet();
+	}
+	
+	effetPleinEcran.afficher(fbo.getColorTexture());
 	
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
@@ -147,6 +168,12 @@ void ofApp::keyPressed(int key){
 		zoomOut();
 	else if(key == 'v' || key == 'V')
 		vertigoEnFonction = !vertigoEnFonction;
+	else if(key == '1')
+		effetBrouillard = !effetBrouillard;
+	else if(key == '2')
+		effetNoirEtBlanc = !effetNoirEtBlanc;
+	else if(key == '3')
+		effetLignes = !effetLignes;
 	else if(key == 'i' || key == 'I')
 	{
 		ofImage fenetre;
@@ -204,8 +231,8 @@ void ofApp::mousePressed(int x, int y, int button){
 		}
 		if(button == OF_MOUSE_BUTTON_3){
 			//primitives.ajouterPrimitive(PrimitiveGeometrique(primitiveSelectionnee, materiauSelectionne, getPositionDevantCamera(), DIMENSION_PAR_DEFAUT));
-			//NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT));
-			NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererObj("Models/champignon.obj"));
+			NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT));
+			//NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererObj("Models/champignon.obj"));
 			noeudMesh->matriceTransformations.glTranslate(editeurMesh.positionAEchelle(getPositionDevantCamera()));
 			noeudMateriau->ajouterEnfant((Noeud*)noeudMesh);
 		}
@@ -232,6 +259,7 @@ void ofApp::windowResized(int w, int h){
 	centreXFenetre = w * 0.5;
 	centreYFenetre = h * 0.5;
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+	fbo.generateFBO(w,h);
 }
 
 //--------------------------------------------------------------
@@ -247,6 +275,9 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::configurerUI() {
 	paused.addListener(this, &ofApp::pauseToggled);
 	vertigoEnFonction.addListener(this, &ofApp::vertigoToggled);
+	effetBrouillard.addListener(this, &ofApp::effetBrouillardToggled);
+	effetNoirEtBlanc.addListener(this, &ofApp::effetNoirEtBlancToggled);
+	effetLignes.addListener(this, &ofApp::effetLignesToggled);
 	lampeDePoche.addListener(this, &ofApp::lampeDePocheToggled);
 	vitesseCamera.addListener(this, &ofApp::vitesseCameraChanged);
 	typePrimitive.addListener(this, &ofApp::primitiveChanged);
@@ -256,6 +287,9 @@ void ofApp::configurerUI() {
 	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
 	gui.add(paused.setup("p - Pause", false));
 	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
+	gui.add(effetBrouillard.setup("1 - Effet brouillard", false));
+	gui.add(effetNoirEtBlanc.setup("2 - Effet noir et blanc", false));
+	gui.add(effetLignes.setup("3 - Effet lignes", false));
 	gui.add(lampeDePoche.setup("q - Lamp de poche", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
 	gui.add(fps.setup("fps", ""));
@@ -303,6 +337,27 @@ void ofApp::vertigoToggled(bool &enabled) {
 		vitesseCamera = VITESSE_CAMERA_DEFAUT;
 		angleChampDeVision = ANGLE_VISION_NORMAL;
 		projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth() / ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
+	}
+}
+
+void ofApp::effetBrouillardToggled(bool &enabled) {
+	if (enabled){
+		effetLignes = false;
+		effetNoirEtBlanc = false;
+	}
+}
+
+void ofApp::effetNoirEtBlancToggled(bool &enabled) {
+	if (enabled){
+		effetBrouillard = false;
+		effetLignes = false;
+	}
+}
+
+void ofApp::effetLignesToggled(bool &enabled) {
+	if (enabled){
+		effetBrouillard = false;
+		effetNoirEtBlanc = false;
 	}
 }
 

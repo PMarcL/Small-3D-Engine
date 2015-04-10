@@ -17,6 +17,8 @@
 #include "NoeudMateriau.h"
 #include "GenerateurMesh.h"
 #include "EditeurMesh.h"
+#include "EffetPleinEcran.h"
+#include "Framebuffer.h"
 
 #include <stack>
 
@@ -27,7 +29,7 @@ const static float VERTIGO_DEGREE_PAR_FRAME = 1.0;
 const static float ANGLE_VISION_NORMAL = 70.0;
 const static float RAYON_DE_SELECTION = 50.0;
 const static float DIMENSION_PAR_DEFAUT = 20.0f;
-const static int NB_MAX_PRIMITIVE = 3;
+const static int NB_MAX_PRIMITIVE = 5;
 const static int NB_MAX_MATERIAU = 21;
 
 class ofApp : public ofBaseApp{
@@ -58,6 +60,9 @@ class ofApp : public ofBaseApp{
 		void popMatrix();
 		void pauseToggled(bool & paused);
 		void vertigoToggled(bool & enabled);
+		void effetBrouillardToggled(bool & enabled);
+		void effetNoirEtBlancToggled(bool & enabled);
+		void effetLignesToggled(bool & enabled);
 		void lampeDePocheToggled(bool & enabled);
 		void vitesseCameraChanged(float& vitesse);
 		void primitiveChanged(int& primitive);
@@ -77,12 +82,15 @@ class ofApp : public ofBaseApp{
 		CubeMap cubeMap;
 		Lumiere lumiere;
 		ConteneurPrimitives primitives;
+		EffetPleinEcran effetPleinEcran;
+
 		PRIMITIVES primitiveSelectionnee;
 		MATERIAUX materiauSelectionne;
 		GraphScene* graphScene;
 		NoeudShader* shaderPrimitives;
 		EditeurMesh editeurMesh;
 		NoeudMateriau* noeudMateriau;
+		Framebuffer fbo;
 
 		int centreXFenetre;
 		int centreYFenetre;
@@ -97,6 +105,9 @@ class ofApp : public ofBaseApp{
 		ofxToggle vertigoEnFonction;
 		ofxToggle paused;
 		ofxToggle lampeDePoche;
+		ofxToggle effetBrouillard;
+		ofxToggle effetNoirEtBlanc;
+		ofxToggle effetLignes;
 		ofxLabel guiMessage;
 		ofxLabel fps;
 		ofxLabel usageMessage;
