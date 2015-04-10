@@ -82,11 +82,37 @@
     <ClCompile Include="src\ConteneurPrimitives.cpp">
       <Filter>src\Affichables</Filter>
     </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="src\Noeud.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphScene.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NoeudMesh.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NoeudShader.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GenerateurMesh.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NoeudTransformation.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NoeudMateriau.cpp">
+      <Filter>src\Utilitaires</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EditeurMesh.cpp">
+      <Filter>src\Utilitaires</Filter>
+=======
     <ClCompile Include="src\Framebuffer.cpp">
       <Filter>src\Utilitaires</Filter>
     </ClCompile>
     <ClCompile Include="src\EffetPleinEcran.cpp">
       <Filter>src</Filter>
+>>>>>>> 4e35f53ce2fae53187a0323c1ffb893905c5d434
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +217,31 @@
     <ClInclude Include="src\ConteneurPrimitives.h">
       <Filter>src\Affichables</Filter>
     </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="src\Noeud.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphScene.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoeudMesh.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoeudShader.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GenerateurMesh.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoeudTransformation.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoeudMateriau.h">
+      <Filter>src\Utilitaires</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EditeurMesh.h">
+      <Filter>src\Utilitaires</Filter>
+=======
     <ClInclude Include="src\ShaderTmp.h">
       <Filter>src\Utilitaires</Filter>
     </ClInclude>
@@ -199,6 +250,7 @@
     </ClInclude>
     <ClInclude Include="src\EffetPleinEcran.h">
       <Filter>src</Filter>
+>>>>>>> 4e35f53ce2fae53187a0323c1ffb893905c5d434
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
