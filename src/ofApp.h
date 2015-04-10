@@ -10,7 +10,6 @@
 #include "MusiqueSFX.h"
 #include "CubeMap.h"
 #include "Lumiere.h"
-#include "ConteneurPrimitives.h"
 #include "GraphScene.h"
 #include "NoeudMesh.h"
 #include "NoeudShader.h"
@@ -19,6 +18,7 @@
 #include "EditeurMesh.h"
 #include "EffetPleinEcran.h"
 #include "Framebuffer.h"
+#include "PrimitiveGeometrique.h"
 
 #include <stack>
 
@@ -81,7 +81,6 @@ class ofApp : public ofBaseApp{
 		Paysage paysage;
 		CubeMap cubeMap;
 		Lumiere lumiere;
-		ConteneurPrimitives primitives;
 		EffetPleinEcran effetPleinEcran;
 
 		PRIMITIVES primitiveSelectionnee;

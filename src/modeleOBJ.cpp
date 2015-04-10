@@ -2,8 +2,6 @@
 #include <fstream>
 #include <iostream>
 
-bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<ofVec2f>& texCoord, std::vector<ofVec3f>& normales);
-
 ModeleOBJ::ModeleOBJ(void)
 {
 }
@@ -35,7 +33,7 @@ void ModeleOBJ::afficher()
 	glDisable(GL_CULL_FACE);
 }
 
-bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<ofVec2f>& texCoord, std::vector<ofVec3f>& normales)
+bool ModeleOBJ::chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<ofVec2f>& texCoord, std::vector<ofVec3f>& normales)
 {
 	vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	vector<ofVec3f> tempVertices;
@@ -119,4 +117,5 @@ bool chargerOBJ(const char * cheminFichier, vector<ofVec3f>& sommets, vector<ofV
 		normales.push_back(tempNormals[normalIndices[i] - 1]);
 		texCoord.push_back(tempTexCoords[uvIndices[i] - 1]);
 	}
+	return true;
 }

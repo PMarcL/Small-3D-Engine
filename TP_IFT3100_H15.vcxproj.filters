@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\ofApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Noeud.cpp">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NoeudMateriau.cpp">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NoeudMesh.cpp">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NoeudShader.cpp">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NoeudTransformation.cpp">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphScene.cpp">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CubeMap.cpp">
+      <Filter>src\Affichable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Axes.cpp">
+      <Filter>src\Affichable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>src\Affichable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modeleOBJ.cpp">
+      <Filter>src\Affichable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paysage.cpp">
+      <Filter>src\Affichable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Plane.cpp">
+      <Filter>src\Affichable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EffetPleinEcran.cpp">
+      <Filter>src\Post processing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framebuffer.cpp">
+      <Filter>src\Post processing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrimitiveGeometrique.cpp">
+      <Filter>src\Affichable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera.cpp">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EditeurMesh.cpp">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GenerateurMesh.cpp">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lumiere.cpp">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrimitivesData.cpp">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MousePositionHandler.cpp">
+      <Filter>src\Utilitaire\Autre</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MusiqueSFX.cpp">
+      <Filter>src\Utilitaire\Autre</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons">
+      <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGui">
+      <UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGui\src">
+      <UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utilitaire">
+      <UniqueIdentifier>{f0194c5c-4e73-49bb-a40d-0a6194eb772e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utilitaire\Graph de scene">
+      <UniqueIdentifier>{7a384a72-6e3e-4534-99f3-bc92c954f0dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Affichable">
+      <UniqueIdentifier>{c9ad6b43-cbb1-4fa3-a340-570748a14695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Post processing">
+      <UniqueIdentifier>{0c7dbd3f-79aa-464d-a43d-e3d317fdbc6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utilitaire\Autre">
+      <UniqueIdentifier>{f37b061b-fc01-483b-9db8-61748b674c1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utilitaire\Visuel">
+      <UniqueIdentifier>{be796bb5-76e5-4b38-89de-301afd649d19}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Noeud.h">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoeudMateriau.h">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoeudMesh.h">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoeudShader.h">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoeudTransformation.h">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphScene.h">
+      <Filter>src\Utilitaire\Graph de scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Axes.h">
+      <Filter>src\Affichable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CubeMap.h">
+      <Filter>src\Affichable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>src\Affichable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\modeleOBJ.h">
+      <Filter>src\Affichable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paysage.h">
+      <Filter>src\Affichable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Plane.h">
+      <Filter>src\Affichable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framebuffer.h">
+      <Filter>src\Post processing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EffetPleinEcran.h">
+      <Filter>src\Post processing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera.h">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EditeurMesh.h">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GenerateurMesh.h">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lumiere.h">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PrimitivesData.h">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader.h">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>src\Utilitaire\Visuel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MousePositionHandler.h">
+      <Filter>src\Utilitaire\Autre</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MusiqueSFX.h">
+      <Filter>src\Utilitaire\Autre</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PrimitiveGeometrique.h">
+      <Filter>src\Affichable</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+</Project>
