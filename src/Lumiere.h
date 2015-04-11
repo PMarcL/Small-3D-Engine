@@ -3,9 +3,9 @@
 #include "ofMain.h"
 
 const static ofVec3f COUL_DIFFUSE_DEFAUT = ofVec3f(0.5, 0.5, 0.5);
-const static ofVec3f COUL_AMBIANTE_DEFAUT = ofVec3f(0.01, 0.01, 0.1);
-const static ofVec3f COUL_REFLECTION_SPEC = ofVec3f(1.0, 1.0, 1.0);
-const static ofVec3f DIRECTION_LUMIERE_DEFAUT = ofVec3f(0.5, 0.3, 0.5);
+const static ofVec3f COUL_AMBIANTE_DEFAUT = ofVec3f(0.1, 0.07, 0.01);
+const static ofVec3f COUL_REFLECTION_SPEC = ofVec3f(1.0, 0.9, 0.7);
+const static ofVec3f DIRECTION_LUMIERE_DEFAUT = ofVec3f(0.5, 0.1, 0.35);
 
 struct LumiereDirectionnelle {
 	ofVec3f direction;
@@ -46,6 +46,11 @@ public:
 	void ajouterProjecteur(Projecteur proj);
 	void ajouterLumierePonctuelle(LumierePonctuelle lumiere);
 	void ajouterLampeDePoche(ofVec3f position, ofVec3f direction);
+	void changerValeurCouleurRougeLampeDePoche(float r);
+	void changerValeurCouleurVertLampeDePoche(float g);
+	void changerValeurCouleurBleuLampeDePoche(float b);
+	void changerValeurConeInterneLampeDePoche(float angle);
+	void changerValeurConeExterneLampeDePoche(float angle);
 	void enleverLampeDePoche();
 	void mettreAJourLampeDePoche(ofVec3f position, ofVec3f direction);
 

@@ -66,7 +66,13 @@ class ofApp : public ofBaseApp{
 		void lampeDePocheToggled(bool & enabled);
 		void vitesseCameraChanged(float& vitesse);
 		void primitiveChanged(int& primitive);
-		void ofApp::materiauChanged(int& materiau);
+		void materiauChanged(int& materiau);
+		void rougeLampeDePocheChanged(float& r);
+		void vertLampeDePocheChanged(float& g);
+		void bleuLampeDePocheChanged(float& b);
+		void coneInterneLampeDePocheChanged(float& cone);
+		void coneExterneLampeDePocheChanged(float& cone);
+		void precisionEchelleValeurChanged(int& precision);
 		ofVec3f getPositionDevantCamera();
 
 		stack<ofMatrix4x4> matrices;
@@ -99,6 +105,12 @@ class ofApp : public ofBaseApp{
 
 		bool showMenu;
 		ofxFloatSlider vitesseCamera;
+		ofxFloatSlider rougeLampeDePoche;
+		ofxFloatSlider vertLampeDePoche;
+		ofxFloatSlider bleuLampeDePoche;
+		ofxFloatSlider coneInterneLampeDePoche;
+		ofxFloatSlider coneExterneLampeDePoche;
+		ofxIntSlider precisionEchelle;
 		ofxIntSlider typePrimitive;
 		ofxIntSlider typeMateriau;
 		ofxToggle vertigoEnFonction;
@@ -109,6 +121,8 @@ class ofApp : public ofBaseApp{
 		ofxToggle effetLignes;
 		ofxLabel guiMessage;
 		ofxLabel fps;
+		ofxLabel couleurLampeDePoche;
+		ofxLabel coneLampeDePoche;
 		ofxLabel usageMessage;
 		ofxLabel usageMessage2;
 		ofxLabel usageMessage3;
@@ -121,7 +135,6 @@ class ofApp : public ofBaseApp{
 		ofxLabel usageMessage10;
 		ofxLabel usageMessage11;
 		ofxPanel gui;
-		ofxLabel primitivesMessage;
 
 		Shader shaderLampe;
 		PrimitiveGeometrique positionLampe;

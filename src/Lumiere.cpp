@@ -121,7 +121,49 @@ void Lumiere::ajouterLampeDePoche(ofVec3f position, ofVec3f direction)
 		lampeDePoche->coneExterne = cos(ofDegToRad(20.0));
 	}
 }
-	
+
+void Lumiere::changerValeurCouleurRougeLampeDePoche(float r)
+{
+	if(lampeDePoche != NULL)
+	{
+		lampeDePoche->diffuse.x = r;
+		lampeDePoche->speculaire.x = r + 0.2;
+	}
+}
+
+void Lumiere::changerValeurCouleurVertLampeDePoche(float g)
+{
+	if(lampeDePoche != NULL)
+	{
+		lampeDePoche->diffuse.y = g;
+		lampeDePoche->speculaire.y = g + 0.2;
+	}
+}
+
+void Lumiere::changerValeurCouleurBleuLampeDePoche(float b)
+{
+	if(lampeDePoche != NULL)
+	{
+		lampeDePoche->diffuse.z = b;
+		lampeDePoche->speculaire.z = b + 0.2;
+	}
+}
+
+void Lumiere::changerValeurConeInterneLampeDePoche(float angle)
+{
+	if(lampeDePoche != NULL)
+	{
+		lampeDePoche->coneInterne = cos(ofDegToRad(angle));
+	}
+}
+
+void Lumiere::changerValeurConeExterneLampeDePoche(float angle)
+{
+	if(lampeDePoche != NULL)
+	{
+		lampeDePoche->coneExterne = cos(ofDegToRad(angle));
+	}
+}
 
 void Lumiere::enleverLampeDePoche()
 {

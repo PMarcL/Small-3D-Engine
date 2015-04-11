@@ -20,7 +20,6 @@ void ofApp::setup(){
 	primitiveSelectionnee = CUBE;
 	materiauSelectionne = RUBY;
 	graphScene = new GraphScene();
-	editeurMesh.setEchelle(10);
 	noeudMateriau = new NoeudMateriau(MATERIAUX::RUBY);
 
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
@@ -115,7 +114,7 @@ void ofApp::draw(){
 		origineDuMonde.afficher(projection, model, view);
 		paysage.afficher(projection, model, view, lumiere);
 	
-		/*pushMatrix();
+		pushMatrix();
 			glUseProgram(shaderLampe.getProgramID());
 				model.glTranslate(positionLampe.getPosition());
 				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
@@ -128,7 +127,7 @@ void ofApp::draw(){
 				glUniformMatrix4fv(glGetUniformLocation(shaderLampe.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
 				positionPonctuelle.afficher();
 			glUseProgram(0);
-		popMatrix();*/
+		popMatrix();
 	
 	}
 	fbo.unbind();
@@ -206,8 +205,14 @@ void ofApp::keyReleased(int key){
 	else if(key == 'x' || key == 'X'){
 		editeurMesh.supprimerSelection();
 	}
-	else if(key == 'q' || key == 'Q')
+	else if(key == 'q' || key == 'Q') {
 		lampeDePoche = !lampeDePoche;
+		rougeLampeDePoche = 0.8;
+		bleuLampeDePoche = 0.8;
+		vertLampeDePoche = 0.8;
+		coneInterneLampeDePoche = 10.5;
+		coneExterneLampeDePoche = 20.0;
+	}
 }
 
 //--------------------------------------------------------------
@@ -278,20 +283,33 @@ void ofApp::configurerUI() {
 	vitesseCamera.addListener(this, &ofApp::vitesseCameraChanged);
 	typePrimitive.addListener(this, &ofApp::primitiveChanged);
 	typeMateriau.addListener(this, &ofApp::materiauChanged);
+	rougeLampeDePoche.addListener(this, &ofApp::rougeLampeDePocheChanged);
+	vertLampeDePoche.addListener(this, &ofApp::vertLampeDePocheChanged);
+	bleuLampeDePoche.addListener(this, &ofApp::bleuLampeDePocheChanged);
+	coneInterneLampeDePoche.addListener(this, &ofApp::coneInterneLampeDePocheChanged);
+	coneExterneLampeDePoche.addListener(this, &ofApp::coneExterneLampeDePocheChanged);
+	precisionEchelle.addListener(this, &ofApp::precisionEchelleValeurChanged);
 	
 	gui.setup("Parametres");
 	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
+	gui.add(fps.setup("fps", ""));
 	gui.add(paused.setup("p - Pause", false));
 	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
+	gui.add(lampeDePoche.setup("q - Lamp de poche", false));
 	gui.add(effetBrouillard.setup("1 - Effet brouillard", false));
 	gui.add(effetNoirEtBlanc.setup("2 - Effet noir et blanc", false));
 	gui.add(effetLignes.setup("3 - Effet lignes", false));
-	gui.add(lampeDePoche.setup("q - Lamp de poche", false));
 	gui.add(vitesseCamera.setup("vitesse de deplacement", VITESSE_CAMERA_DEFAUT, 0.5, 10));
-	gui.add(fps.setup("fps", ""));
-	gui.add(primitivesMessage.setup("", "Les prochains curseurs\npermettent de choisir\nla primitive qui sera\ncreer et le materiau qui\nla compose.", 200, 150));
 	gui.add(typePrimitive.setup("Primitives", 1, 1, NB_MAX_PRIMITIVE));
 	gui.add(typeMateriau.setup("Materiaux", 14, 1, NB_MAX_MATERIAU));
+	gui.add(precisionEchelle.setup("Grille - precision", 0, 0, 20));
+	gui.add(couleurLampeDePoche.setup("", "Couleurs- Lampe de poche", 200, 20));
+	gui.add(rougeLampeDePoche.setup("Rouge", 0.8, 0.0, 1.0));
+	gui.add(vertLampeDePoche.setup("Vert", 0.8, 0.0, 1.0));
+	gui.add(bleuLampeDePoche.setup("Bleu", 0.8, 0.0, 1.0));
+	gui.add(coneLampeDePoche.setup("", "Cone- Lampe de poche", 200, 20));
+	gui.add(coneInterneLampeDePoche.setup("Interne", 10.5, 1.0, 20.0));
+	gui.add(coneExterneLampeDePoche.setup("Externe", 20.0, 10.0, 40.0));
 	gui.add(usageMessage.setup("", "Autres fonctions : ", 200, 20));
 	gui.add(usageMessage2.setup("","w - avancer", 200, 20));
 	gui.add(usageMessage3.setup("","s - reculer", 200, 20));
@@ -387,6 +405,36 @@ void ofApp::zoomOut()
 void ofApp::vitesseCameraChanged(float& vitesse)
 {
 	camera.setVitesse(vitesse);
+}
+
+void ofApp::rougeLampeDePocheChanged(float& r)
+{
+	lumiere.changerValeurCouleurRougeLampeDePoche(r);
+}
+
+void ofApp::vertLampeDePocheChanged(float& g)
+{
+	lumiere.changerValeurCouleurVertLampeDePoche(g);
+}
+
+void ofApp::bleuLampeDePocheChanged(float& b)
+{
+	lumiere.changerValeurCouleurBleuLampeDePoche(b);
+}
+
+void ofApp::coneInterneLampeDePocheChanged(float& cone)
+{
+	lumiere.changerValeurConeInterneLampeDePoche(cone);
+}
+
+void ofApp::coneExterneLampeDePocheChanged(float& cone)
+{
+	lumiere.changerValeurConeExterneLampeDePoche(cone);
+}
+
+void ofApp::precisionEchelleValeurChanged(int& precision)
+{
+	editeurMesh.setEchelle(precision);
 }
 
 void ofApp::pushMatrix()
