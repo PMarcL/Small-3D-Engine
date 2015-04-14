@@ -1,32 +1,34 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <vector>
 #include "ofMain.h"
+
+static const int NUM_SAMPLES = 8;
+
 class Framebuffer
 {
-private:
-	GLuint FBO;
-	GLuint rbo;
-	        
-	GLuint texture_depth;	
-	std::vector<GLenum> drawbuffer;
-
-	void destroy();
-	void generateColorTexture(unsigned int width, unsigned int height);
-	void generateDepthTexture(unsigned int width, unsigned int height);
-
 public:
 	Framebuffer();
 	~Framebuffer();
 
-	unsigned int texture_color; 
+	
 
 	void generateFBO(unsigned int width, unsigned int height);
 	GLuint getColorTexture();
-	GLuint getDepthTexture();
 	void resize(unsigned int width, unsigned int height);
 	void bind();
 	void unbind();
+
+private:
+	void generateIntermediateMultiSampleFBO();
+	void generateColorTexture();
+	void destroy();
+
+	GLuint width;
+	GLuint height;
+	GLuint FBO;
+	GLuint intermediateFBO;
+	GLuint rbo;
+	GLuint texture_color;
+	GLuint screenColor;
+	std::vector<GLenum> drawbuffer;
 };
 
