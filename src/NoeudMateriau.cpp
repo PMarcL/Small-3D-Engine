@@ -5,10 +5,10 @@ NoeudMateriau::NoeudMateriau(MATERIAUX materiau){
 	this->materiau = materiau;
 }
 
-void NoeudMateriau::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau){
+void NoeudMateriau::afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau){
 	this->appliquerMateriau(this->materiau, shaderId);
 
-	this->afficherEnfants(projection, vue, lumiere, modeles, shaderId, this->materiau);
+	this->afficherEnfants(paramsAff, shaderId, this->materiau);
 	
 	this->appliquerMateriau(materiau, shaderId);
 }

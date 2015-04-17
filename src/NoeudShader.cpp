@@ -5,10 +5,10 @@ NoeudShader::NoeudShader(Shader shader){
 	this->shader = shader;
 }
 
-void NoeudShader::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau){
-	this->preparerContextRendu(projection, vue, lumiere, shader.getProgramID());
-	Noeud::afficher(projection, vue, lumiere, modeles, shader.getProgramID(), materiau);
-	this->preparerContextRendu(projection, vue, lumiere, shaderId);
+void NoeudShader::afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau){
+	this->preparerContextRendu(paramsAff->projection, paramsAff->vue, paramsAff->lumiere, shader.getProgramID());
+	Noeud::afficher(paramsAff, shader.getProgramID(), materiau);
+	this->preparerContextRendu(paramsAff->projection, paramsAff->vue, paramsAff->lumiere, shaderId);
 }
 
 void NoeudShader::preparerContextRendu(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, GLuint shaderId){

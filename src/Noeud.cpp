@@ -12,8 +12,8 @@ Noeud::~Noeud(){
 		parent->retirerEnfantListe(this->id);
 }
 
-void Noeud::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau){
-	this->afficherEnfants(projection, vue, lumiere, modeles, shaderId, materiau);
+void Noeud::afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau){
+	this->afficherEnfants(paramsAff, shaderId, materiau);
 }
 
 void Noeud::supprimerEnfants(){
@@ -85,9 +85,9 @@ Noeud* Noeud::chercherMesh(Noeud* meshPlusProche, ofVec3f position, float rayon,
 	return meshPlusProche;
 }
 
-void Noeud::afficherEnfants(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau){
+void Noeud::afficherEnfants(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau){
 	for(list<Noeud*>::iterator i = this->listeEnfants.begin(); i != this->listeEnfants.end(); i++)
-		(*i)->afficher(projection, vue, lumiere, modeles, shaderId, materiau);
+		(*i)->afficher(paramsAff, shaderId, materiau);
 }
 
 uint8_t Noeud::getType(){

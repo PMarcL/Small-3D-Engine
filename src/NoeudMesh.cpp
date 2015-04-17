@@ -5,14 +5,14 @@ NoeudMesh::NoeudMesh(Mesh* mesh){
 	this->mesh = mesh;
 }
 
-void NoeudMesh::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau){
-	this->ajouterModele(modeles);
+void NoeudMesh::afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau){
+	this->ajouterModele(paramsAff->modeles);
 
-	this->afficherMesh(modeles->back(), shaderId);
+	this->afficherMesh(paramsAff->modeles->back(), shaderId);
 
-	this->afficherEnfants(projection, vue, lumiere, modeles, shaderId, materiau);
+	this->afficherEnfants(paramsAff, shaderId, materiau);
 	
-	this->retirerModele(modeles);
+	this->retirerModele(paramsAff->modeles);
 }
 
 void NoeudMesh::afficherMesh(const ofMatrix4x4* modele, const GLuint shaderId){

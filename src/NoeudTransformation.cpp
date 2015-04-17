@@ -5,12 +5,12 @@ NoeudTransformation::NoeudTransformation(){
 	this->matriceTransformations.makeIdentityMatrix();
 }
 
-void NoeudTransformation::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau){
-	this->ajouterModele(modeles);
+void NoeudTransformation::afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau){
+	this->ajouterModele(paramsAff->modeles);
 
-	this->afficherEnfants(projection, vue, lumiere, modeles, shaderId, materiau);
+	this->afficherEnfants(paramsAff, shaderId, materiau);
 	
-	this->retirerModele(modeles);
+	this->retirerModele(paramsAff->modeles);
 }
 
 void NoeudTransformation::ajouterModele(vector<ofMatrix4x4*>* modeles){

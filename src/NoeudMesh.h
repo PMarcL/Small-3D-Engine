@@ -11,7 +11,7 @@ public:
 
 	Mesh* mesh;
 
-	virtual void afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau);
+	virtual void afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau);
 
 	void setPositionAbsolue(ofVec3f nouvellePosition);
 	void setPositionAbsolue(float nouvellePositionX, float nouvellePositionY, float nouvellePositionZ);

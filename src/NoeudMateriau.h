@@ -8,7 +8,7 @@ class NoeudMateriau : public  Noeud
 		NoeudMateriau(MATERIAUX materiau);
 		~NoeudMateriau(){};
 
-		virtual void afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau);	
+		virtual void afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau);	
 
 		MATERIAUX materiau;
 	protected:

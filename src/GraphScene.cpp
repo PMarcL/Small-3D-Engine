@@ -8,10 +8,15 @@ void GraphScene::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue,
 	GLint precedentGlProgram;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &precedentGlProgram);
 
-	vector<ofMatrix4x4*>* modeles = new vector<ofMatrix4x4*>;
 	preparerContextRendu(projection, vue, lumiere, this->shaderIdOrigine);
 
-	this->afficherEnfants(projection, vue, lumiere, modeles, this->shaderIdOrigine, MATERIAUX::AUCUN);
+	ParametresAffichage* paramsAff = new ParametresAffichage();
+	paramsAff->projection = projection;
+	paramsAff->vue = vue;
+	paramsAff->lumiere = lumiere;
+	paramsAff->modeles = new vector<ofMatrix4x4*>;
+
+	this->afficherEnfants(paramsAff, this->shaderIdOrigine, MATERIAUX::AUCUN);
 
 	glUseProgram(precedentGlProgram);
 }

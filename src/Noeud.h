@@ -2,12 +2,12 @@
 
 #include "ofMain.h"
 #include "Lumiere.h"
-#include "PrimitivesData.h"//Changer pour un materiau data<<<<<<<<<<
+#include "PrimitivesData.h"
 
 class Noeud
 {
     public:
-		enum TypeNoeud : uint8_t{//À retirer si au final ça ne sert pas.<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		enum TypeNoeud : uint8_t{
 			typeNoeud = 0,
 			typeShader = 1,
 			typeTransformation = 2,
@@ -16,10 +16,17 @@ class Noeud
 			typeMateriau = 16
 		};
 
+		struct ParametresAffichage{
+			const ofMatrix4x4* projection;
+			const ofMatrix4x4* vue;
+			const Lumiere* lumiere;
+			vector<ofMatrix4x4*>* modeles;
+		};
+
 		Noeud();
 		~Noeud();
 
-		virtual void afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau);
+		virtual void afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau);
 
 		void ajouterEnfant(Noeud* enfant);
 		void supprimerEnfants();
@@ -42,7 +49,7 @@ class Noeud
 		virtual Noeud* chercherMesh(Noeud* meshPlusProche, ofVec3f position, float rayon, float* distanceMinimum, vector<ofMatrix4x4*>* transformations);
 		virtual ofMatrix4x4 getTransformationsPrecedentes();
 
-		void afficherEnfants(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau);
+		void afficherEnfants(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau);
 	private:
 		const int id;
 };
