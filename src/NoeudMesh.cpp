@@ -1,6 +1,6 @@
 #include "NoeudMesh.h"
 
-NoeudMesh::NoeudMesh(Mesh mesh){
+NoeudMesh::NoeudMesh(Mesh* mesh){
 	this->type |= typeMesh;
 	this->mesh = mesh;
 }
@@ -17,7 +17,7 @@ void NoeudMesh::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, 
 
 void NoeudMesh::afficherMesh(const ofMatrix4x4* modele, const GLuint shaderId){
 	glUniformMatrix4fv(glGetUniformLocation(shaderId, "model"), 1, GL_FALSE, modele->getPtr());
-	this->mesh.dessiner();
+	this->mesh->dessiner();
 }
 
 void NoeudMesh::ajouterModele(vector<ofMatrix4x4*>* modeles){

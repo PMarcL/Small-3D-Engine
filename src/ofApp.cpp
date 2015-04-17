@@ -21,6 +21,8 @@ void ofApp::setup(){
 	materiauSelectionne = RUBY;
 	graphScene = new GraphScene();
 
+	generateurMesh = new GenerateurMesh();
+
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
 	son.jouerMusiqueEtAmbiance();
@@ -231,8 +233,11 @@ void ofApp::mousePressed(int x, int y, int button){
 			editeurMesh.selectionnerMesh((NoeudMesh*)graphScene->trouverMesh(getPositionDevantCamera(), RAYON_DE_SELECTION));
 		}
 		if(button == OF_MOUSE_BUTTON_3){
-			NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT));
-			//NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererObj("Models/champignon.obj"));
+			//NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererObj("Models/champignon.obj"));//Exemple avec un modèle
+			Mesh* mesh = generateurMesh->selectionnerPrimitive(primitiveSelectionnee);
+			if(mesh == NULL)
+				mesh = generateurMesh->ajouterPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT);
+			NoeudMesh* noeudMesh = new NoeudMesh(mesh);
 			noeudMesh->matriceTransformations.glTranslate(editeurMesh.positionAEchelle(getPositionDevantCamera()));
 			shaderPrimitives->ajouterNoeudAMateriau(noeudMesh, this->materiauSelectionne);
 		}

@@ -1,5 +1,34 @@
 #include "GenerateurMesh.h"
 
+GenerateurMesh::GenerateurMesh(list<PRIMITIVES> primitives, int taille){	
+	for(list<PRIMITIVES>::iterator i = primitives.begin(); i != primitives.end(); i++){
+		ajouterPrimitive((*i), taille);
+	}
+}
+
+GenerateurMesh::~GenerateurMesh(){
+	for(list<MeshPrimitive>::iterator i = this->listePrimitives.begin(); i != this->listePrimitives.end(); i++){
+		delete (*i).mesh;
+		this->listePrimitives.push_back((*i));
+	}
+}
+
+Mesh* GenerateurMesh::ajouterPrimitive(PRIMITIVES primitive, int taille){
+	MeshPrimitive temp;
+	temp.mesh = new Mesh(genererPrimitive(primitive, taille));
+	temp.primitve = primitive;
+	this->listePrimitives.push_back(temp);
+	return temp.mesh;
+}
+
+Mesh* GenerateurMesh::selectionnerPrimitive(PRIMITIVES primitive){
+	for(list<MeshPrimitive>::iterator i = this->listePrimitives.begin(); i != this->listePrimitives.end(); i++){
+		if((*i).primitve == primitive)
+			return (*i).mesh;
+	}
+	return NULL;
+}
+
 Mesh GenerateurMesh::genererPrimitive(PRIMITIVES primitive, int taille){
 
 	vector<float> sommets = getSommetsPourPrimitive(primitive, taille);

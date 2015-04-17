@@ -94,6 +94,7 @@ class ofApp : public ofBaseApp{
 		NoeudShader* shaderPrimitives;
 		EditeurMesh editeurMesh;
 		Framebuffer fbo;
+		GenerateurMesh* generateurMesh;
 
 		int centreXFenetre;
 		int centreYFenetre;

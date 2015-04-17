@@ -6,10 +6,10 @@
 class NoeudMesh : public NoeudTransformation
 {
 public:
-	NoeudMesh(Mesh mesh);
+	NoeudMesh(Mesh* mesh);
 	~NoeudMesh(){};
 
-	Mesh mesh;
+	Mesh* mesh;
 
 	virtual void afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, vector<ofMatrix4x4*>* modeles, GLuint shaderId, MATERIAUX materiau);
 
