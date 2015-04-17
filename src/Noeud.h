@@ -29,6 +29,7 @@ class Noeud
 
 		int getId();
 		uint8_t getType();
+		Noeud* getParent();
 	protected:
 		static int nouveauId;
 		Noeud* parent;

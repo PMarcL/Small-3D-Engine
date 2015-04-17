@@ -18,3 +18,22 @@ void NoeudShader::preparerContextRendu(const ofMatrix4x4* projection, const ofMa
 	if(lumiere != NULL)
 		lumiere->chargerValeursIlluminationUniforms(shaderId);
 }
+
+
+void NoeudShader::ajouterNoeudAMateriau(Noeud* noeud, MATERIAUX materiau){
+	list<Noeud*>::iterator i = this->listeEnfants.begin();
+	bool noeudTrouve = false;
+	while(i != this->listeEnfants.end() && !noeudTrouve){
+		if((*i)->getType() == TypeNoeud::typeMateriau && ((NoeudMateriau*)(*i))->materiau == materiau){
+			noeudTrouve = true;
+			(*i)->ajouterEnfant(noeud);
+		}
+		i++;
+	}
+
+	if(!noeudTrouve){
+		NoeudMateriau* noeudMateriau = new NoeudMateriau(materiau);
+		this->ajouterEnfant(noeudMateriau);
+		noeudMateriau->ajouterEnfant(noeud);
+	}
+}

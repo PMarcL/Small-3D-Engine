@@ -20,7 +20,6 @@ void ofApp::setup(){
 	primitiveSelectionnee = CUBE;
 	materiauSelectionne = RUBY;
 	graphScene = new GraphScene();
-	noeudMateriau = new NoeudMateriau(MATERIAUX::RUBY);
 
 	projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth()/ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	model.makeIdentityMatrix();
@@ -36,7 +35,6 @@ void ofApp::setup(){
 	shaderPrimitives = new NoeudShader(Shader("Shaders/shaderMateriaux.vert", "Shaders/shaderMateriaux.frag"));
 	graphScene->ajouterEnfant(shaderPrimitives);
 	shaderPrimitives->shader.charger();
-	shaderPrimitives->ajouterEnfant(noeudMateriau);
 
 	shaderTex = Shader("Shaders/shaderTexture.vert", "Shaders/shaderTexture.frag");
 	shaderTex.charger();
@@ -236,7 +234,7 @@ void ofApp::mousePressed(int x, int y, int button){
 			NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT));
 			//NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererObj("Models/champignon.obj"));
 			noeudMesh->matriceTransformations.glTranslate(editeurMesh.positionAEchelle(getPositionDevantCamera()));
-			noeudMateriau->ajouterEnfant((Noeud*)noeudMesh);
+			shaderPrimitives->ajouterNoeudAMateriau(noeudMesh, this->materiauSelectionne);
 		}
 	}
 }

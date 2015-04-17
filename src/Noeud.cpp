@@ -99,3 +99,7 @@ ofMatrix4x4 Noeud::getTransformationsPrecedentes(){
 		return ofMatrix4x4::newIdentityMatrix();
 	return this->parent->getTransformationsPrecedentes();
 }
+
+Noeud* Noeud::getParent(){
+	return this->parent;
+}

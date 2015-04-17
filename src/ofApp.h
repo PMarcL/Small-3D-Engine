@@ -13,7 +13,6 @@
 #include "GraphScene.h"
 #include "NoeudMesh.h"
 #include "NoeudShader.h"
-#include "NoeudMateriau.h"
 #include "GenerateurMesh.h"
 #include "EditeurMesh.h"
 #include "EffetPleinEcran.h"
@@ -94,7 +93,6 @@ class ofApp : public ofBaseApp{
 		GraphScene* graphScene;
 		NoeudShader* shaderPrimitives;
 		EditeurMesh editeurMesh;
-		NoeudMateriau* noeudMateriau;
 		Framebuffer fbo;
 
 		int centreXFenetre;

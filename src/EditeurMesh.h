@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "NoeudMesh.h"
+#include "NoeudMateriau.h"
 #include "PrimitivesData.h"
 
 class EditeurMesh
@@ -21,5 +22,7 @@ public:
 	ofVec3f positionAEchelle(ofVec3f position);
 private:
 	NoeudMesh* objetSelectionne;
+	Noeud* ancienParent;
+	NoeudMateriau* materiauSelection;
 	float echellePosition;	
 };

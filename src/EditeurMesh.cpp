@@ -3,14 +3,25 @@
 EditeurMesh::EditeurMesh(){
 	echellePosition = 0;
 	objetSelectionne = NULL;
+	ancienParent = NULL;
+	materiauSelection = new NoeudMateriau(MATERIAUX::SELECTION);
 }
 
 void EditeurMesh::relacherSelection(){
-	objetSelectionne = NULL;
+	if(objetSelectionne != NULL){
+		objetSelectionne->changerParent(ancienParent);
+		materiauSelection->changerParent(NULL);
+		objetSelectionne = NULL;
+	}
 }
 
 void EditeurMesh::selectionnerMesh(NoeudMesh* selection){
 	objetSelectionne = selection;
+	if(selection != NULL){
+		ancienParent = selection->getParent();
+		ancienParent->ajouterEnfant(materiauSelection);
+		selection->changerParent(materiauSelection);
+	}
 }
 
 void EditeurMesh::supprimerSelection(){
