@@ -38,3 +38,12 @@ Noeud* NoeudTransformation::chercherMesh(Noeud* meshPlusProche, ofVec3f position
 ofMatrix4x4 NoeudTransformation::getTransformationsPrecedentes(){
 	return Noeud::getTransformationsPrecedentes() * this->matriceTransformations;
 }
+
+void NoeudTransformation::setTransformations(ofMatrix4x4 transformations){
+	this->matriceTransformations = transformations;
+	Noeud::miseAJourPositionAbsolueEnfants(transformations);
+}
+
+ofMatrix4x4 NoeudTransformation::getTransformations(){
+	return this->matriceTransformations;
+}

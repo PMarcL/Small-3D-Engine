@@ -4,7 +4,7 @@ GraphScene::GraphScene(){
 	this->type |= typeGraphScene;
 }
 
-void GraphScene::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere){
+void GraphScene::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue, const Lumiere* lumiere, ofVec3f orientationCamera, ofVec3f positionCamera){
 	GLint precedentGlProgram;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &precedentGlProgram);
 
@@ -15,6 +15,8 @@ void GraphScene::afficher(const ofMatrix4x4* projection, const ofMatrix4x4* vue,
 	paramsAff->vue = vue;
 	paramsAff->lumiere = lumiere;
 	paramsAff->modeles = new vector<ofMatrix4x4*>;
+	paramsAff->normalPlan = new ofVec3f(orientationCamera.getNormalized());
+	paramsAff->positionPlan = new ofVec3f(positionCamera);
 
 	this->afficherEnfants(paramsAff, this->shaderIdOrigine, MATERIAUX::AUCUN);
 

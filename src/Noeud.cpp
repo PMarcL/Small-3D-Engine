@@ -103,3 +103,11 @@ ofMatrix4x4 Noeud::getTransformationsPrecedentes(){
 Noeud* Noeud::getParent(){
 	return this->parent;
 }
+
+void Noeud::miseAJourPositionAbsolueEnfants(ofMatrix4x4 transformations){
+	list<Noeud*>::iterator i = this->listeEnfants.begin();
+	while(i != this->listeEnfants.end()){
+		(*i)->miseAJourPositionAbsolueEnfants(transformations);
+		i++;
+	}
+}

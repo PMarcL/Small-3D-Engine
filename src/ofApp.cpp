@@ -109,7 +109,7 @@ void ofApp::draw(){
 			cubeMap.afficher(projection, model, view);
 		popMatrix();
 	
-		graphScene->afficher(&projection, &view, &lumiere);
+		graphScene->afficher(&projection, &view, &lumiere, camera.getOrientation(), camera.getPosition());
 		
 		origineDuMonde.afficher(projection, model, view);
 		paysage.afficher(projection, model, view, lumiere);
@@ -238,8 +238,16 @@ void ofApp::mousePressed(int x, int y, int button){
 			if(mesh == NULL)
 				mesh = generateurMesh->ajouterPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT);
 			NoeudMesh* noeudMesh = new NoeudMesh(mesh);
-			noeudMesh->matriceTransformations.glTranslate(editeurMesh.positionAEchelle(getPositionDevantCamera()));
+			noeudMesh->setPositionAbsolue(editeurMesh.positionAEchelle(getPositionDevantCamera()));
 			shaderPrimitives->ajouterNoeudAMateriau(noeudMesh, this->materiauSelectionne);
+
+			//Pour montrer qu'on peut attacher un mesh a un autre<<<<
+			NoeudMesh* noeudMesh2 = new NoeudMesh(mesh);
+			noeudMesh->ajouterEnfant(noeudMesh2);
+			ofVec3f unePosition = getPositionDevantCamera();
+			unePosition.x += 40;
+			noeudMesh2->setPositionAbsolue(editeurMesh.positionAEchelle(unePosition));
+			
 		}
 	}
 }

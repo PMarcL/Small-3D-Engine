@@ -3,16 +3,28 @@
 NoeudMesh::NoeudMesh(Mesh* mesh){
 	this->type |= typeMesh;
 	this->mesh = mesh;
+	this->positionAbsolue = ofVec3f(0, 0, 0);
 }
 
 void NoeudMesh::afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau){
 	this->ajouterModele(paramsAff->modeles);
 
-	this->afficherMesh(paramsAff->modeles->back(), shaderId);
+	if(positionneDevantPlan(*paramsAff->normalPlan, *paramsAff->positionPlan)){
+		this->afficherMesh(paramsAff->modeles->back(), shaderId);
+	}
 
 	this->afficherEnfants(paramsAff, shaderId, materiau);
 	
 	this->retirerModele(paramsAff->modeles);
+}
+
+bool NoeudMesh::positionneDevantPlan(ofVec3f normalPlan, ofVec3f positionPlan){
+	ofVec3f temp = this->positionAbsolue - positionPlan;
+	float res = temp.dot(normalPlan);
+	if(res > 0){
+		return true;
+	}
+	return false;
 }
 
 void NoeudMesh::afficherMesh(const ofMatrix4x4* modele, const GLuint shaderId){
@@ -20,11 +32,16 @@ void NoeudMesh::afficherMesh(const ofMatrix4x4* modele, const GLuint shaderId){
 	this->mesh->dessiner();
 }
 
+void NoeudMesh::changerParent(Noeud* parent){
+	Noeud::changerParent(parent);
+	this->positionAbsolue = this->getTransformationsPrecedentes().getTranslation();
+}
+
 void NoeudMesh::ajouterModele(vector<ofMatrix4x4*>* modeles){
 	if(modeles->size() == 0){
-		modeles->push_back(new ofMatrix4x4(this->matriceTransformations));
+		modeles->push_back(new ofMatrix4x4(this->getTransformations()));
 	}else
-		modeles->push_back(new ofMatrix4x4(*modeles->back() * this->matriceTransformations));
+		modeles->push_back(new ofMatrix4x4(*modeles->back() * this->getTransformations()));
 }
 
 Noeud* NoeudMesh::chercherMesh(Noeud* meshPlusProche, ofVec3f position, float rayon, float* distanceMinimum, vector<ofMatrix4x4*>* transformations){
@@ -44,14 +61,27 @@ Noeud* NoeudMesh::chercherMesh(Noeud* meshPlusProche, ofVec3f position, float ra
 }
 
 void NoeudMesh::setPositionAbsolue(ofVec3f nouvellePosition){
-	this->setPositionAbsolue(nouvellePosition.x, nouvellePosition.y, nouvellePosition.z);
+	ofVec3f positionRelativeActuelle = this->getTransformations().getTranslation();
+	ofMatrix4x4 transformations = this->getTransformations();
+	
+	transformations.setTranslation(
+		positionRelativeActuelle.x + (nouvellePosition.x - this->positionAbsolue.x),
+		positionRelativeActuelle.y + (nouvellePosition.y - this->positionAbsolue.y),
+		positionRelativeActuelle.z + (nouvellePosition.z - this->positionAbsolue.z));
+
+	this->setTransformations(transformations);
 }
 
 void NoeudMesh::setPositionAbsolue(float nouvellePositionX, float nouvellePositionY, float nouvellePositionZ){
-	ofVec3f positionAbsolueActuelle = this->getTransformationsPrecedentes().getTranslation();
-	ofVec3f positionRelativeActuelle = this->matriceTransformations.getTranslation();
-	this->matriceTransformations.setTranslation(
-		positionRelativeActuelle.x + (nouvellePositionX - positionAbsolueActuelle.x),
-		positionRelativeActuelle.y + (nouvellePositionY - positionAbsolueActuelle.y),
-		positionRelativeActuelle.z + (nouvellePositionZ - positionAbsolueActuelle.z));
+	this->setPositionAbsolue(ofVec3f(nouvellePositionX, nouvellePositionY, nouvellePositionZ));
+}
+
+void NoeudMesh::miseAJourPositionAbsolueEnfants(ofMatrix4x4 transformations){
+	this->positionAbsolue = transformations.getTranslation();
+	Noeud::miseAJourPositionAbsolueEnfants(transformations);
+}
+
+void NoeudMesh::setTransformations(ofMatrix4x4 transformations){
+	NoeudTransformation::setTransformations(transformations);
+	this->positionAbsolue = this->getTransformationsPrecedentes().getTranslation();
 }

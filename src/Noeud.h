@@ -20,6 +20,8 @@ class Noeud
 			const ofMatrix4x4* projection;
 			const ofMatrix4x4* vue;
 			const Lumiere* lumiere;
+			const ofVec3f* positionPlan;
+			const ofVec3f* normalPlan;
 			vector<ofMatrix4x4*>* modeles;
 		};
 
@@ -27,10 +29,10 @@ class Noeud
 		~Noeud();
 
 		virtual void afficher(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau);
+		virtual void changerParent(Noeud* parent);
 
 		void ajouterEnfant(Noeud* enfant);
-		void supprimerEnfants();
-		void changerParent(Noeud* parent);
+		void supprimerEnfants();		
 		Noeud* trouverNoeud(int id);
 		Noeud* trouverMesh(ofVec3f position, float rayon);
 
@@ -48,6 +50,7 @@ class Noeud
 
 		virtual Noeud* chercherMesh(Noeud* meshPlusProche, ofVec3f position, float rayon, float* distanceMinimum, vector<ofMatrix4x4*>* transformations);
 		virtual ofMatrix4x4 getTransformationsPrecedentes();
+		virtual void miseAJourPositionAbsolueEnfants(ofMatrix4x4 transformations);
 
 		void afficherEnfants(const ParametresAffichage* paramsAff, GLuint shaderId, MATERIAUX materiau);
 	private:
