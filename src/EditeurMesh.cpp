@@ -26,7 +26,7 @@ void EditeurMesh::selectionnerMesh(NoeudMesh* selection){
 
 void EditeurMesh::supprimerSelection(){
 	delete objetSelectionne;
-	this->relacherSelection();
+	objetSelectionne = NULL;
 }
 
 void EditeurMesh::deplacerSelection(ofVec3f position){
