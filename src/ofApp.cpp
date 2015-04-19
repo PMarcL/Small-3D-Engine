@@ -242,7 +242,7 @@ void ofApp::mousePressed(int x, int y, int button){
 			noeudMesh->setPositionAbsolue(editeurMesh.positionAEchelle(getPositionDevantCamera()));
 			shaderPrimitives->ajouterNoeudAMateriau(noeudMesh, this->materiauSelectionne);
 
-			//Pour montrer qu'on peut attacher un mesh a un autre<<<<
+			//Pour montrer qu'on peut attacher un mesh a un autre
 			if(primitiveEnfant) {
 				NoeudMesh* noeudMesh2 = new NoeudMesh(mesh);
 				noeudMesh->ajouterEnfant(noeudMesh2);

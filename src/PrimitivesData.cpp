@@ -256,7 +256,7 @@ vector<float> genererTexCoordsSphere() {
 std::vector<float> getMateriauData(MATERIAUX materiau) {
 	switch(materiau) {
 	case(AUCUN):
-		return vector<float>(ARGENT_DATA, ARGENT_DATA + sizeof(ARGENT_DATA) / sizeof(ARGENT_DATA[0]));//A revoir<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		return vector<float>(ARGENT_DATA, ARGENT_DATA + sizeof(ARGENT_DATA) / sizeof(ARGENT_DATA[0]));//Lorsqu'aucun: Argent
 		break;
 	case(PLASTIQUE_NOIR):
 		return vector<float>(PLASTIQUE_NOIR_DATA, PLASTIQUE_NOIR_DATA + sizeof(PLASTIQUE_NOIR_DATA) / sizeof(PLASTIQUE_NOIR_DATA[0]));

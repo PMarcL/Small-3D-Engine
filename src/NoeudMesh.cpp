@@ -34,7 +34,7 @@ void NoeudMesh::afficherMesh(const ofMatrix4x4* modele, const GLuint shaderId){
 
 void NoeudMesh::changerParent(Noeud* parent){
 	Noeud::changerParent(parent);
-	this->positionAbsolue = this->getTransformationsPrecedentes().getTranslation();
+	this->majPositionRelative();
 }
 
 void NoeudMesh::ajouterModele(vector<ofMatrix4x4*>* modeles){
@@ -61,15 +61,8 @@ Noeud* NoeudMesh::chercherMesh(Noeud* meshPlusProche, ofVec3f position, float ra
 }
 
 void NoeudMesh::setPositionAbsolue(ofVec3f nouvellePosition){
-	ofVec3f positionRelativeActuelle = this->getTransformations().getTranslation();
-	ofMatrix4x4 transformations = this->getTransformations();
-	
-	transformations.setTranslation(
-		positionRelativeActuelle.x + (nouvellePosition.x - this->positionAbsolue.x),
-		positionRelativeActuelle.y + (nouvellePosition.y - this->positionAbsolue.y),
-		positionRelativeActuelle.z + (nouvellePosition.z - this->positionAbsolue.z));
-
-	this->setTransformations(transformations);
+	this->positionAbsolue = nouvellePosition;
+	this->majPositionRelative();
 }
 
 void NoeudMesh::setPositionAbsolue(float nouvellePositionX, float nouvellePositionY, float nouvellePositionZ){
@@ -77,11 +70,17 @@ void NoeudMesh::setPositionAbsolue(float nouvellePositionX, float nouvellePositi
 }
 
 void NoeudMesh::miseAJourPositionAbsolueEnfants(ofMatrix4x4 transformations){
-	this->positionAbsolue = transformations.getTranslation();
-	Noeud::miseAJourPositionAbsolueEnfants(transformations);
+	ofVec3f translationPrecedentes = transformations.getTranslation();
+	ofVec3f translationDuMesh = this->getTransformations().getTranslation();
+
+	this->setPositionAbsolue(translationPrecedentes + translationDuMesh);
 }
 
-void NoeudMesh::setTransformations(ofMatrix4x4 transformations){
-	NoeudTransformation::setTransformations(transformations);
-	this->positionAbsolue = this->getTransformationsPrecedentes().getTranslation();
+void NoeudMesh::majPositionRelative(){
+	ofVec3f positionPrecedente = Noeud::getTransformationsPrecedentes().getTranslation();
+	ofMatrix4x4 transformations = this->getTransformations();
+
+	transformations.setTranslation(this->positionAbsolue - positionPrecedente);
+
+	this->setTransformations(transformations);
 }

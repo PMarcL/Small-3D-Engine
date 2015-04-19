@@ -41,9 +41,14 @@ ofMatrix4x4 NoeudTransformation::getTransformationsPrecedentes(){
 
 void NoeudTransformation::setTransformations(ofMatrix4x4 transformations){
 	this->matriceTransformations = transformations;
-	Noeud::miseAJourPositionAbsolueEnfants(transformations);
+	NoeudTransformation::miseAJourPositionAbsolueEnfants(Noeud::getTransformationsPrecedentes());
 }
 
 ofMatrix4x4 NoeudTransformation::getTransformations(){
 	return this->matriceTransformations;
+}
+
+void NoeudTransformation::miseAJourPositionAbsolueEnfants(ofMatrix4x4 transformations){
+	transformations *= this->matriceTransformations;
+	Noeud::miseAJourPositionAbsolueEnfants(transformations);
 }
