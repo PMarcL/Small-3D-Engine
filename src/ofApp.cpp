@@ -181,6 +181,8 @@ void ofApp::keyPressed(int key){
 		fenetre.saveImage("Captures/capture" + nb +".png");
 		nbCaptureEcran++;
 	}
+	else if(key == 't' || key == 'T')
+		primitiveEnfant = !primitiveEnfant;
 	else if (key == 'm' || key == 'M')
 		showMenu = !showMenu;
 }
@@ -233,7 +235,6 @@ void ofApp::mousePressed(int x, int y, int button){
 			editeurMesh.selectionnerMesh((NoeudMesh*)graphScene->trouverMesh(getPositionDevantCamera(), RAYON_DE_SELECTION));
 		}
 		if(button == OF_MOUSE_BUTTON_3){
-			//NoeudMesh* noeudMesh = new NoeudMesh(GenerateurMesh::genererObj("Models/champignon.obj"));//Exemple avec un modèle
 			Mesh* mesh = generateurMesh->selectionnerPrimitive(primitiveSelectionnee);
 			if(mesh == NULL)
 				mesh = generateurMesh->ajouterPrimitive(primitiveSelectionnee, DIMENSION_PAR_DEFAUT);
@@ -242,12 +243,13 @@ void ofApp::mousePressed(int x, int y, int button){
 			shaderPrimitives->ajouterNoeudAMateriau(noeudMesh, this->materiauSelectionne);
 
 			//Pour montrer qu'on peut attacher un mesh a un autre<<<<
-			NoeudMesh* noeudMesh2 = new NoeudMesh(mesh);
-			noeudMesh->ajouterEnfant(noeudMesh2);
-			ofVec3f unePosition = getPositionDevantCamera();
-			unePosition.x += 40;
-			noeudMesh2->setPositionAbsolue(editeurMesh.positionAEchelle(unePosition));
-			
+			if(primitiveEnfant) {
+				NoeudMesh* noeudMesh2 = new NoeudMesh(mesh);
+				noeudMesh->ajouterEnfant(noeudMesh2);
+				ofVec3f unePosition = getPositionDevantCamera();
+				unePosition.x += 40;
+				noeudMesh2->setPositionAbsolue(editeurMesh.positionAEchelle(unePosition));
+			}
 		}
 	}
 }
@@ -300,6 +302,7 @@ void ofApp::configurerUI() {
 	coneInterneLampeDePoche.addListener(this, &ofApp::coneInterneLampeDePocheChanged);
 	coneExterneLampeDePoche.addListener(this, &ofApp::coneExterneLampeDePocheChanged);
 	precisionEchelle.addListener(this, &ofApp::precisionEchelleValeurChanged);
+	primitiveEnfant.addListener(this, &ofApp::primitiveEnfantToggle);
 	
 	gui.setup("Parametres");
 	gui.add(guiMessage.setup("", "Pour acceder au menu \navec la souris, \nvous devez entrer \nla touche 'p'", 200, 120));
@@ -307,6 +310,7 @@ void ofApp::configurerUI() {
 	gui.add(paused.setup("p - Pause", false));
 	gui.add(vertigoEnFonction.setup("v - Effet vertigo", false));
 	gui.add(lampeDePoche.setup("q - Lamp de poche", false));
+	gui.add(primitiveEnfant.setup("t - double primitives", false));
 	gui.add(effetBrouillard.setup("1 - Effet brouillard", false));
 	gui.add(effetNoirEtBlanc.setup("2 - Effet noir et blanc", false));
 	gui.add(effetLignes.setup("3 - Effet lignes", false));
@@ -363,6 +367,10 @@ void ofApp::vertigoToggled(bool &enabled) {
 		angleChampDeVision = ANGLE_VISION_NORMAL;
 		projection.makePerspectiveMatrix(angleChampDeVision, (double)ofGetWindowWidth() / ofGetWindowHeight(), 1.0, FAR_PLANE_DISTANCE);
 	}
+}
+
+void ofApp::primitiveEnfantToggle(bool & enabled) {
+	primitiveEnfant = enabled;
 }
 
 void ofApp::effetBrouillardToggled(bool &enabled) {

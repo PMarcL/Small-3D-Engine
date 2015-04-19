@@ -63,6 +63,7 @@ class ofApp : public ofBaseApp{
 		void effetNoirEtBlancToggled(bool & enabled);
 		void effetLignesToggled(bool & enabled);
 		void lampeDePocheToggled(bool & enabled);
+		void primitiveEnfantToggle(bool & enabled);
 		void vitesseCameraChanged(float& vitesse);
 		void primitiveChanged(int& primitive);
 		void materiauChanged(int& materiau);
@@ -118,6 +119,7 @@ class ofApp : public ofBaseApp{
 		ofxToggle effetBrouillard;
 		ofxToggle effetNoirEtBlanc;
 		ofxToggle effetLignes;
+		ofxToggle primitiveEnfant;
 		ofxLabel guiMessage;
 		ofxLabel fps;
 		ofxLabel couleurLampeDePoche;
