@@ -318,11 +318,11 @@ void ofApp::configurerUI() {
 	gui.add(typePrimitive.setup("Primitives", 1, 1, NB_MAX_PRIMITIVE));
 	gui.add(typeMateriau.setup("Materiaux", 14, 1, NB_MAX_MATERIAU));
 	gui.add(precisionEchelle.setup("Grille - precision", 0, 0, 20));
-	gui.add(couleurLampeDePoche.setup("", "Couleurs- Lampe de poche", 200, 20));
+	gui.add(couleurLampeDePoche.setup("", "Couleurs - Lampe de poche", 200, 20));
 	gui.add(rougeLampeDePoche.setup("Rouge", 0.8, 0.0, 1.0));
 	gui.add(vertLampeDePoche.setup("Vert", 0.8, 0.0, 1.0));
 	gui.add(bleuLampeDePoche.setup("Bleu", 0.8, 0.0, 1.0));
-	gui.add(coneLampeDePoche.setup("", "Cone- Lampe de poche", 200, 20));
+	gui.add(coneLampeDePoche.setup("", "Cone - Lampe de poche", 200, 20));
 	gui.add(coneInterneLampeDePoche.setup("Interne", 10.5, 1.0, 20.0));
 	gui.add(coneExterneLampeDePoche.setup("Externe", 20.0, 10.0, 40.0));
 	gui.add(usageMessage.setup("", "Autres fonctions : ", 200, 20));
@@ -335,7 +335,7 @@ void ofApp::configurerUI() {
 	gui.add(usageMessage8.setup("","m - afficher menu", 200, 20));
 	gui.add(usageMessage9.setup("","Interaction primitives :", 200, 20));
 	gui.add(usageMessage10.setup("","Clique Droit - creer", 200, 20));
-	gui.add(usageMessage11.setup("","Clique Droit - selection", 200, 20));
+	gui.add(usageMessage11.setup("","Clique Gauche - selection", 200, 20));
 }
 
 void ofApp::primitiveChanged(int& primitive)
