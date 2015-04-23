@@ -47,6 +47,10 @@ private:
 	Texture texEauSpeculaire;
 	Texture texEauNormal;
 	ModeleOBJ champignon;
+	Texture texChampignon;
+	Texture texChampignonSpeculaire;
+	Texture texChampignonNormal;
 	vector<ofVec3f> positionsArbres;
+	vector<ofVec3f> positionsChampignon;
 };
 

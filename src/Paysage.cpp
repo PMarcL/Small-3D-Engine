@@ -27,7 +27,6 @@ Paysage::Paysage()
 	texEauNormal = Texture("Textures/waterNormalMap.jpg");
 	texEauNormal.charger();
 
-
 	montagne = Plane(1000, 5, 10);
 	montagne.generePenteProgressive(0.0, 5.0);
 
@@ -39,6 +38,14 @@ Paysage::Paysage()
 	texTreeSpeculaire.charger();
 	texTreeNormal = Texture("Textures/woodNormalMap.jpg");
 	texTreeNormal.charger();
+
+	champignon = ModeleOBJ("Models/champignon.obj");
+	texChampignon = Texture("Textures/champignon.jpg");
+	texChampignon.charger();
+	texChampignonNormal = Texture("Textures/champignonNormalMap.png");
+	texChampignonNormal.charger();
+	texChampignonSpeculaire = Texture("Textures/champignon_specular.jpg");
+	texChampignonSpeculaire.charger();
 }
 
 void Paysage::generationPositionsArbres()
@@ -47,6 +54,9 @@ void Paysage::generationPositionsArbres()
 	{
 		ofVec3f position = genererPositionAvecEspacement(150);
 		positionsArbres.push_back(position);
+		position.x += ofRandom(100, 20);
+		position.z += ofRandom(-100, -20);
+		positionsChampignon.push_back(position);
 	}
 }
 
@@ -119,10 +129,31 @@ void Paysage::afficher(ofMatrix4x4 projection, ofMatrix4x4 modelIn, ofMatrix4x4 
 			model.glTranslate(positionsArbres[i]);
 			model.glScale(50, 50, 50);
 			glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
-			arbre.afficher();		
+			arbre.afficher();
 		popMatrix();
 	}
 	
+	// affichage des champignons
+	glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "diffuseMap"), 0);
+	glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "specularMap"), 1);
+	glUniform1i(glGetUniformLocation(shaderUneTexture.getProgramID(), "normalMap"), 2);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texChampignon.getID());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texChampignonSpeculaire.getID());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, texChampignonNormal.getID());
+	for(int i = 0; i < NB_ARBRES; i++)
+	{
+		pushMatrix();
+			model.glTranslate(positionsChampignon[i]);
+			model.glRotate(-90, 1, 0, 0);
+			model.glScale(0.75, 0.75, 0.75);
+			glUniformMatrix4fv(glGetUniformLocation(shaderUneTexture.getProgramID(), "model"), 1, GL_FALSE, model.getPtr());
+			champignon.afficher();
+		popMatrix();
+	}
+
 	// Affichage de l'océan
 	pushMatrix();
 		glUseProgram(shaderOscillation.getProgramID());
