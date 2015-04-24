@@ -3,7 +3,9 @@
 
 EffetPleinEcran::EffetPleinEcran()
 {
-	desactiverEffet();
+	shaderActif = Shader("Shaders/shaderPleinEcran.vert", "Shaders/shaderEffetAucun.frag");
+	shaderActif.charger();
+	effetCourant = AUCUN;
 
 	creerRectanglePleinEcran();
 }
